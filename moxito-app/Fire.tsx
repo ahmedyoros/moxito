@@ -12,6 +12,7 @@ class Fire {
       firebase.initializeApp({
         apiKey: "AIzaSyABXgnEA7O5REXo5wCGq2UuGWpbHrTn8Cg",
         authDomain: "moxito-a4531.firebaseapp.com",
+        databaseURL: "https://moxito-a4531.firebaseio.com",
         projectId: "moxito-a4531",
         storageBucket: "moxito-a4531.appspot.com",
         messagingSenderId: "17884074050",
@@ -43,6 +44,8 @@ class Fire {
   }
 
   parse = (snapshot: { val?: any; key?: any; }) => {
+    console.log(snapshot);
+    
     const { timestamp: numberStamp, text, user } = snapshot.val();
     const { key: _id } = snapshot;
     const timestamp = new Date(numberStamp);
@@ -58,7 +61,7 @@ class Fire {
   on = (callback: (arg0: { _id: any; timestamp: Date; text: any; user: any; }) => any) =>
     this.ref
       .limitToLast(20)
-      .on('child_added', snapshot => callback(this.parse(snapshot)));
+      .on('child_added', (snapshot: { val?: any; key?: any; }) => callback(this.parse(snapshot)));
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
@@ -72,6 +75,8 @@ class Fire {
         user,
         timestamp: this.timestamp,
       };
+      console.log(message);
+      
       this.append(message);
     }
   };
