@@ -1,4 +1,14 @@
 import firebase from 'firebase';
+import {
+  API_KEY,
+  AUTH_DOMAIN,
+  DB_URL,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+  MESSAGING_SENDER_ID,
+  APP_ID,
+  MEASURMENT
+} from '@env';
 
 class Fire {
   static shared: Fire;
@@ -10,14 +20,14 @@ class Fire {
   init = () => {
     if (!firebase.apps.length) {
       firebase.initializeApp({
-        apiKey: "AIzaSyABXgnEA7O5REXo5wCGq2UuGWpbHrTn8Cg",
-        authDomain: "moxito-a4531.firebaseapp.com",
-        databaseURL: "https://moxito-a4531.firebaseio.com",
-        projectId: "moxito-a4531",
-        storageBucket: "moxito-a4531.appspot.com",
-        messagingSenderId: "17884074050",
-        appId: "1:17884074050:web:f10aaf9836be7bad81dddb",
-        measurementId: "G-M82CK7RT92"
+        apiKey: API_KEY,
+        authDomain: AUTH_DOMAIN,
+        databaseURL: DB_URL,
+        projectId: PROJECT_ID,
+        storageBucket: STORAGE_BUCKET,
+        messagingSenderId: MESSAGING_SENDER_ID,
+        appId: APP_ID,
+        measurementId: MEASURMENT
       });
     }
   };
@@ -44,7 +54,6 @@ class Fire {
   }
 
   parse = (snapshot: { val?: any; key?: any; }) => {
-    console.log(snapshot);
     
     const { timestamp: numberStamp, text, user } = snapshot.val();
     const { key: _id } = snapshot;
