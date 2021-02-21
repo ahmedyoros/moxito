@@ -1,13 +1,4 @@
-import {
-  API_KEY,
-  APP_ID, 
-  AUTH_DOMAIN,
-  DB_URL,
-  MEASURMENT, 
-  MESSAGING_SENDER_ID, 
-  PROJECT_ID,
-  STORAGE_BUCKET
-} from '@env';
+import { firebaseConfig} from './config';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
@@ -21,16 +12,7 @@ class Fire {
 
   init = () => {
     if (!firebase.apps.length) {
-      firebase.initializeApp({
-        apiKey: API_KEY,
-        authDomain: AUTH_DOMAIN,
-        databaseURL: DB_URL,
-        projectId: PROJECT_ID,
-        storageBucket: STORAGE_BUCKET,
-        messagingSenderId: MESSAGING_SENDER_ID,
-        appId: APP_ID,
-        measurementId: MEASURMENT
-      });
+      firebase.initializeApp(firebaseConfig);
     }
   };
 
