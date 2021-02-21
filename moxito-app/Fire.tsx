@@ -1,14 +1,16 @@
-import firebase from 'firebase';
 import {
   API_KEY,
+  APP_ID, 
   AUTH_DOMAIN,
   DB_URL,
+  MEASURMENT, 
+  MESSAGING_SENDER_ID, 
   PROJECT_ID,
-  STORAGE_BUCKET,
-  MESSAGING_SENDER_ID,
-  APP_ID,
-  MEASURMENT
+  STORAGE_BUCKET
 } from '@env';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 
 class Fire {
   static shared: Fire;

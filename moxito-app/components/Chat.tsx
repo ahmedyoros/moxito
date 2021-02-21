@@ -1,17 +1,22 @@
-// @flow
 import React from 'react';
-import { GiftedChat } from 'react-native-gifted-chat'; // 0.3.0
+import { GiftedChat, IMessage } from 'react-native-gifted-chat'; // 0.3.0
+import { NavigationScreenProp } from 'react-navigation';
 
 import Fire from '../Fire';
 
 type Props = {
   name?: string,
+  navigation: NavigationScreenProp<any,any>
 };
 
-class Chat extends React.Component<Props> {
+type State = { 
+  messages: IMessage[] | undefined; 
+}
 
-  static navigationOptions = ({ navigation }) => ({
-    title: (navigation.state.params || {}).name || 'Chat!',
+class Chat extends React.Component<Props, State> {
+
+  static navigationOptions = (props: Props) => ({
+    title: (props.navigation.state.params || {}).name || 'Chat!',
   });
 
   state = {
@@ -30,15 +35,23 @@ class Chat extends React.Component<Props> {
       <GiftedChat
         messages={this.state.messages}
         onSend={Fire.shared.send}
-        user={this.user}
+        user={{
+          _id:this.user._id!,
+          name:this.user.name
+        }}
       />
     );
   }
 
   componentDidMount() {
     Fire.shared.on(message =>
-      this.setState(previousState => ({
-        messages: GiftedChat.append(previousState.messages, message),
+      this.setState((previousState) => ({
+        messages: GiftedChat.append(previousState.messages, [{
+          _id: message._id,
+          text: message.text,
+          user: message.user,
+          createdAt: message.timestamp
+        }]),
       }))
     );
   }

@@ -7,7 +7,13 @@ import {
   View,
 } from 'react-native';
 
-class Main extends React.Component {
+import { NavigationScreenProp } from 'react-navigation';
+
+export interface Props {
+  navigation: NavigationScreenProp<any,any>
+};
+
+class Main extends React.Component<Props> {
   static navigationOptions = {
     title: 'Chatter',
   };
@@ -19,7 +25,7 @@ class Main extends React.Component {
   onPress = () =>
     this.props.navigation.navigate('Chat', { name: this.state.name });
 
-  onChangeText = name => this.setState({ name });
+  onChangeText = (name: string) => this.setState({ name });
 
   render() {
     return (
@@ -27,7 +33,6 @@ class Main extends React.Component {
         <Text style={styles.title}>Enter your name:</Text>
         <TextInput
           style={styles.nameInput}
-          placeHolder="Flutter God Evan Bacon"
           onChangeText={this.onChangeText}
           value={this.state.name}
         />
