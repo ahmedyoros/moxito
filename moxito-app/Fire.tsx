@@ -7,7 +7,6 @@ class Fire {
   static shared: Fire;
   constructor() {
     this.init();
-    this.observeAuth();
   }
 
   init = () => {
@@ -15,23 +14,6 @@ class Fire {
       firebase.initializeApp(firebaseConfig);
     }
   };
-
-  observeAuth = () =>
-    firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
-
-  onAuthStateChanged = (user: any) => {
-    if (!user) {
-      try {
-        firebase.auth().signInAnonymously();
-      } catch ({ message }) {
-        alert(message);
-      }
-    }
-  };
-
-  get uid() {
-    return (firebase.auth().currentUser || {}).uid;
-  }
 
   get ref() {
     return firebase.database().ref('messages');

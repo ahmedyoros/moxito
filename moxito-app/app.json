@@ -17,12 +17,25 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "univ.lille.moxito",
+      "supportsTablet": true,
+      "config":{
+        "googleSignIn":{
+          "reservedClientId": "com.googleusercontent.apps.17884074050-2ssuqgak04cp89ed81pmlcv3q0pkaikq"
+        }
+      }
     },
     "android": {
+      "package": "univ.lille.moxito",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleSignIn":{
+          "certificateHash": "EE6915C40DC3479FFFFC1518BEA2CFB67B891FEA"
+        }
       }
     },
     "web": {

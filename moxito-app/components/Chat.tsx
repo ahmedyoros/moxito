@@ -1,4 +1,6 @@
+import firebase from 'firebase';
 import React from 'react';
+import { Button, View } from 'react-native';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat'; // 0.3.0
 import { NavigationScreenProp } from 'react-navigation';
 
@@ -24,22 +26,27 @@ class Chat extends React.Component<Props, State> {
   };
 
   get user() {
+    const user:firebase.User = firebase.auth().currentUser!;
     return {
-      name: this.props.navigation.state.params.name,
-      _id: Fire.shared.uid,
+      name: user.displayName!,
+      _id: user.uid,
     };
   }
 
   render() {
     return (
-      <GiftedChat
-        messages={this.state.messages}
-        onSend={Fire.shared.send}
-        user={{
-          _id:this.user._id!,
-          name:this.user.name
-        }}
-      />
+      <View style={{flex: 1}}>
+        <GiftedChat
+          messages={this.state.messages}
+          onSend={Fire.shared.send}
+          user={{
+              _id:this.user._id!,
+              name:this.user.name
+            }}
+        />
+        <Button title="Sign out" onPress={() => firebase.auth().signOut()} />
+      </View>
+      
     );
   }
 

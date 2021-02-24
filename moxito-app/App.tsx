@@ -1,10 +1,8 @@
 import React from 'react';
-
-import { createStackNavigator } from 'react-navigation-stack'
-import { createAppContainer } from 'react-navigation';
-
-import Main from './components/Main';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import Chat from './components/Chat';
+import CheckLogin from './components/CheckLogin';
+import Login from './components/Login';
 
 export default class App extends React.Component {
   render() {
@@ -12,10 +10,10 @@ export default class App extends React.Component {
   }
 }
 
-// Create the navigator
-const navigator = createStackNavigator({
-  Main: { screen: Main },
-  Chat: { screen: Chat },
-});
+const navigator = createSwitchNavigator({
+  CheckLogin: CheckLogin,
+  Login: Login,
+  Chat: Chat
+})
 
 const AppNavigator = createAppContainer(navigator);
