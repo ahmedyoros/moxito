@@ -23,7 +23,8 @@
         "googleSignIn":{
           "reservedClientId": "com.googleusercontent.apps.17884074050-2ssuqgak04cp89ed81pmlcv3q0pkaikq"
         }
-      }
+      },
+      "userInterfaceStyle": "automatic"
     },
     "android": {
       "package": "univ.lille.moxito",
@@ -40,6 +41,23 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "userInterfaceStyle": "automatic",
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": [
+        "expo.ts",
+        "expo.tsx",
+        "expo.js",
+        "expo.jsx",
+        "ts",
+        "tsx",
+        "js",
+        "jsx",
+        "json",
+        "wasm",
+        "svg"
+      ]
     }
   }
 }
