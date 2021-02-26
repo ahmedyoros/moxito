@@ -1,21 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import './logs/IgnoreLogs';
+import CheckLogin from './screens/CheckLogin';
+import ChooseRole from './screens/ChooseRole';
+import Login from './screens/Login';
+import MainMenu from './screens/MainMenu';
+import { ThemeProvider } from './themes/ThemeProvider';
 
 export default function App() {
+  const isDarkMode = useColorScheme() === 'dark';
+
   return (
-    <View style={styles.container}>
-      <Text>Welcome in mOxitO!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AppearanceProvider>
+      <ThemeProvider>
+        <AppNavigator theme={isDarkMode ? 'dark' : 'light'} />
+      </ThemeProvider>
+    </AppearanceProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const navigator = createSwitchNavigator({
+  CheckLogin: CheckLogin,
+  NotLogged: createStackNavigator({
+    ChooseRole: {
+      screen: ChooseRole,
+      navigationOptions: { headerShown: false },
+    },
+    Login: Login,
+  }),
+  Logged: MainMenu,
 });
+
+const AppNavigator = createAppContainer(navigator);

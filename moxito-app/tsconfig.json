@@ -6,7 +6,9 @@
     "moduleResolution": "node",
     "noEmit": true,
     "skipLibCheck": true,
+    "typeRoots": ["types"],
     "resolveJsonModule": true,
-    "strict": true
-  }
+    "strict": true,
+    "target": "es5"
+  },
 }
