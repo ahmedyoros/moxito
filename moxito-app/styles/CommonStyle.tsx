@@ -7,7 +7,6 @@ export default (theme: Theme) => StyleSheet.create({
     backgroundColor:theme.colors.background,
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start',
   },
   
   button: {

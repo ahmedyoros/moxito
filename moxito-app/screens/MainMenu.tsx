@@ -3,6 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 import Button from 'react-native-button';
 import { BarTitle } from '../components/BarTitle';
+import MyButton from '../components/MyButton';
 import CommonStyle from '../styles/CommonStyle';
 import useTheme from '../themes/ThemeProvider';
 import { NavigationProp } from '../types/navigation';
@@ -14,14 +15,12 @@ export default function MainMenu({navigation}: NavigationProp) {
   const commonStyle = CommonStyle(theme);
 
   return (
-    <View style={commonStyle.centerLayout}>
+    <View style={commonStyle.container}>
       <BarTitle title={'Bonjour ' + user.displayName} />
-      <Button
-        style={commonStyle.button}
+      <MyButton
+        title="Se déconnecter"
         onPress={() => firebase.auth().signOut()}
-      >
-        Sign out
-      </Button>
+      />
     </View>
   );
 }
