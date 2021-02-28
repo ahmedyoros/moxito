@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "moxito-app",
+    "name": "moxito",
     "slug": "moxito-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,14 +13,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "univ.lille.moxito",
       "supportsTablet": true,
-      "config":{
-        "googleSignIn":{
+      "config": {
+        "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.17884074050-2ssuqgak04cp89ed81pmlcv3q0pkaikq"
         }
       },
@@ -34,7 +32,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "config": {
-        "googleSignIn":{
+        "googleSignIn": {
           "certificateHash": "EE6915C40DC3479FFFFC1518BEA2CFB67B891FEA"
         }
       }
@@ -58,6 +56,11 @@
         "wasm",
         "svg"
       ]
-    }
+    },
+    "facebookScheme": "fb775379670075305",
+    "facebookAppId": "775379670075305",
+    "facebookDisplayName": "moxito",
+    "facebookAutoInitEnabled": true,
+    "scheme": "moxito"
   }
 }

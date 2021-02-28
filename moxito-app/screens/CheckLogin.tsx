@@ -1,9 +1,9 @@
 import firebase from 'firebase';
 import React from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { NavigationProp } from '../types/navigation';
 
-export default function CheckLogin({navigation}: NavigationProp) {
+export default function CheckLogin({ navigation }: NavigationProp) {
   firebase
     .auth()
     .onAuthStateChanged((user: firebase.User | null) =>
@@ -11,6 +11,8 @@ export default function CheckLogin({navigation}: NavigationProp) {
     );
 
   return (
-    <View />
+    <View>
+      <ActivityIndicator color="#fff" size="large" animating />
+    </View>
   );
 }

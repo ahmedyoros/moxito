@@ -15,7 +15,7 @@ export default function MainMenu({navigation}: NavigationProp) {
 
   return (
     <View style={commonStyle.container}>
-      <BarTitle title={'Logged as ' + user.displayName} />
+      <BarTitle title={'Bonjour ' + user.displayName} />
       <Button
         style={commonStyle.button}
         onPress={() => firebase.auth().signOut()}
