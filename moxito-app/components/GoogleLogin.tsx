@@ -5,7 +5,7 @@ import { Text, TouchableOpacity } from 'react-native';
 import GoogleIcon from '../assets/logos/google.svg';
 import CommonStyle from '../styles/CommonStyle';
 import LoginStyle from '../styles/LoginStyle';
-import { useTheme } from '../themes/ThemeProvider';
+import useTheme from '../themes/ThemeProvider';
 import * as Google from 'expo-auth-session/providers/google';
 
 export default function GoogleLogin({ setCredential }: any) {

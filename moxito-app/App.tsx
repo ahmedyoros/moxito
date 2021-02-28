@@ -1,5 +1,6 @@
 import React from 'react';
-import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
+import { useColorScheme } from 'react-native-appearance';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import './logs/IgnoreLogs';
@@ -7,17 +8,13 @@ import CheckLogin from './screens/CheckLogin';
 import ChooseRole from './screens/ChooseRole';
 import Login from './screens/Login';
 import MainMenu from './screens/MainMenu';
-import { ThemeProvider } from './themes/ThemeProvider';
+import useTheme from './themes/ThemeProvider';
 
 export default function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
   return (
-    <AppearanceProvider>
-      <ThemeProvider>
-        <AppNavigator theme={isDarkMode ? 'dark' : 'light'} />
-      </ThemeProvider>
-    </AppearanceProvider>
+    <PaperProvider theme={useTheme()}>
+      <AppNavigator theme={useColorScheme()} />
+    </PaperProvider>
   );
 }
 

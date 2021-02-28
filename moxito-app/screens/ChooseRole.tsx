@@ -6,11 +6,12 @@ import ChooseRoleStyle from '../styles/ChooseRoleStyle';
 import { COLORS } from '../themes/colors';
 import CommonStyle from '../styles/CommonStyle';
 import LoginStyle from '../styles/LoginStyle';
-import { useTheme } from '../themes/ThemeProvider';
+import useTheme from '../themes/ThemeProvider';
 import { NavigationProp } from '../types/navigation';
 import { Role } from '../types/role';
+import MyButton from '../components/MyButton';
 
-export default function ChooseRole({navigation}: NavigationProp) {
+export default function ChooseRole({ navigation }: NavigationProp) {
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
   const chooseRoleStyle = ChooseRoleStyle(theme);
@@ -22,9 +23,12 @@ export default function ChooseRole({navigation}: NavigationProp) {
       imageStyle={{ resizeMode: 'repeat' }}
     >
       <View style={chooseRoleStyle.container}>
-        <Moxito width={500} style={{
-          marginBottom:0
-        }} />
+        <Moxito
+          width={500}
+          style={{
+            marginBottom: 0,
+          }}
+        />
 
         <Text
           style={{
@@ -36,30 +40,27 @@ export default function ChooseRole({navigation}: NavigationProp) {
           Se déplacer autrement
         </Text>
 
-        <Button
-          style={commonStyle.button}
+        <MyButton
           onPress={() =>
             navigation.navigate('Login', { register: true, role: Role.Driver })
           }
-        >
-          Je suis chauffeur
-        </Button>
+          title="Je suis chauffeur"
+        />
 
-        <Button
-          style={commonStyle.button}
+        <MyButton
           onPress={() =>
-            navigation.navigate('Login', { register: true, role: Role.Customer })
+            navigation.navigate('Login', {
+              register: true,
+              role: Role.Customer,
+            })
           }
-        >
-          Je cherche un Taxi-moto
-        </Button>
+          title="Je cherche un Taxi-moto"
+        />
 
-        <Button
-          style={commonStyle.button}
+        <MyButton
           onPress={() => navigation.navigate('Login')}
-        >
-          J'ai déjà un compte
-        </Button>
+          title="J'ai déjà un compte"
+        />
       </View>
     </ImageBackground>
   );

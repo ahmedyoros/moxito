@@ -7,7 +7,7 @@ import FacebookIcon from '../assets/logos/facebook.svg';
 import { facebookConfig } from '../login.config';
 import CommonStyle from '../styles/CommonStyle';
 import LoginStyle from '../styles/LoginStyle';
-import { useTheme } from '../themes/ThemeProvider';
+import useTheme from '../themes/ThemeProvider';
 
 export default function FacebookLogin({setCredential}:any) {
   const [request, response, promptAsync] =  Facebook.useAuthRequest(facebookConfig);

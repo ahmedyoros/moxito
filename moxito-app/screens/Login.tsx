@@ -4,14 +4,16 @@ import 'firebase/database';
 import 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
+import useTheme from '../themes/ThemeProvider';
 import { BarTitle } from '../components/BarTitle';
 import FacebookLogin from '../components/FacebookLogin';
 import GoogleLogin from '../components/GoogleLogin';
+import ManualLogin from '../components/ManualLogin';
+import ManualSignup from '../components/ManualSignup';
 import TwitterLogin from '../components/TwitterLogin';
 import { firebaseConfig } from '../config';
 import CommonStyle from '../styles/CommonStyle';
 import LoginStyle from '../styles/LoginStyle';
-import { useTheme } from '../themes/ThemeProvider';
 import { NavigationProp } from '../types/navigation';
 import { Role } from '../types/role';
 
@@ -29,7 +31,9 @@ export default function Login({ navigation }: NavigationProp) {
   const register: boolean = navigation.getParam('register');
   const title = register ? "S'inscrire" : 'Se connecter';
 
-  const [credential, setCredential] = useState<firebase.auth.OAuthCredential | undefined>(undefined);
+  const [credential, setCredential] = useState<
+    firebase.auth.OAuthCredential | undefined
+  >(undefined);
 
   useEffect(() => {
     if (!credential) return;
@@ -39,7 +43,6 @@ export default function Login({ navigation }: NavigationProp) {
       .then((result) => {
         const user = result.user!;
         if (result.additionalUserInfo!.isNewUser) {
-
           const userProfile: any = result.additionalUserInfo!.profile!;
           firebase
             .database()
@@ -75,7 +78,7 @@ export default function Login({ navigation }: NavigationProp) {
   const loginStyle = LoginStyle(theme);
 
   return (
-    <View style={[commonStyle.container]}>
+    <View style={commonStyle.container}>
       <BarTitle title={title + ' avec'} />
       <View style={loginStyle.providerIcons}>
         <GoogleLogin setCredential={setCredential} />
@@ -83,6 +86,13 @@ export default function Login({ navigation }: NavigationProp) {
         <TwitterLogin setCredential={setCredential} />
       </View>
       <BarTitle title={title + ' manuellement'} />
+      <View>
+        {register ? (
+          <ManualSignup setCredential={setCredential} />
+        ) : (
+          <ManualLogin setCredential={setCredential} />
+        )}
+      </View>
     </View>
   );
 }

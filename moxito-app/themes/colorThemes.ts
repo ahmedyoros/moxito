@@ -1,18 +1,29 @@
 import { COLORS } from './colors';
-export type Colors = typeof lightColors;
+export type Colors = {
+  primary?: string;
+  text?: string;
+  background?: string;
+  surface?: string;
+  accent?: string;
+  error?: string;
+  onSurface?: string;
+  onBackground?: string;
+  disabled?: string;
+  placeholder?: string;
+  backdrop?: string;
+  notification?: string;
+}
 
 // Light theme colors
-export const lightColors = {
+export const lightColors: Colors = {
   background: COLORS.white,
-  primary: '#512DA8',
-  text: '#121212',
-  error: '#D32F2F',
+  text: COLORS.black,
+  placeholder: COLORS.black,
 };
 
 // Dark theme colors
 export const darkColors = {
-  background: COLORS.grey,
-  primary: '#B39DDB',
-  text: '#FFFFFF',
-  error: '#EF9A9A',
+  background: COLORS.black,
+  text: COLORS.white,
+  placeholder: COLORS.white
 };

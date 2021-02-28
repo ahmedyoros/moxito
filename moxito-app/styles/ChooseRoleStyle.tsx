@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLORS } from '../themes/colors';
-import { Theme } from '../themes/ThemeProvider';
+import { Theme } from 'react-native-paper/lib/typescript/types';
 
 export default (theme: Theme) => StyleSheet.create({
   container: {
@@ -12,6 +11,6 @@ export default (theme: Theme) => StyleSheet.create({
 
   backgroundImage: {
     flex: 1,
-    backgroundColor: COLORS.orange,
+    backgroundColor: theme.colors.primary,
   }
 });

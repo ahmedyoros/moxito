@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Theme } from '../themes/ThemeProvider';
+import { Theme } from 'react-native-paper/lib/typescript/types';
 import { COLORS } from '../themes/colors';
 
 export default (theme: Theme) => StyleSheet.create({
@@ -10,10 +10,9 @@ export default (theme: Theme) => StyleSheet.create({
   },
   
   providerButton: {
-    borderColor: COLORS.grey,
+    borderColor: COLORS.black,
     backgroundColor: COLORS.white,
     padding: 10,
     borderRadius: 100,
-    
   },
 });

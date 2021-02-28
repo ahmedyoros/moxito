@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
 import CommonStyle from '../styles/CommonStyle';
-import { useTheme } from '../themes/ThemeProvider';
+import useTheme from '../themes/ThemeProvider';
+import { useColorScheme } from 'react-native-appearance';
 
 type Title = {
   title: string;
@@ -9,6 +10,7 @@ type Title = {
 
 export function BarTitle({title}: Title) {
   const theme = useTheme();
+  
   const commonStyle = CommonStyle(theme);
   
   return (

@@ -1,32 +1,31 @@
 import { StyleSheet } from 'react-native';
+import { Theme } from 'react-native-paper/lib/typescript/types';
 import { COLORS } from '../themes/colors';
-import { Theme } from '../themes/ThemeProvider';
 
 export default (theme: Theme) => StyleSheet.create({
   container: {
+    backgroundColor:theme.colors.background,
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.colors.background
+    justifyContent: 'flex-start',
   },
-
+  
   button: {
     backgroundColor: COLORS.white,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
-    margin: 5,
+    margin: 15,
     width: 250,
-    height: 50,
     textAlignVertical: 'center',
-    color: 'black',
     fontWeight: 'bold',
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOpacity: 0.8,
     elevation: 6,
     shadowRadius: 15 ,
     shadowOffset : { width: 1, height: 13},
+    alignSelf: 'center'
   },
 
   text: {
