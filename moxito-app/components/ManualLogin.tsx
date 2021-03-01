@@ -1,47 +1,36 @@
 import firebase from 'firebase';
 import 'firebase/auth';
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
-import CommonStyle from '../styles/CommonStyle';
-import LoginStyle from '../styles/LoginStyle';
-import { Button, TextInput } from 'react-native-paper';
-import useTheme from '../themes/ThemeProvider';
-import { COLORS } from '../themes/colors';
+import { HelperText, TextInput } from 'react-native-paper';
 import MyButton from './MyButton';
 
 export default function ManualLogin({ setCredential }: any) {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fireError, setFireError] = useState('');
 
-  const signIn = (email: string, password: string) => {
-    console.log(`email : ${email} password : ${password}`);
-    // firebase.auth().createUserWithEmailAndPassword(email, password).then(
-    //   (credential) => setCredential(credential)
-    // )
+  const signIn = () => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email.trim(), password)
+      .then(setCredential)
+      .catch(({ message }) => setFireError(message));
   };
-
-  const theme = useTheme();
-  const commonStyle = CommonStyle(theme);
-  const loginStyle = LoginStyle(theme);
 
   return (
     <View>
-      <TextInput
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
+      <TextInput label="Email" value={email} onChangeText={setEmail} />
       <TextInput
         label="Mot de passe"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
-
-      <MyButton
-        title="Connexion"
-        onPress={() => signIn(email, password)}
-      />
+      <HelperText type="error" visible={fireError != ''}>
+        {fireError}
+      </HelperText>
+      <MyButton title="Connexion" onPress={() => signIn()} />
     </View>
   );
 }

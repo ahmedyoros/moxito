@@ -22,6 +22,7 @@
     "lodash": "^4.17.21",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-firebase-hooks": "^3.0.0-alpha.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
     "react-native-appearance": "~0.3.3",
     "react-native-button": "^3.0.1",
