@@ -1,6 +1,5 @@
 import firebase from 'firebase';
 import { useObjectVal } from 'react-firebase-hooks/database';
-import { log } from 'react-native-reanimated';
 import { User } from '../types/user';
 
 export default function useUser(): [User, boolean] {

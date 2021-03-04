@@ -8,7 +8,7 @@ import Loading from '../components/Loading';
 import MyButton from '../components/MyButton';
 import { useDidMountEffect } from '../components/MyHooks';
 import UploadImage from '../components/UploadImage';
-import useUser from '../components/UserProvider';
+import useUser from '../providers/UserProvider';
 import { NavigationProps } from '../types/Props';
 import { Role } from '../types/Role';
 

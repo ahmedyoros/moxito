@@ -12,6 +12,7 @@ import { SafeAreaView, Text, useWindowDimensions } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import Avatar from './components/Avatar';
 import './logs/IgnoreLogs';
+import Adresses from './screens/Adresses';
 import ChooseRole from './screens/ChooseRole';
 import Login from './screens/Login';
 import MainMenu from './screens/MainMenu';
@@ -70,7 +71,7 @@ export default function App() {
   }
 
   function renderMenu(): React.ReactNode {
-    const routeNames = ['Accueil', 'Votre profile'];
+    const routeNames = ['Accueil', 'Votre profile', 'Mes adresses préférées'];
     return (
       <Drawer.Navigator
         drawerContent={renderDrawerItems}
@@ -86,6 +87,11 @@ export default function App() {
           component={Profile}
           options={{ headerShown: true }}
           initialParams={{ newUser: newUser }}
+        />
+        <Drawer.Screen
+          name={routeNames[2]}
+          component={Adresses}
+          options={{ headerShown: true }}
         />
       </Drawer.Navigator>
     );
