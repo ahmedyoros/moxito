@@ -1,33 +1,23 @@
 import { COLORS } from './colors';
 export type Colors = {
-  primary?: string;
-  text?: string;
-  background?: string;
-  surface?: string;
-  accent?: string;
-  error?: string;
-  onSurface?: string;
-  onBackground?: string;
-  disabled?: string;
-  placeholder?: string;
-  backdrop?: string;
-  notification?: string;
+  primary: string;
+  text: string;
+  background: string;
+  surface: string;
 }
 
 // Light theme colors
 export const lightColors: Colors = {
   background: COLORS.white,
   text: COLORS.black,
-  placeholder: COLORS.black,
   primary: COLORS.darkOrange,
-  onBackground: COLORS.white,
+  surface: COLORS.white,
 };
 
 // Dark theme colors
-export const darkColors = {
+export const darkColors: Colors = {
   background: COLORS.black,
   text: COLORS.white,
-  placeholder: COLORS.white,
   primary: COLORS.orange,
-  onBackground: "#595959"
+  surface: COLORS.grey
 };

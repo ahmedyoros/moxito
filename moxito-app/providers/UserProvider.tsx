@@ -2,8 +2,9 @@ import firebase from 'firebase';
 import { useObjectVal } from 'react-firebase-hooks/database';
 import { User } from '../types/user';
 
-export default function useUser(): [User, boolean] {
+export default function useUser(): [User, boolean] | undefined {
   const fireUser: firebase.User = firebase.auth().currentUser!;
+  if(!fireUser) return;
   const [userVal, userLoading] = useObjectVal<User>(firebase.database().ref('/users/' + fireUser.uid));
   const user: User = { 
     ...(userVal as User),

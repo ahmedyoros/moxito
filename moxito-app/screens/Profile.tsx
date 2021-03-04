@@ -9,14 +9,16 @@ import MyButton from '../components/MyButton';
 import { useDidMountEffect } from '../components/MyHooks';
 import UploadImage from '../components/UploadImage';
 import useUser from '../providers/UserProvider';
+import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
 import { Role } from '../types/Role';
 
 export default function Profile({ navigation, route }: NavigationProps) {
-  const [user, userLoading] = useUser();
+  const [user, userLoading] = useUser()!;
   const newUser: boolean = route.params!.newUser;
   const fireUser = firebase.auth().currentUser!;
-
+  const theme = useTheme();
+  
   const [presentation, setPresentation] = useState('');
   const [presenationError, setPresenationError] = useState(false);
 
@@ -109,6 +111,7 @@ export default function Profile({ navigation, route }: NavigationProps) {
       )}
       <MyButton title="Valider" onPress={submit} />
       <Snackbar
+        theme={{ colors: {surface: theme.colors.text},}}
         visible={snackbarVisible}
         onDismiss={() => setSnackbarVisible(false)}
         action={{

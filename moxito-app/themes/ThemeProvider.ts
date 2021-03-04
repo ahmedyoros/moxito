@@ -1,22 +1,24 @@
-import { DefaultTheme as DefaultNavigationTheme, Theme as NavigationTheme } from '@react-navigation/native';
+import { DefaultTheme as DefaultNavigationTheme, Theme as NavigationTheme, DarkTheme as DarkNavigationTheme } from '@react-navigation/native';
 import { useColorScheme } from 'react-native-appearance';
-import { DefaultTheme } from 'react-native-paper';
+import { DefaultTheme, DarkTheme } from 'react-native-paper';
 import { Theme } from 'react-native-paper/lib/typescript/types';
 import { COLORS } from './colors';
 import { darkColors, lightColors } from './colorThemes';
 
 export default function useTheme(): Theme {
   const isDark = useColorScheme() === 'dark';
-
+  const colors = (isDark ? darkColors : lightColors);
+  const paperColors = (isDark ? DarkTheme.colors : DefaultTheme.colors)
   return {
     ...DefaultTheme,
     dark: isDark,
     colors: {
-      ...DefaultTheme.colors,
-      ...(isDark ? darkColors : lightColors),
-      // placeholder: COLORS.orange,
-      // accent: COLORS.orange,
-      surface: COLORS.orange,
+      ...paperColors,
+      ...colors,
+      surface: colors.surface,
+      accent: colors.primary,
+      notification: colors.primary,
+      onSurface: colors.surface,
     },
   };
 }
@@ -24,13 +26,17 @@ export default function useTheme(): Theme {
 export function useNavigationTheme(): NavigationTheme {
   const isDark = useColorScheme() === 'dark';
   const colors = (isDark ? darkColors : lightColors);
+  const navigationColors = (isDark ? DarkNavigationTheme.colors : DefaultNavigationTheme.colors)
   return {
     ...DefaultNavigationTheme,
     dark: isDark,
     colors: {
-      ...DefaultNavigationTheme.colors,
-      ...colors,
-      card: colors.background!
+      primary: colors.primary,
+      background: colors.background,
+      card: colors.background,
+      text: colors.text,
+      border: navigationColors.border,
+      notification: navigationColors.notification,
     },
   };
 }

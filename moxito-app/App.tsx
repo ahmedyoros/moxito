@@ -9,7 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import firebase from 'firebase';
 import React, { useState } from 'react';
 import { SafeAreaView, Text, useWindowDimensions } from 'react-native';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Button, Provider as PaperProvider } from 'react-native-paper';
 import Avatar from './components/Avatar';
 import './logs/IgnoreLogs';
 import Adresses from './screens/Adresses';
@@ -23,27 +23,34 @@ import useTheme, { useNavigationTheme } from './themes/ThemeProvider';
 import { NavigationProps } from './types/Props';
 import { Role } from './types/Role';
 import { defaultPictureUrl } from './types/user';
+import Helmet from './assets/icons/helmet.svg';
+import House from './assets/icons/house.svg';
+import Logo from './assets/logos/logo-client.svg';
+import { Ionicons } from '@expo/vector-icons';
+
+import useUser from './providers/UserProvider';
+import { Icon } from 'expo';
+import { COLORS } from './themes/colors';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   const theme = useTheme();
-
   const commonStyle = CommonStyle(theme);
   const [logged, setLogged] = useState(false);
   const [newUser, setNewUser] = useState(false);
   const dimensions = useWindowDimensions();
 
   firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
-    if (user){
+    if (user) {
       setNewUser(user.metadata.creationTime == user.metadata.lastSignInTime);
     }
     setLogged(user != null);
   });
 
   return (
-    <PaperProvider theme={useTheme()}>
+    <PaperProvider theme={theme}>
       <NavigationContainer theme={useNavigationTheme()}>
         {logged ? renderMenu() : renderLogin()}
       </NavigationContainer>
@@ -72,32 +79,53 @@ export default function App() {
   }
 
   function renderMenu(): React.ReactNode {
-    const routeNames = ['Accueil', 'Votre profile', 'Mes adresses préférées', 'Mes chauffeurs préférés'];
+    const routeNames = [
+      'Accueil',
+      'Votre profile',
+      'Mes adresses préférées',
+      'Mes chauffeurs préférés',
+    ];
     return (
       <Drawer.Navigator
         drawerContent={renderDrawerItems}
         initialRouteName={routeNames[newUser ? 1 : 0]}
+        screenOptions={{
+          headerShown: true,
+          headerTintColor: theme.colors.text,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          headerLeftAccessibilityLabel: 'coucou',
+        }}
       >
         <Drawer.Screen
           name={routeNames[0]}
           component={MainMenu}
-          options={{ headerShown: true }}
+          options={{
+            drawerIcon: () =>  <Ionicons name="map" size={20} color={theme.colors.primary}/>,
+          }}
         />
         <Drawer.Screen
           name={routeNames[1]}
           component={Profile}
-          options={{ headerShown: true }}
           initialParams={{ newUser: newUser }}
+          options={{
+            drawerIcon: () => <Logo width={20} height={20} fill={theme.colors.primary}/>,
+          }}
         />
         <Drawer.Screen
           name={routeNames[2]}
           component={Adresses}
-          options={{ headerShown: true }}
+          options={{
+            drawerIcon: () => <House width={20} height={20} />,
+          }}
         />
         <Drawer.Screen
           name={routeNames[3]}
           component={Drivers}
-          options={{ headerShown: true }}
+          options={{
+            drawerIcon: () => <Helmet width={20} height={20} />,
+          }}
         />
       </Drawer.Navigator>
     );

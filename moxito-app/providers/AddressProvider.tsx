@@ -5,7 +5,7 @@ import { Address } from '../types/address';
 export default function useFavoritesAdresses(): [Address[], boolean] {
   const fireUser: firebase.User = firebase.auth().currentUser!;
   const [addressVal, loading] = useObjectVal<Address[]>(firebase.database().ref('/addresses/' + fireUser.uid));
-  const address: Address[] = addressVal as Address[];
+  const address: Address[] = (addressVal || []) as Address[];
   return [address, loading];
 }
 

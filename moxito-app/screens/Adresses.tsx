@@ -6,7 +6,7 @@ import useFavoritesAdresses from '../providers/AddressProvider';
 import CommonStyle from '../styles/CommonStyle';
 import FavoriteStyle from '../styles/FavoriteStyle';
 import useTheme from '../themes/ThemeProvider';
-import House from '../assets/icons/House.svg';
+import House from '../assets/icons/house.svg';
 
 export default function Adresses() {
   const [adresses, loading] = useFavoritesAdresses();
@@ -18,11 +18,14 @@ export default function Adresses() {
   if (loading) return <Loading />;
   return (
     <View style={favoriteStyle.container}>
-      <House style={{ alignSelf: 'center'}} />
-      <Text style={favoriteStyle.text}>Adresses Enregistrées</Text>
+      <House style={{ alignSelf: 'center' }} />
       <List.Section>
         {adresses.map((a) => (
-          <List.Item style={{backgroundColor: theme.colors.onBackground, marginBottom: 5}}
+          <List.Item
+            style={[{
+              backgroundColor: theme.colors.surface,
+              marginBottom: 5,
+            }, commonStyle.shadow]}
             key={a.city + a.street}
             title={a.city}
             description={a.street}
@@ -35,6 +38,12 @@ export default function Adresses() {
           />
         ))}
       </List.Section>
+      {adresses.length === 0 && (
+        <Text style={favoriteStyle.text}>
+          Il semblerait que vous n'ayez pas encore ajouter d’adresses a vos
+          favoris
+        </Text>
+      )}
     </View>
   );
 }
