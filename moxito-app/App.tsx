@@ -14,6 +14,7 @@ import Avatar from './components/Avatar';
 import './logs/IgnoreLogs';
 import Adresses from './screens/Adresses';
 import ChooseRole from './screens/ChooseRole';
+import Drivers from './screens/Drivers';
 import Login from './screens/Login';
 import MainMenu from './screens/MainMenu';
 import Profile from './screens/Profile';
@@ -71,7 +72,7 @@ export default function App() {
   }
 
   function renderMenu(): React.ReactNode {
-    const routeNames = ['Accueil', 'Votre profile', 'Mes adresses préférées'];
+    const routeNames = ['Accueil', 'Votre profile', 'Mes adresses préférées', 'Mes chauffeurs préférés'];
     return (
       <Drawer.Navigator
         drawerContent={renderDrawerItems}
@@ -91,6 +92,11 @@ export default function App() {
         <Drawer.Screen
           name={routeNames[2]}
           component={Adresses}
+          options={{ headerShown: true }}
+        />
+        <Drawer.Screen
+          name={routeNames[3]}
+          component={Drivers}
           options={{ headerShown: true }}
         />
       </Drawer.Navigator>
