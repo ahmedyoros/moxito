@@ -4,33 +4,28 @@ import 'firebase/database';
 import 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import useTheme from '../themes/ThemeProvider';
 import { BarTitle } from '../components/BarTitle';
 import FacebookLogin from '../components/FacebookLogin';
 import GoogleLogin from '../components/GoogleLogin';
+import KeyboardAvoid from '../components/KeyboardAvoid';
 import ManualLogin from '../components/ManualLogin';
 import ManualSignup from '../components/ManualSignup';
 import TwitterLogin from '../components/TwitterLogin';
 import { firebaseConfig } from '../config';
 import CommonStyle from '../styles/CommonStyle';
 import LoginStyle from '../styles/LoginStyle';
-import { NavigationProp } from '../types/navigation';
-import { Role } from '../types/role';
-import { User } from '../user/UserProvider';
+import useTheme from '../themes/ThemeProvider';
+import { NavigationProps } from '../types/Props';
+import { Role } from '../types/Role';
+import { User } from '../types/user';
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-Login.navigationOptions = ({ navigation }: NavigationProp) => ({
-  title: navigation.getParam('register')
-    ? `S'inscrire comme ${Role.toString(navigation.getParam('role'))}`
-    : 'Se connecter',
-});
-
-export default function Login({ navigation }: NavigationProp) {
-  const register: boolean = navigation.getParam('register');
-  const role: Role = navigation.getParam('role');
+export default function Login({ navigation, route }: NavigationProps) {
+  const register: boolean = route.params!.register;
+  const role: Role = route.params!.role || Role.Customer;
   const title = register ? "S'inscrire" : 'Se connecter';
 
   const [credential, setCredential] = useState<firebase.auth.OAuthCredential>();
@@ -49,14 +44,19 @@ export default function Login({ navigation }: NavigationProp) {
     const fireUser = userCredential!.user!;
     if (userCredential!.additionalUserInfo!.isNewUser) {
       const userProfile: any = userCredential!.additionalUserInfo!.profile!;
-      const user: User = {
-        email: fireUser.email!,
-        pictureUrl: userProfile.picture,
-        firstname: userProfile.given_name,
-        name: userProfile.family_name || undefined,
-        createdAt: Date.now(),
-        role: navigation.getParam('role'),
+      const user: any = {
+        firstname: userProfile.given_name || null,
+        name: userProfile.family_name || null,
+        role: role,
       };
+
+      fireUser.updateProfile({
+        displayName: fireUser.displayName || user.firstname || user.name,
+        photoURL:
+          typeof userProfile.picture === 'string'
+            ? userProfile.picture
+            : userProfile.picture.data.url,
+      });
       firebase
         .database()
         .ref('/users/' + fireUser.uid)
@@ -76,21 +76,23 @@ export default function Login({ navigation }: NavigationProp) {
   const loginStyle = LoginStyle(theme);
 
   return (
-    <View style={commonStyle.container}>
-      <BarTitle title={title + ' avec'} />
-      <View style={loginStyle.providerIcons}>
-        <GoogleLogin setCredential={setCredential} />
-        <FacebookLogin setCredential={setCredential} />
-        <TwitterLogin setCredential={setCredential} />
+    <KeyboardAvoid>
+      <View style={commonStyle.container}>
+        <BarTitle title={title + ' avec'} />
+        <View style={loginStyle.providerIcons}>
+          <GoogleLogin setCredential={setCredential} />
+          <FacebookLogin setCredential={setCredential} />
+          <TwitterLogin setCredential={setCredential} />
+        </View>
+        <BarTitle title={title + ' manuellement'} />
+        <View>
+          {register ? (
+            <ManualSignup role={role} setCredential={setUserCredential} />
+          ) : (
+            <ManualLogin setCredential={setUserCredential} />
+          )}
+        </View>
       </View>
-      <BarTitle title={title + ' manuellement'} />
-      <View>
-        {register ? (
-          <ManualSignup role={role} setCredential={setUserCredential} />
-        ) : (
-          <ManualLogin setCredential={setUserCredential} />
-        )}
-      </View>
-    </View>
+    </KeyboardAvoid>
   );
 }

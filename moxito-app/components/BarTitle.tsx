@@ -17,7 +17,7 @@ export function BarTitle({title}: Title) {
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       <View style={{ flex: 1, height: 1, backgroundColor: theme.colors.text }} />
       <View>
-        <Text style={[commonStyle.text, {marginHorizontal:20, color: theme.colors.text}]}>{title}</Text>
+        <Text style={[commonStyle.text, {margin:20}]}>{title}</Text>
       </View>
       <View style={{ flex: 1, height: 1, backgroundColor: theme.colors.text }} />
     </View>

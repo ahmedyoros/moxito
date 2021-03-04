@@ -2,7 +2,7 @@ import firebase from 'firebase';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Button, HelperText, TextInput } from 'react-native-paper';
-import { Role } from '../types/role';
+import { defaultPictureUrl } from '../types/user';
 
 export default function ManualSignUp({ role, setCredential }: any) {
   const [email, setEmail] = useState('');
@@ -20,13 +20,10 @@ export default function ManualSignUp({ role, setCredential }: any) {
       .auth()
       .createUserWithEmailAndPassword(email.trim(), password)
       .then((credential) => {
-        credential.user!.updateProfile({
-          displayName: firstname.trim(),
-        });
         credential.additionalUserInfo!.profile = {
           given_name: firstname.trim(),
           family_name: name.trim(),
-          picture: `/assets/logos/logo-${Role.toString(role)}.svg`,
+          picture: defaultPictureUrl,
         };
         setCredential(credential);
       })

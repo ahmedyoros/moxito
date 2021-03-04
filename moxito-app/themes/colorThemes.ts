@@ -19,11 +19,13 @@ export const lightColors: Colors = {
   background: COLORS.white,
   text: COLORS.black,
   placeholder: COLORS.black,
+  primary: COLORS.darkOrange
 };
 
 // Dark theme colors
 export const darkColors = {
   background: COLORS.black,
   text: COLORS.white,
-  placeholder: COLORS.white
+  placeholder: COLORS.white,
+  primary: COLORS.orange
 };

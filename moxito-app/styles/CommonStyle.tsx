@@ -6,7 +6,6 @@ export default (theme: Theme) => StyleSheet.create({
   container: {
     backgroundColor:theme.colors.background,
     flex: 1,
-    alignItems: 'center',
   },
   
   button: {
@@ -16,7 +15,7 @@ export default (theme: Theme) => StyleSheet.create({
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
     margin: 15,
-    width: 250,
+    maxWidth: 250,
     textAlignVertical: 'center',
     fontWeight: 'bold',
     shadowColor: 'rgba(0, 0, 0, 0.1)',
@@ -24,12 +23,12 @@ export default (theme: Theme) => StyleSheet.create({
     elevation: 6,
     shadowRadius: 15 ,
     shadowOffset : { width: 1, height: 13},
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
 
   text: {
     fontSize: 20,
-    marginVertical: 20,
+    color:theme.colors.text
   },
 
   shadow: {

@@ -1,17 +1,20 @@
+import { NavigationProp } from '@react-navigation/native';
+import {
+  StackNavigationHelpers,
+  StackNavigationProp,
+} from '@react-navigation/stack/lib/typescript/src/types';
 import React from 'react';
 import { ImageBackground, Text, View } from 'react-native';
-import Button from 'react-native-button';
 import Moxito from '../assets/logos/moxito-w.svg';
-import ChooseRoleStyle from '../styles/ChooseRoleStyle';
-import { COLORS } from '../themes/colors';
-import CommonStyle from '../styles/CommonStyle';
-import LoginStyle from '../styles/LoginStyle';
-import useTheme from '../themes/ThemeProvider';
-import { NavigationProp } from '../types/navigation';
-import { Role } from '../types/role';
 import MyButton from '../components/MyButton';
+import ChooseRoleStyle from '../styles/ChooseRoleStyle';
+import CommonStyle from '../styles/CommonStyle';
+import { COLORS } from '../themes/colors';
+import useTheme from '../themes/ThemeProvider';
+import { NavigationProps } from '../types/Props';
+import { Role } from '../types/Role';
 
-export default function ChooseRole({ navigation }: NavigationProp) {
+export default function ChooseRole({ navigation }: NavigationProps) {
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
   const chooseRoleStyle = ChooseRoleStyle(theme);
@@ -58,7 +61,7 @@ export default function ChooseRole({ navigation }: NavigationProp) {
         />
 
         <MyButton
-          onPress={() => navigation.navigate('Login')}
+          onPress={() => navigation.navigate('Login', { register: false })}
           title="J'ai déjà un compte"
         />
       </View>

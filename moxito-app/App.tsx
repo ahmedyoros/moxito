@@ -1,33 +1,119 @@
-import React from 'react';
-import { useColorScheme } from 'react-native-appearance';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerItemList,
+} from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import firebase from 'firebase';
+import React, { useState } from 'react';
+import { SafeAreaView, Text, useWindowDimensions } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import Avatar from './components/Avatar';
 import './logs/IgnoreLogs';
-import CheckLogin from './screens/CheckLogin';
 import ChooseRole from './screens/ChooseRole';
 import Login from './screens/Login';
 import MainMenu from './screens/MainMenu';
-import useTheme from './themes/ThemeProvider';
+import Profile from './screens/Profile';
+import CommonStyle from './styles/CommonStyle';
+import useTheme, { useNavigationTheme } from './themes/ThemeProvider';
+import { NavigationProps } from './types/Props';
+import { Role } from './types/Role';
+import { defaultPictureUrl } from './types/user';
+
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
 export default function App() {
+  const theme = useTheme();
+
+  const commonStyle = CommonStyle(theme);
+  const [logged, setLogged] = useState(false);
+  const [newUser, setNewUser] = useState(false);
+  const dimensions = useWindowDimensions();
+
+  firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
+    if (user){
+      setNewUser(user.metadata.creationTime == user.metadata.lastSignInTime);
+    }
+    setLogged(user != null);
+  });
+
   return (
     <PaperProvider theme={useTheme()}>
-      <AppNavigator theme={useColorScheme()} />
+      <NavigationContainer theme={useNavigationTheme()}>
+        {logged ? renderMenu() : renderLogin()}
+      </NavigationContainer>
     </PaperProvider>
   );
+
+  function renderLogin(): React.ReactNode {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="ChooseRole"
+          component={ChooseRole}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={({ route }: NavigationProps) => ({
+            title: route.params!.register
+              ? `S'inscrire comme ${Role.toString(route.params!.role)}`
+              : 'Se connecter',
+          })}
+        />
+      </Stack.Navigator>
+    );
+  }
+
+  function renderMenu(): React.ReactNode {
+    const routeNames = ['Accueil', 'Votre profile'];
+    return (
+      <Drawer.Navigator
+        drawerContent={renderDrawerItems}
+        initialRouteName={routeNames[newUser ? 1 : 0]}
+      >
+        <Drawer.Screen
+          name={routeNames[0]}
+          component={MainMenu}
+          options={{ headerShown: true }}
+        />
+        <Drawer.Screen
+          name={routeNames[1]}
+          component={Profile}
+          options={{ headerShown: true }}
+          initialParams={{ newUser: newUser }}
+        />
+      </Drawer.Navigator>
+    );
+  }
+
+  function renderDrawerItems(props: any) {
+    const fireUser = firebase.auth().currentUser!;
+    return (
+      <DrawerContentScrollView {...props}>
+        <SafeAreaView
+          style={[
+            commonStyle.container,
+            {
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+          ]}
+        >
+          <Avatar size={50} imageUrl={fireUser.photoURL || defaultPictureUrl} />
+          <Text style={[commonStyle.text]}>{fireUser.displayName}</Text>
+        </SafeAreaView>
+        <DrawerItemList {...props} />
+        <DrawerItem
+          label="Se déconnecter"
+          onPress={() => firebase.auth().signOut()}
+        />
+      </DrawerContentScrollView>
+    );
+  }
 }
-
-const navigator = createSwitchNavigator({
-  CheckLogin: CheckLogin,
-  NotLogged: createStackNavigator({
-    ChooseRole: {
-      screen: ChooseRole,
-      navigationOptions: { headerShown: false },
-    },
-    Login: Login,
-  }),
-  Logged: MainMenu,
-});
-
-const AppNavigator = createAppContainer(navigator);
