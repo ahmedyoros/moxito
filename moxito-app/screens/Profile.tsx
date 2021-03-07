@@ -8,13 +8,13 @@ import Loading from '../components/Loading';
 import MyButton from '../components/MyButton';
 import { useDidMountEffect } from '../components/MyHooks';
 import UploadImage from '../components/UploadImage';
-import useUser from '../providers/UserProvider';
+import useCurrentUser, { updateCurrentUser } from '../backend/UserManager';
 import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
-import { Role } from '../types/Role';
+import { Role } from '../enums/Role';
 
 export default function Profile({ navigation, route }: NavigationProps) {
-  const [user, userLoading] = useUser()!;
+  const [user, userLoading] = useCurrentUser()!;
   const newUser: boolean = route.params!.newUser;
   const fireUser = firebase.auth().currentUser!;
   const theme = useTheme();
@@ -64,14 +64,7 @@ export default function Profile({ navigation, route }: NavigationProps) {
       userData.motoModel = motoModel;
       userData.immatriculation = immatriculation;
     }
-
-    firebase
-      .database()
-      .ref('/users/' + user.id)
-      .update(userData)
-      .then(() => {
-        setSnackbarVisible(true);
-      });
+    updateCurrentUser(userData, () => setSnackbarVisible(true));
   };
 
   if (userLoading) return <Loading />;

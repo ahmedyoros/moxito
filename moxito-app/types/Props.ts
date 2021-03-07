@@ -15,3 +15,7 @@ export type NavigationProps = {
   navigation: StackNavigationHelpers;
   route: RouteProp<any, any>;
 };
+
+export type UserProps = {
+  user: User;
+};

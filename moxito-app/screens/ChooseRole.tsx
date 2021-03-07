@@ -12,7 +12,7 @@ import CommonStyle from '../styles/CommonStyle';
 import { COLORS } from '../themes/colors';
 import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
-import { Role } from '../types/Role';
+import { Role } from '../enums/Role';
 
 export default function ChooseRole({ navigation }: NavigationProps) {
   const theme = useTheme();

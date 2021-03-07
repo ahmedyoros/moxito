@@ -1,10 +1,13 @@
 import firebase from 'firebase';
-import { useObjectVal } from 'react-firebase-hooks/database';
 import { Address } from '../types/address';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { AddressesRef } from '../types/DocumentReferences';
+
+const db = firebase.firestore();
 
 export default function useFavoritesAdresses(): [Address[], boolean] {
   const fireUser: firebase.User = firebase.auth().currentUser!;
-  const [addressVal, loading] = useObjectVal<Address[]>(firebase.database().ref('/addresses/' + fireUser.uid));
+  const [addressVal, loading] = useDocumentData<Address[]>(db.doc('/addresses/' + fireUser.uid) as AddressesRef);
   const address: Address[] = (addressVal || []) as Address[];
   return [address, loading];
 }
@@ -18,5 +21,6 @@ export function loadFavoritesAddresses(): void {
     street: '10 rue john hadley',
     city: 'Lille'
   }];
-  firebase.database().ref('/addresses/' + fireUser.uid).set(addresses)
+
+  db.doc('/addresses/' + fireUser.uid).set(addresses)
 }

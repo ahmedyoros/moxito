@@ -1,36 +1,33 @@
+import { Ionicons } from '@expo/vector-icons';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
-  DrawerItemList,
+  DrawerItemList
 } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import firebase from 'firebase';
 import React, { useState } from 'react';
-import { SafeAreaView, Text, useWindowDimensions } from 'react-native';
-import { Button, Provider as PaperProvider } from 'react-native-paper';
+import { SafeAreaView, Text } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
+import Helmet from './assets/icons/helmet.svg';
+import House from './assets/icons/house.svg';
+import Logo from './assets/logos/logo-client.svg';
 import Avatar from './components/Avatar';
+import { Role } from './enums/Role';
 import './logs/IgnoreLogs';
 import Adresses from './screens/Adresses';
 import ChooseRole from './screens/ChooseRole';
 import Drivers from './screens/Drivers';
+import Home from './screens/Home';
 import Login from './screens/Login';
-import MainMenu from './screens/MainMenu';
 import Profile from './screens/Profile';
 import CommonStyle from './styles/CommonStyle';
 import useTheme, { useNavigationTheme } from './themes/ThemeProvider';
 import { NavigationProps } from './types/Props';
-import { Role } from './types/Role';
 import { defaultPictureUrl } from './types/user';
-import Helmet from './assets/icons/helmet.svg';
-import House from './assets/icons/house.svg';
-import Logo from './assets/logos/logo-client.svg';
-import { Ionicons } from '@expo/vector-icons';
 
-import useUser from './providers/UserProvider';
-import { Icon } from 'expo';
-import { COLORS } from './themes/colors';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -40,13 +37,15 @@ export default function App() {
   const commonStyle = CommonStyle(theme);
   const [logged, setLogged] = useState(false);
   const [newUser, setNewUser] = useState(false);
-  const dimensions = useWindowDimensions();
 
   firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
     if (user) {
+      setLogged(true);
       setNewUser(user.metadata.creationTime == user.metadata.lastSignInTime);
+    }else{
+      setLogged(false);
+      
     }
-    setLogged(user != null);
   });
 
   return (
@@ -100,7 +99,7 @@ export default function App() {
       >
         <Drawer.Screen
           name={routeNames[0]}
-          component={MainMenu}
+          component={Home}
           options={{
             drawerIcon: () =>  <Ionicons name="map" size={20} color={theme.colors.primary}/>,
           }}
