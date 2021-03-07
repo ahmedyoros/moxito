@@ -1,18 +1,13 @@
-import { NavigationProp } from '@react-navigation/native';
-import {
-  StackNavigationHelpers,
-  StackNavigationProp,
-} from '@react-navigation/stack/lib/typescript/src/types';
 import React from 'react';
 import { ImageBackground, Text, View } from 'react-native';
 import Moxito from '../assets/logos/moxito-w.svg';
 import MyButton from '../components/MyButton';
+import { Role } from '../enums/Role';
 import ChooseRoleStyle from '../styles/ChooseRoleStyle';
 import CommonStyle from '../styles/CommonStyle';
 import { COLORS } from '../themes/colors';
 import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
-import { Role } from '../enums/Role';
 
 export default function ChooseRole({ navigation }: NavigationProps) {
   const theme = useTheme();

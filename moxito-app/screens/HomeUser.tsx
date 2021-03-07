@@ -21,13 +21,13 @@ export default function HomeUser({ user }: UserProps) {
       <BarTitle title="Où allez vous ?" />
       <TextInput placeholder="Destination" />
       {searching ? (
-        <MyButton title="Rechercher" onPress={search} />
-      ) : (
-        <>
-          <SandTimer />
+        <View style={{alignItems: 'center'}}>
+          <SandTimer style={[commonStyle.roundIcon, commonStyle.shadow, { padding: 50}]}/>
           <Text style={commonStyle.text}>Recherche en cours...</Text>
-        </>
-      )}
+        </View>
+        ) : (
+          <MyButton title="Rechercher" onPress={search} />
+        )}
     </View>
   );
 }

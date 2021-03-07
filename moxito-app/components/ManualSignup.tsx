@@ -1,8 +1,10 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Button, HelperText, TextInput } from 'react-native-paper';
 import { defaultPictureUrl } from '../types/user';
+import MyButton from './MyButton';
 
 export default function ManualSignUp({ role, setCredential }: any) {
   const [email, setEmail] = useState('');
@@ -53,7 +55,7 @@ export default function ManualSignUp({ role, setCredential }: any) {
       <HelperText type="error" visible={pwError}>
         Les mots de passes ne correspondent pas.
       </HelperText>
-      <Button onPress={() => signUp()}> Sign up</Button>
+      <MyButton title="Valider" onPress={() => signUp()} />
     </View>
   );
 }

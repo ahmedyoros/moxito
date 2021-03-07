@@ -8,6 +8,7 @@ import { updateCurrentUser } from '../backend/UserManager';
 import CommonStyle from '../styles/CommonStyle';
 import useTheme from '../themes/ThemeProvider';
 import { UserProps } from '../types/Props';
+import SandTimer from '../assets/icons/sand-timer.svg';
 
 export default function HomeDriver({ user }: UserProps) {
   const theme = useTheme();
@@ -28,7 +29,10 @@ export default function HomeDriver({ user }: UserProps) {
   return (
     <View style={commonStyle.container}>
       {statut === Statut.available ? (
-        <BarTitle title="Recherche d'une course en cours" />
+        <>
+          <SandTimer />
+          <BarTitle title="Recherche d'une course en cours" />
+        </>
       ) : (
         <BarTitle title="Vous êtes actuellement hors-ligne" />
       )}

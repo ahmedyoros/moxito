@@ -1,7 +1,5 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import 'firebase/database';
-import 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { newUser, updateCurrentUser } from '../backend/UserManager';
@@ -30,7 +28,10 @@ export default function Login({ navigation, route }: NavigationProps) {
   const title = register ? "S'inscrire" : 'Se connecter';
 
   const [credential, setCredential] = useState<firebase.auth.OAuthCredential>();
-  const [userCredential, setUserCredential] = useState<firebase.auth.UserCredential>();
+  const [
+    userCredential,
+    setUserCredential,
+  ] = useState<firebase.auth.UserCredential>();
 
   useEffect(() => {
     if (!credential) return;
@@ -50,7 +51,8 @@ export default function Login({ navigation, route }: NavigationProps) {
       };
 
       fireUser.updateProfile({
-        displayName: fireUser.displayName || userInfos.firstname || userInfos.name,
+        displayName:
+          fireUser.displayName || userInfos.firstname || userInfos.name,
         photoURL:
           typeof userProfile.picture === 'string'
             ? userProfile.picture

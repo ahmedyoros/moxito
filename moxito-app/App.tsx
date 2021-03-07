@@ -3,11 +3,12 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
-  DrawerItemList
+  DrawerItemList,
 } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import React, { useState } from 'react';
 import { SafeAreaView, Text } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -28,7 +29,6 @@ import useTheme, { useNavigationTheme } from './themes/ThemeProvider';
 import { NavigationProps } from './types/Props';
 import { defaultPictureUrl } from './types/user';
 
-
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -42,9 +42,8 @@ export default function App() {
     if (user) {
       setLogged(true);
       setNewUser(user.metadata.creationTime == user.metadata.lastSignInTime);
-    }else{
+    } else {
       setLogged(false);
-      
     }
   });
 
@@ -101,7 +100,9 @@ export default function App() {
           name={routeNames[0]}
           component={Home}
           options={{
-            drawerIcon: () =>  <Ionicons name="map" size={20} color={theme.colors.primary}/>,
+            drawerIcon: () => (
+              <Ionicons name="map" size={20} color={theme.colors.primary} />
+            ),
           }}
         />
         <Drawer.Screen
@@ -109,7 +110,9 @@ export default function App() {
           component={Profile}
           initialParams={{ newUser: newUser }}
           options={{
-            drawerIcon: () => <Logo width={20} height={20} fill={theme.colors.primary}/>,
+            drawerIcon: () => (
+              <Logo width={20} height={20} fill={theme.colors.primary} />
+            ),
           }}
         />
         <Drawer.Screen

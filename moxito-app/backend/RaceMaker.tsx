@@ -1,7 +1,5 @@
-import firebase from "firebase";
+import firebase from 'firebase/app';
 
 export function useAvailableDriver(){
-//   const [driverVal, driverLoading] = useObjectVal<User>(
-//    firebase.database().ref('/avai/' + fireUser.uid)
-//  );
+
 }
