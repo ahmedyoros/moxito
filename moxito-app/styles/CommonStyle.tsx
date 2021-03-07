@@ -37,5 +37,11 @@ export default (theme: Theme) => StyleSheet.create({
     elevation: 6,
     shadowRadius: 15 ,
     shadowOffset : { width: 1, height: 13},
-  }
+  },
+
+  roundIcon: {
+    backgroundColor: COLORS.white,
+    padding: 10,
+    borderRadius: 100,
+  },
 });

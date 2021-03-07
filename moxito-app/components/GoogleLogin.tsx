@@ -24,13 +24,12 @@ export default function GoogleLogin({ setCredential }: any) {
 
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
-  const loginStyle = LoginStyle(theme);
 
   return (
     <TouchableOpacity
       disabled={!request}
       onPress={() => promptAsync()}
-      style={[loginStyle.providerButton, commonStyle.shadow]}
+      style={[commonStyle.roundIcon, commonStyle.shadow]}
     >
       <Text>
         <GoogleIcon width={30} height={30} />

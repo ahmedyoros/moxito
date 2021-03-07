@@ -8,11 +8,4 @@ export default (theme: Theme) => StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  
-  providerButton: {
-    borderColor: COLORS.black,
-    backgroundColor: COLORS.white,
-    padding: 10,
-    borderRadius: 100,
-  },
 });

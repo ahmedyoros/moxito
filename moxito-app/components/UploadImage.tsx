@@ -1,7 +1,8 @@
 import * as ImagePicker from 'expo-image-picker';
 import { ImagePickerOptions } from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import React from 'react';
 import { View } from 'react-native';
 import Avatar from './Avatar';

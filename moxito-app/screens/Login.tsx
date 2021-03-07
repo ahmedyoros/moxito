@@ -1,9 +1,8 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import 'firebase/database';
-import 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { newUser, updateCurrentUser } from '../backend/UserManager';
 import { BarTitle } from '../components/BarTitle';
 import FacebookLogin from '../components/FacebookLogin';
 import GoogleLogin from '../components/GoogleLogin';
@@ -12,12 +11,12 @@ import ManualLogin from '../components/ManualLogin';
 import ManualSignup from '../components/ManualSignup';
 import TwitterLogin from '../components/TwitterLogin';
 import { firebaseConfig } from '../config';
+import { Role } from '../enums/Role';
+import { Statut } from '../enums/Statut';
 import CommonStyle from '../styles/CommonStyle';
 import LoginStyle from '../styles/LoginStyle';
 import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
-import { Role } from '../types/Role';
-import { User } from '../types/user';
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
@@ -44,30 +43,24 @@ export default function Login({ navigation, route }: NavigationProps) {
     const fireUser = userCredential!.user!;
     if (userCredential!.additionalUserInfo!.isNewUser) {
       const userProfile: any = userCredential!.additionalUserInfo!.profile!;
-      const user: any = {
+      const userInfos: any = {
         firstname: userProfile.given_name || null,
         name: userProfile.family_name || null,
         role: role,
+        statut: Statut.idle,
       };
 
       fireUser.updateProfile({
-        displayName: fireUser.displayName || user.firstname || user.name,
+        displayName:
+          fireUser.displayName || userInfos.firstname || userInfos.name,
         photoURL:
           typeof userProfile.picture === 'string'
             ? userProfile.picture
             : userProfile.picture.data.url,
       });
-      firebase
-        .database()
-        .ref('/users/' + fireUser.uid)
-        .set(user);
+      newUser(userInfos, fireUser.uid);
     } else {
-      firebase
-        .database()
-        .ref('/users/' + fireUser.uid)
-        .update({
-          lastLoggedIn: Date.now(),
-        });
+      updateCurrentUser({ lastLoggedIn: Date.now() });
     }
   }, [userCredential]);
 

@@ -1,4 +1,5 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { HelperText, Snackbar, TextInput } from 'react-native-paper';
@@ -8,17 +9,17 @@ import Loading from '../components/Loading';
 import MyButton from '../components/MyButton';
 import { useDidMountEffect } from '../components/MyHooks';
 import UploadImage from '../components/UploadImage';
-import useUser from '../providers/UserProvider';
+import useCurrentUser, { updateCurrentUser } from '../backend/UserManager';
 import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
-import { Role } from '../types/Role';
+import { Role } from '../enums/Role';
 
 export default function Profile({ navigation, route }: NavigationProps) {
-  const [user, userLoading] = useUser()!;
+  const [user, userLoading] = useCurrentUser()!;
   const newUser: boolean = route.params!.newUser;
   const fireUser = firebase.auth().currentUser!;
   const theme = useTheme();
-  
+
   const [presentation, setPresentation] = useState('');
   const [presenationError, setPresenationError] = useState(false);
 
@@ -30,55 +31,52 @@ export default function Profile({ navigation, route }: NavigationProps) {
 
   const [snackbarVisible, setSnackbarVisible] = useState(false);
 
-  const checkPresentationError = () => setPresenationError(presentation.trim() === '' && user.role == Role.Driver);
+  const checkPresentationError = () => setPresenationError(presentation.trim() === '' && user.role === Role.Driver);
   useDidMountEffect(checkPresentationError, [presentation]);
   const checkMotoModelError = () => setMotoModelError(motoModel.trim() === '');
   useDidMountEffect(checkMotoModelError, [motoModel]);
   const checkImmatriculationError = () => setImmatriculationError(immatriculation.trim() === '');
   useDidMountEffect(checkImmatriculationError, [immatriculation]);
-  
+
   useEffect(() => {
-    if (!userLoading){
+    if (!userLoading) {
       user.presentation && setPresentation(user.presentation);
       user.motoModel && setMotoModel(user.motoModel);
       user.immatriculation && setImmatriculation(user.immatriculation);
     }
   }, [userLoading]);
 
-  const updatePhotoUrl = (photoURL : string) => {
+  const updatePhotoUrl = (photoURL: string) => {
     fireUser.updateProfile({
-      photoURL: photoURL
-    })
-  }
+      photoURL: photoURL,
+    });
+  };
 
   const submit = () => {
     const userData: any = {
-      presentation: presentation
+      presentation: presentation,
     };
     if (user.role == Role.Driver) {
-      checkPresentationError()
-      checkImmatriculationError()
-      checkMotoModelError()
+      checkPresentationError();
+      checkImmatriculationError();
+      checkMotoModelError();
       if (presenationError || motoModelError || immatriculationError) return;
 
       userData.motoModel = motoModel;
       userData.immatriculation = immatriculation;
     }
-
-    firebase
-      .database()
-      .ref('/users/' + user.id)
-      .update(userData)
-      .then(() => {
-        setSnackbarVisible(true);
-      });
+    updateCurrentUser(userData, () => setSnackbarVisible(true));
   };
 
   if (userLoading) return <Loading />;
   return (
     <KeyboardAvoid>
       {newUser && <BarTitle title={`Bienvenue ${user.displayName} !`} />}
-      <UploadImage avatar={true} imageUrl={user.photoURL} setImageUrl={updatePhotoUrl} />
+      <UploadImage
+        avatar={true}
+        imageUrl={user.photoURL}
+        setImageUrl={updatePhotoUrl}
+      />
       <TextInput
         multiline={true}
         numberOfLines={5}
@@ -111,13 +109,14 @@ export default function Profile({ navigation, route }: NavigationProps) {
       )}
       <MyButton title="Valider" onPress={submit} />
       <Snackbar
-        theme={{ colors: {surface: theme.colors.text},}}
+        theme={{ colors: { surface: theme.colors.text } }}
         visible={snackbarVisible}
         onDismiss={() => setSnackbarVisible(false)}
         action={{
-          label: 'Retour à l\'Accueil',
+          label: "Retour à l'Accueil",
           onPress: () => navigation.navigate('Accueil'),
-        }}>
+        }}
+      >
         Profile sauvegardé !
       </Snackbar>
     </KeyboardAvoid>

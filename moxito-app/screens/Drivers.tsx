@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import Loading from '../components/Loading';
-import useFavoritesDrivers from '../providers/DriversProvider';
+import useFavoritesDrivers from '../backend/DriversProvider';
 import CommonStyle from '../styles/CommonStyle';
 import FavoriteStyle from '../styles/FavoriteStyle';
 import useTheme from '../themes/ThemeProvider';
