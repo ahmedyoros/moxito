@@ -43,16 +43,25 @@ export default function Login({ navigation, route }: NavigationProps) {
     const fireUser = userCredential!.user!;
     if (userCredential!.additionalUserInfo!.isNewUser) {
       const userProfile: any = userCredential!.additionalUserInfo!.profile!;
+      const displayName = fireUser.displayName!;
+      const names = displayName.split(' ');
+      let firstname = null;
+      let lastname = null;
+      if (names.length > 1) {
+        firstname = names[0];
+        names.shift();
+        lastname = names.join(' ');
+      }
+
       const userInfos: any = {
-        firstname: userProfile.given_name || null,
-        name: userProfile.family_name || null,
+        firstname: userProfile.given_name || firstname || displayName,
+        name: userProfile.family_name || lastname || null,
         role: role,
         statut: Statut.idle,
       };
 
       fireUser.updateProfile({
-        displayName:
-          fireUser.displayName || userInfos.firstname || userInfos.name,
+        displayName: displayName || userInfos.firstname || userInfos.name,
         photoURL:
           typeof userProfile.picture === 'string'
             ? userProfile.picture
