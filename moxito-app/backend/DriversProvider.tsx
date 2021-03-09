@@ -3,7 +3,7 @@ import 'firebase/firestore';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { firebaseConfig } from '../config';
 import { UsersRef } from '../types/DocumentReferences';
-import { User } from '../types/user';
+import { User } from '../types/User';
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);

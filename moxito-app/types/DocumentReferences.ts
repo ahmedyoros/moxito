@@ -1,3 +1,6 @@
+import { Address } from "./Address";
+import { User } from "./User";
+
 export type UsersRef = firebase.firestore.DocumentReference<User[]>;
 export type UserRef = firebase.firestore.DocumentReference<User>;
 

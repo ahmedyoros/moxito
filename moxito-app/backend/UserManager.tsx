@@ -2,26 +2,28 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-import { User } from '../types/user';
+import { BaseUser, User } from '../types/User';
 import { hasNull as hasNullOrUndefined } from '../utils/hasNull';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useDocumentData, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 import { UserRef } from '../types/DocumentReferences';
 import { firebaseConfig } from '../config';
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-const db = firebase.firestore();
+const userRef = firebase.firestore().collection('/users');
 
-export default function useCurrentUser(): [User, boolean] {
-  const fireUser: firebase.User = firebase.auth().currentUser!;
-  return useUser(fireUser);
+export function getFireUser(): firebase.User {
+  return firebase.auth().currentUser!;
 }
 
-function useUser(fireUser: firebase.User): [User, boolean] {
+export default function useCurrentUser(): [User, boolean] {
+  const fireUser: firebase.User = getFireUser();
+  
   const [userVal, userLoading] = useDocumentData<User>(
-    db.doc('/users/' + fireUser.uid) as UserRef
+    userRef.doc(fireUser.uid) as UserRef
   );
+  
   const fireUserInfos = {
     email: fireUser.email!,
     photoURL: fireUser.photoURL!,
@@ -37,8 +39,17 @@ function useUser(fireUser: firebase.User): [User, boolean] {
   return [user, loading];
 }
 
-export function newUser(infos: any, id: string, callback?: () => void) {
-  db.doc('/users/' + id)
+export function getBaseUser(): BaseUser{
+  const user = getFireUser();
+  return {
+    photoURL: user.photoURL!,
+    displayName: user.displayName!,
+    id: user.uid,
+  }
+}
+
+export function createUser(infos: any, id: string, callback?: () => void) {
+  userRef.doc(id)
     .set(infos)
     .then(() => {
       if (callback) callback();
@@ -51,7 +62,7 @@ export function updateCurrentUser(infos: any, callback?: () => void) {
 }
 
 export function updateUser(id: string, infos: any, callback?: () => void) {
-  db.doc('/users/' + id)
+  userRef.doc(id)
     .update(infos)
     .then(() => {
       if (callback) callback();

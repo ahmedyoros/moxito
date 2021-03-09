@@ -3,7 +3,7 @@ import 'firebase/auth';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Button, HelperText, TextInput } from 'react-native-paper';
-import { defaultPictureUrl } from '../types/user';
+import { defaultPictureUrl } from '../types/User';
 import MyButton from './MyButton';
 
 export default function ManualSignUp({ role, setCredential }: any) {
@@ -27,6 +27,10 @@ export default function ManualSignUp({ role, setCredential }: any) {
           family_name: name.trim(),
           picture: defaultPictureUrl,
         };
+        firebase.auth().currentUser!.updateProfile({
+          displayName: firstname.trim(), 
+        });
+
         setCredential(credential);
       })
       .catch(({ message }) => setFireError(message));
