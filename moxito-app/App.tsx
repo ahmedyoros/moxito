@@ -3,18 +3,17 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
-  DrawerItemList,
+  DrawerItemList
 } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import React, { useState } from 'react';
-import { SafeAreaView, Text } from 'react-native';
+import { Image, SafeAreaView, Text } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import Helmet from './assets/icons/helmet.svg';
 import House from './assets/icons/house.svg';
-import Logo from './assets/logos/logo-client.svg';
 import Avatar from './components/Avatar';
 import { Role } from './enums/Role';
 import './logs/IgnoreLogs';
@@ -25,9 +24,10 @@ import Home from './screens/Home';
 import Login from './screens/Login';
 import Profile from './screens/Profile';
 import CommonStyle from './styles/CommonStyle';
+import { COLORS } from './themes/colors';
 import useTheme, { useNavigationTheme } from './themes/ThemeProvider';
 import { NavigationProps } from './types/Props';
-import { defaultPictureUrl } from './types/user';
+import { defaultPictureUrl } from './types/User';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -78,8 +78,8 @@ export default function App() {
 
   function renderMenu(): React.ReactNode {
     const routeNames = [
-      'Accueil',
-      'Votre profile',
+      'Ma course',
+      'Mon profile',
       'Mes adresses préférées',
       'Mes chauffeurs préférés',
     ];
@@ -101,8 +101,8 @@ export default function App() {
           component={Home}
           options={{
             drawerIcon: () => (
-              <Ionicons name="map" size={20} color={theme.colors.primary} />
-            ),
+              <Ionicons name="map" size={20} color={COLORS.orange} />
+            )
           }}
         />
         <Drawer.Screen
@@ -111,7 +111,10 @@ export default function App() {
           initialParams={{ newUser: newUser }}
           options={{
             drawerIcon: () => (
-              <Logo width={20} height={20} fill={theme.colors.primary} />
+              <Image
+                style={{width:20, height:22.1052631579}}
+                source={require('./assets/logos/logo-client.png')}
+              />
             ),
           }}
         />

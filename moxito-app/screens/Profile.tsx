@@ -1,18 +1,18 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { HelperText, Snackbar, TextInput } from 'react-native-paper';
+import useCurrentUser, { updateCurrentUser } from '../backend/UserManager';
 import { BarTitle } from '../components/BarTitle';
 import KeyboardAvoid from '../components/KeyboardAvoid';
 import Loading from '../components/Loading';
 import MyButton from '../components/MyButton';
 import { useDidMountEffect } from '../components/MyHooks';
 import UploadImage from '../components/UploadImage';
-import useCurrentUser, { updateCurrentUser } from '../backend/UserManager';
+import { Role } from '../enums/Role';
 import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
-import { Role } from '../enums/Role';
 
 export default function Profile({ navigation, route }: NavigationProps) {
   const [user, userLoading] = useCurrentUser()!;
@@ -114,7 +114,7 @@ export default function Profile({ navigation, route }: NavigationProps) {
         onDismiss={() => setSnackbarVisible(false)}
         action={{
           label: "Retour à l'Accueil",
-          onPress: () => navigation.navigate('Accueil'),
+          onPress: () => navigation.navigate('Ma course'),
         }}
       >
         Profile sauvegardé !

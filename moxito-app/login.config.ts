@@ -16,7 +16,7 @@ export const facebookConfig = {
   // For usage in managed apps using the proxy
   redirectUri: isNative
     ? Platform.OS === 'android'
-      ? `https://auth.expo.io/@YOURUSERORORGANISATION/${Constants.manifest.slug}`
+      ? `https://auth.expo.io/@moxito/${Constants.manifest.slug}`
       : `fb${FACEBOOK_ID}://authorize`
     : makeRedirectUri({
         useProxy,

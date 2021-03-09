@@ -13,5 +13,10 @@ export default (theme: Theme) => StyleSheet.create({
   backgroundImage: {
     flex: 1,
     backgroundColor: COLORS.orange,
+  },
+
+  text: {
+    color: COLORS.white,
+    fontSize: 20,
   }
 });

@@ -1,7 +1,8 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationHelpers } from '@react-navigation/stack/lib/typescript/src/types';
 import { ReactElement, ReactNode } from 'react';
-import { User } from './user';
+import { Race } from './Race';
+import { User } from './User';
 
 export type NodeProps = {
   children: ReactNode[] | ReactNode;
@@ -18,4 +19,8 @@ export type NavigationProps = {
 
 export type UserProps = {
   user: User;
-};
+}
+
+export type RaceProps = {
+  race: Race;
+}

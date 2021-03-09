@@ -3,24 +3,23 @@ import { ImageBackground, Text, View } from 'react-native';
 import Moxito from '../assets/logos/moxito-w.svg';
 import MyButton from '../components/MyButton';
 import { Role } from '../enums/Role';
-import ChooseRoleStyle from '../styles/ChooseRoleStyle';
 import CommonStyle from '../styles/CommonStyle';
-import { COLORS } from '../themes/colors';
+import MoxitoStyle from '../styles/MoxitoStyle';
 import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
 
 export default function ChooseRole({ navigation }: NavigationProps) {
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
-  const chooseRoleStyle = ChooseRoleStyle(theme);
+  const moxitoStyle = MoxitoStyle(theme);
 
   return (
     <ImageBackground
       source={require('../assets/logos/bg-logos.png')}
-      style={chooseRoleStyle.backgroundImage}
+      style={moxitoStyle.backgroundImage}
       imageStyle={{ resizeMode: 'repeat' }}
     >
-      <View style={chooseRoleStyle.container}>
+      <View style={moxitoStyle.container}>
         <Moxito
           width={500}
           style={{
@@ -28,13 +27,7 @@ export default function ChooseRole({ navigation }: NavigationProps) {
           }}
         />
 
-        <Text
-          style={{
-            color: COLORS.white,
-            fontSize: 20,
-            marginBottom: 40,
-          }}
-        >
+        <Text style={[moxitoStyle.text, { marginBottom: 40 }]}>
           Se déplacer autrement
         </Text>
 

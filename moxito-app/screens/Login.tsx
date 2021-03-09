@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { newUser, updateCurrentUser } from '../backend/UserManager';
+import { createUser, updateCurrentUser } from '../backend/UserManager';
 import { BarTitle } from '../components/BarTitle';
 import FacebookLogin from '../components/FacebookLogin';
 import GoogleLogin from '../components/GoogleLogin';
@@ -12,7 +12,7 @@ import ManualSignup from '../components/ManualSignup';
 import TwitterLogin from '../components/TwitterLogin';
 import { firebaseConfig } from '../config';
 import { Role } from '../enums/Role';
-import { Statut } from '../enums/Statut';
+import { UserStatus } from '../enums/Status';
 import CommonStyle from '../styles/CommonStyle';
 import LoginStyle from '../styles/LoginStyle';
 import useTheme from '../themes/ThemeProvider';
@@ -22,7 +22,7 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-export default function Login({ navigation, route }: NavigationProps) {
+export default function Login({ route }: NavigationProps) {
   const register: boolean = route.params!.register;
   const role: Role = route.params!.role || Role.Customer;
   const title = register ? "S'inscrire" : 'Se connecter';
@@ -43,7 +43,7 @@ export default function Login({ navigation, route }: NavigationProps) {
     const fireUser = userCredential!.user!;
     if (userCredential!.additionalUserInfo!.isNewUser) {
       const userProfile: any = userCredential!.additionalUserInfo!.profile!;
-      const displayName = fireUser.displayName!;
+      const displayName = fireUser.displayName || '';
       const names = displayName.split(' ');
       let firstname = null;
       let lastname = null;
@@ -57,7 +57,7 @@ export default function Login({ navigation, route }: NavigationProps) {
         firstname: userProfile.given_name || firstname || displayName,
         name: userProfile.family_name || lastname || null,
         role: role,
-        statut: Statut.idle,
+        status: UserStatus.idle
       };
 
       fireUser.updateProfile({
@@ -67,7 +67,7 @@ export default function Login({ navigation, route }: NavigationProps) {
             ? userProfile.picture
             : userProfile.picture.data.url,
       });
-      newUser(userInfos, fireUser.uid);
+      createUser(userInfos, fireUser.uid);
     } else {
       updateCurrentUser({ lastLoggedIn: Date.now() });
     }
