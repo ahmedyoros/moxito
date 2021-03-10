@@ -5,9 +5,12 @@ import Avatar from '../../components/Avatar';
 import Loading from '../../components/Loading';
 import CommonStyle from '../../styles/CommonStyle';
 import useTheme from '../../themes/ThemeProvider';
-import { UserProps } from '../../types/Props';
+import { NavigationProps, UserProps } from '../../types/Props';
+import { User } from '../../types/User';
+import { FontAwesome5 } from '@expo/vector-icons';
 
-export default function FollowDriver({user}: UserProps) {
+export default function FollowDriver({navigation, route}: NavigationProps) {
+  const user: User = route.params!.user;
   const [race, loading] = useRace(user.currentRaceId!)
   
   const theme = useTheme();
@@ -15,9 +18,21 @@ export default function FollowDriver({user}: UserProps) {
 
   if(loading) return <Loading />;
   return (
-    <View style={commonStyle.container}>
+    <View
+      style={[
+        commonStyle.container,
+        { alignItems: 'center', justifyContent: 'center' },
+      ]}
+    >
       <Avatar size={50} imageUrl={race.driver!.photoURL} />
       <Text style={[commonStyle.text, {alignSelf: 'center' }]}>{race.driver!.displayName} arrive bientôt !</Text>
+      <FontAwesome5
+        style={[commonStyle.roundIcon, commonStyle.shadow]}
+        name="rocketchat"
+        size={24}
+        color={theme.colors.primary}
+        onPress={() => navigation.navigate('Chat', { race: race, user: user })}
+      />
     </View>
   )
 }
