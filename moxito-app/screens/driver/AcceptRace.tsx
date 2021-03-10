@@ -4,15 +4,15 @@ import React from 'react';
 import { Animated, ImageBackground, Text, View } from 'react-native';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import Moxito from '../../assets/logos/moxito-w.svg';
-import { acceptRace, declineRace } from '../../backend/RaceManager';
-import { updateCurrentUser } from '../../backend/UserManager';
+import { acceptRace, declineRace, getRace } from '../../backend/RaceManager';
+import { updateCurrentUser, updateUser } from '../../backend/UserManager';
+import Loading from '../../components/Loading';
 import MyButton from '../../components/MyButton';
-import { RaceStatus, UserStatus } from '../../enums/Status';
+import { UserStatus } from '../../enums/Status';
 import CommonStyle from '../../styles/CommonStyle';
 import MoxitoStyle from '../../styles/MoxitoStyle';
 import useTheme from '../../themes/ThemeProvider';
-import { NavigationProps, UserProps } from '../../types/Props';
-import { Race } from '../../types/Race';
+import { UserProps } from '../../types/Props';
 
 const Countdown = ({ onComplete }: any) => (
   <CountdownCircleTimer
@@ -33,15 +33,18 @@ const Countdown = ({ onComplete }: any) => (
   </CountdownCircleTimer>
 );
 
-export default function AcceptRace({user: user} : UserProps) {
+export default function AcceptRace({ user: user }: UserProps) {
+  const [race, loading] = getRace(user.currentRaceId!);
+
   const accept = () => {
     acceptRace(user.currentRaceId!, () => {
-      updateCurrentUser({status: UserStatus.racing})
+      updateCurrentUser({ status: UserStatus.racing });
+      updateUser(race.customer.id, { status: UserStatus.racing });
     });
   };
 
   const decline = () => {
-    if(!user.currentRaceId) return;
+    if (!user.currentRaceId) return;
     declineRace(user.currentRaceId!, () => {
       updateCurrentUser({
         status: UserStatus.idle,
@@ -62,9 +65,15 @@ export default function AcceptRace({user: user} : UserProps) {
       <View style={moxitoStyle.container}>
         <Moxito></Moxito>
         <Text style={moxitoStyle.text}>Nouvelle course !</Text>
-        <Countdown onComplete={decline} />
-        <MyButton title="Accepter" onPress={() => accept()} />
-        <MyButton title="Refuser" onPress={() => decline()} />
+        {loading ? (
+          <Loading />
+        ) : (
+          <>
+            <Countdown onComplete={decline} />
+            <MyButton title="Accepter" onPress={() => accept()} />
+            <MyButton title="Refuser" onPress={() => decline()} />
+          </>
+        )}
       </View>
     </ImageBackground>
   );

@@ -1,7 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { useCollection, useDocumentData } from 'react-firebase-hooks/firestore';
+import { useCollection, useDocumentData, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 import { firebaseConfig } from '../config';
 import { RaceStatus } from '../enums/Status';
 import { Address } from '../types/Address';
@@ -11,7 +11,7 @@ import { getBaseUser } from './UserManager';
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-const racesRef = firebase.firestore().collection('/races');
+const racesRef = firebase.firestore().collection('races');
 
 export function createRace(
   from: Address,
@@ -49,8 +49,20 @@ export function acceptRace(id: string, callback?: () => void) {
     .then(() => callback && callback());
 }
 
+export function endRace(id: string, callback?: () => void) {
+  racesRef
+    .doc(id)
+    .update({ status: RaceStatus.over})
+    .then(() => callback && callback());
+}
+
 export function useRace(id: string): [Race, boolean] {
   const [race, loading] = useDocumentData<Race>(racesRef.doc(id));
+  return [race!, loading];
+}
+
+export function getRace(id: string): [Race, boolean] {
+  const [race, loading] = useDocumentDataOnce<Race>(racesRef.doc(id));
   return [race!, loading];
 }
 
