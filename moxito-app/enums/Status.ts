@@ -10,4 +10,5 @@ export enum UserStatus {
   searching = 'searching',
   accepting = 'accepting',
   racing = 'racing',
+  arrived = 'arrived',
 }

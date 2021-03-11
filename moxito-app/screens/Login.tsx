@@ -57,7 +57,7 @@ export default function Login({ route }: NavigationProps) {
         firstname: userProfile.given_name || firstname || displayName,
         name: userProfile.family_name || lastname || null,
         role: role,
-        status: UserStatus.idle
+        status: UserStatus.idle 
       };
 
       fireUser.updateProfile({

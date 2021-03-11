@@ -5,6 +5,7 @@ declare module '*.svg' {
   export default content;
 }
 
+declare module 'money';
 declare module '@env' {
   export const API_KEY: string;
   export const AUTH_DOMAIN: string;
@@ -14,4 +15,6 @@ declare module '@env' {
   export const MESSAGING_SENDER_ID: string;
   export const APP_ID: string;
   export const MEASURMENT: string;
+
+  export const CURRENCY_API_KEY: string;
 }

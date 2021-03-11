@@ -3,7 +3,7 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
-  DrawerItemList
+  DrawerItemList,
 } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -39,6 +39,7 @@ export default function App() {
   const [newUser, setNewUser] = useState(false);
 
   firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
+    
     if (user) {
       setLogged(true);
       setNewUser(user.metadata.creationTime == user.metadata.lastSignInTime);
@@ -56,6 +57,7 @@ export default function App() {
   );
 
   function renderLogin(): React.ReactNode {
+    
     return (
       <Stack.Navigator>
         <Stack.Screen
@@ -93,7 +95,6 @@ export default function App() {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
-          headerLeftAccessibilityLabel: 'coucou',
         }}
       >
         <Drawer.Screen
@@ -112,11 +113,12 @@ export default function App() {
           options={{
             drawerIcon: () => (
               <Image
-                style={{width:20, height:22.1052631579}}
+                style={{ width: 20, height: 22.1052631579 }}
                 source={require('./assets/logos/logo-client.png')}
               />
             ),
           }}
+          
         />
         <Drawer.Screen
           name={routeNames[2]}

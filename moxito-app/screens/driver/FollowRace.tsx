@@ -17,17 +17,14 @@ import { User } from '../../types/User';
 export default function FollowRace({ navigation, route }: NavigationProps) {
   const user: User = route.params!.user;
   const [race, loading] = useRace(user.currentRaceId!);
-  const chat = () => {};
 
   const finish = () => {
     endRace(user.currentRaceId!, () => {
       updateCurrentUser({
-        status: UserStatus.idle,
-        currentRaceId: firebase.firestore.FieldValue.delete(),
+        status: UserStatus.arrived
       });
       updateUser(race.customer.id, {
-        status: UserStatus.idle,
-        currentRaceId: firebase.firestore.FieldValue.delete(),
+        status: UserStatus.arrived
       });
     });
   };

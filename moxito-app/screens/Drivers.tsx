@@ -1,15 +1,15 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
+import { List } from 'react-native-paper';
+import Helmet from '../assets/icons/helmet.svg';
+import { getFavoriteDrivers } from '../backend/FavoriteManager';
 import Loading from '../components/Loading';
-import useFavoritesDrivers from '../backend/DriversProvider';
 import CommonStyle from '../styles/CommonStyle';
 import FavoriteStyle from '../styles/FavoriteStyle';
 import useTheme from '../themes/ThemeProvider';
-import Helmet from '../assets/icons/helmet.svg';
-import { List } from 'react-native-paper';
 
 export default function Drivers() {
-  const [drivers, loading] = useFavoritesDrivers();
+  const [drivers, loading] = getFavoriteDrivers();
 
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);

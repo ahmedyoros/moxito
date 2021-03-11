@@ -1,22 +1,27 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import React from 'react';
-import { Animated, ImageBackground, Text, View } from 'react-native';
+import { Animated, ImageBackground, View } from 'react-native';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
+import { Title } from 'react-native-paper';
 import Moxito from '../../assets/logos/moxito-w.svg';
 import { acceptRace, declineRace, getRace } from '../../backend/RaceManager';
 import { updateCurrentUser, updateUser } from '../../backend/UserManager';
+import CrossTable from '../../components/CrossTable';
+import CrossTableCell from '../../components/CrossTableCell';
 import Loading from '../../components/Loading';
 import MyButton from '../../components/MyButton';
+import fx from '../../currency.config';
 import { UserStatus } from '../../enums/Status';
 import CommonStyle from '../../styles/CommonStyle';
 import MoxitoStyle from '../../styles/MoxitoStyle';
+import { COLORS } from '../../themes/colors';
 import useTheme from '../../themes/ThemeProvider';
 import { UserProps } from '../../types/Props';
 
 const Countdown = ({ onComplete }: any) => (
   <CountdownCircleTimer
-    isPlaying
+    // isPlaying
     duration={10}
     colors={[
       ['#004777', 0.4],
@@ -35,7 +40,6 @@ const Countdown = ({ onComplete }: any) => (
 
 export default function AcceptRace({ user: user }: UserProps) {
   const [race, loading] = getRace(user.currentRaceId!);
-
   const accept = () => {
     acceptRace(user.currentRaceId!, () => {
       updateCurrentUser({ status: UserStatus.racing });
@@ -63,12 +67,42 @@ export default function AcceptRace({ user: user }: UserProps) {
       imageStyle={{ resizeMode: 'repeat' }}
     >
       <View style={moxitoStyle.container}>
-        <Moxito></Moxito>
-        <Text style={moxitoStyle.text}>Nouvelle course !</Text>
+        <Moxito width={200}></Moxito>
+        <Title
+          style={{ alignSelf: 'center', fontSize: 25, color: COLORS.grey }}
+        >
+          Nouvelle course
+        </Title>
         {loading ? (
           <Loading />
         ) : (
           <>
+            <CrossTable
+              child1={
+                <CrossTableCell
+                  title={race.joinDistance + ' Km'}
+                  subtitle={"jusqu'au client"}
+                />
+              }
+              child2={
+                <CrossTableCell
+                  title={race.raceDistance + ' Km'}
+                  subtitle={'de course'}
+                />
+              }
+              child3={
+                <CrossTableCell
+                  title={fx(race.price).to(user.currency)}
+                  subtitle={user.currency!}
+                />
+              }
+              child4={
+                <CrossTableCell
+                  title={Math.round(race.estimateDuration/60) + ' min'}
+                  subtitle={'de trajet'}
+                />
+              }
+            />
             <Countdown onComplete={decline} />
             <MyButton title="Accepter" onPress={() => accept()} />
             <MyButton title="Refuser" onPress={() => decline()} />

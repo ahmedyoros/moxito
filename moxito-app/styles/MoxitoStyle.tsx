@@ -18,5 +18,6 @@ export default (theme: Theme) => StyleSheet.create({
   text: {
     color: COLORS.white,
     fontSize: 20,
+    textAlign: 'center',
   }
 });

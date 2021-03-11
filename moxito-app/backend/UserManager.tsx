@@ -3,8 +3,9 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { firebaseConfig } from '../config';
+import { Currency } from '../enums/Currency';
 import { UserRef } from '../types/DocumentReferences';
-import { BaseUser, User } from '../types/User';
+import { BaseUser, defaultPictureUrl, User } from '../types/User';
 import { hasNull as hasNullOrUndefined } from '../utils/hasNull';
 
 if (!firebase.apps.length) {
@@ -29,6 +30,7 @@ export default function useCurrentUser(): [User, boolean] {
     displayName: fireUser.displayName!,
   };
   const user: User = {
+    currency: Currency.gnf,
     ...(userVal as User),
     id: fireUser.uid,
     ...fireUserInfos,
@@ -40,8 +42,9 @@ export default function useCurrentUser(): [User, boolean] {
 
 export function getBaseUser(): BaseUser {
   const user = getFireUser();
+  
   return {
-    photoURL: user.photoURL!,
+    photoURL: user.photoURL || defaultPictureUrl,
     displayName: user.displayName!,
     id: user.uid,
   };

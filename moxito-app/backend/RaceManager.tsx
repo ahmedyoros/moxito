@@ -14,19 +14,11 @@ if (!firebase.apps.length) {
 const racesRef = firebase.firestore().collection('races');
 
 export function createRace(
-  from: Address,
-  to: Address,
+  race: Race,
   callback?: (path: string) => void
 ) {
-  const newRace: Race = {
-    createdAt: Date.now(),
-    from: from,
-    to: to,
-    customer: getBaseUser(),
-    status: RaceStatus.pending,
-  };
   const docRef = racesRef.doc();
-  docRef.set(newRace).then(() => callback && callback(docRef.id));
+  docRef.set(race).then(() => callback && callback(docRef.id));
 }
 
 export function deleteRace(id: string) {
@@ -45,14 +37,14 @@ export function declineRace(id: string, callback?: () => void) {
 export function acceptRace(id: string, callback?: () => void) {
   racesRef
     .doc(id)
-    .update({ status: RaceStatus.ongoing, driver: getBaseUser() })
+    .update({ status: RaceStatus.ongoing, startedAt: Date.now(), driver: getBaseUser() })
     .then(() => callback && callback());
 }
 
 export function endRace(id: string, callback?: () => void) {
   racesRef
     .doc(id)
-    .update({ status: RaceStatus.over})
+    .update({ status: RaceStatus.over, endedAt: Date.now()})
     .then(() => callback && callback());
 }
 
