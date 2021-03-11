@@ -32,12 +32,12 @@ export function getSampleAddresses(): Address[] {
     {
       street: '9 rue de lignières',
       city: 'Saint-Quentin',
-      coords: { lat: 49.8517, lon: 3.2831 }
+      pos: { lat: 49.8517, lng: 3.2831 }
     },
     {
       street: '10 rue john hadley',
       city: 'Lille',
-      coords: { lat: 50.6098859, lon: 3.1518583 }
+      pos: { lat: 50.6098859, lng: 3.1518583 }
     },
   ];
 }

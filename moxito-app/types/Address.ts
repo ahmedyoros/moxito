@@ -1,7 +1,7 @@
-import { Coords } from "./Coords";
+import { Pos } from "./Pos";
 
 export type Address = {
   street: string,
   city: string,
-  coords: Coords,
+  pos: Pos,
 }

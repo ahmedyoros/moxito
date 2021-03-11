@@ -21,7 +21,7 @@ import { UserProps } from '../../types/Props';
 
 const Countdown = ({ onComplete }: any) => (
   <CountdownCircleTimer
-    // isPlaying
+    isPlaying
     duration={10}
     colors={[
       ['#004777', 0.4],

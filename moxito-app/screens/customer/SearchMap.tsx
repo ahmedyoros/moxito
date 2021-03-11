@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { getSampleAddresses } from '../../backend/AddressProvider';
-import { createRace } from '../../backend/RaceManager';
+import { createRace } from '../../backend/RaceMaker';
 import { getBaseUser, updateCurrentUser } from '../../backend/UserManager';
 import { BarTitle } from '../../components/BarTitle';
 import MyButton from '../../components/MyButton';
@@ -19,13 +19,12 @@ export default function SearchMap({ user }: UserProps) {
       from: addresses[0],
       to: addresses[1],
       customer: getBaseUser(),
-      joinDistance: 100,
       raceDistance: 100,
       estimateDuration: 100,
       price: 100,
       status: RaceStatus.pending,
     };
-    createRace(race, (raceId) =>
+    createRace(race, (raceId: string) =>
       updateCurrentUser({ status: UserStatus.searching, currentRaceId: raceId })
     );
   };

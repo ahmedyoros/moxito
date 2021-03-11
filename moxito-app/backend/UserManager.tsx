@@ -11,7 +11,7 @@ import { hasNull as hasNullOrUndefined } from '../utils/hasNull';
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-const userRef = firebase.firestore().collection('users');
+export const userRef = firebase.firestore().collection('users');
 
 export function getFireUser(): firebase.User {
   return firebase.auth().currentUser!;

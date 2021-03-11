@@ -10,7 +10,7 @@ export type Race = {
   to: Address;
 
   //estimations
-  joinDistance: number; //meters
+  joinDistance?: number; //meters
   raceDistance: number; //meters
   estimateDuration: number; //seconds
   price: number; //usd

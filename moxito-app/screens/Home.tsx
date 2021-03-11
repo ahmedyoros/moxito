@@ -48,9 +48,9 @@ export default function Home({ navigation }: any) {
     switch (user.status) {
       default:
         //idle
-        return <Idle />;
+        return <Idle user={user}/>;
       case UserStatus.searching:
-        return <SearchRace />;
+        return <SearchRace user={user}/>;
       case UserStatus.accepting:
         return <AcceptRace user={user} />;
       case UserStatus.racing:
