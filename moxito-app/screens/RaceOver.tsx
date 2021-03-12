@@ -53,7 +53,10 @@ export default function RaceOver({ navigation, route }: NavigationProps) {
               child1={
                 <CrossTableCell
                   title={race.joinDistance + ' Km'}
-                  subtitle={"jusqu'" + (user.role === Role.Driver ? 'au client' : 'à vous')}
+                  subtitle={
+                    "jusqu'" +
+                    (user.role === Role.Driver ? 'au client' : 'à vous')
+                  }
                 />
               }
               child2={
@@ -82,10 +85,7 @@ export default function RaceOver({ navigation, route }: NavigationProps) {
             </Title>
             <MyButton
               title="Valider"
-              onPress={() => {
-                updateCurrentUser({currentRaceId: firebase.firestore.FieldValue.delete()});
-                navigation.navigate('Noter', { race: race, user: user })
-              }}
+              onPress={() => navigation.navigate('Noter', { race: race, user: user })}
             />
           </>
         )}

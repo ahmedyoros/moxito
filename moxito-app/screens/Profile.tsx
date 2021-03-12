@@ -15,7 +15,7 @@ import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
 
 export default function Profile({ navigation, route }: NavigationProps) {
-  const [user, userLoading] = useCurrentUser()!;
+  const [user, userLoading] = useCurrentUser();
   const newUser: boolean = route.params!.newUser;
   const fireUser = firebase.auth().currentUser!;
   const theme = useTheme();

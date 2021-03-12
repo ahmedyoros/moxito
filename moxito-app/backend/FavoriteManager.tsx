@@ -3,7 +3,8 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import { useCollectionData, useCollectionDataOnce, useDocumentDataOnce, useDocumentOnce } from 'react-firebase-hooks/firestore';
 import { firebaseConfig } from '../config';
-import { BaseUser, User } from '../types/User';
+import { Address } from '../types/Address';
+import { User } from '../types/User';
 import { getBaseUser } from './UserManager';
 
 if (!firebase.apps.length) {
@@ -14,31 +15,32 @@ const getFavRef = (userId: string) => {
   return firebase
     .firestore()
     .collection('users')
-    .doc(getBaseUser().id)
-    .collection('favoriteDrivers');
+    .doc(userId)
+    .collection('favoriteAddresses');
 };
 
-export const getFavoriteDrivers = (): [BaseUser[], boolean] => {
-  const [drivers, loading] = useCollectionData<BaseUser>(
+export const getFavoriteAddresses = (): [Address[], boolean] => {
+  const [addresses, loading] = useCollectionData<Address>(
     getFavRef(getBaseUser().id)
   );
   if (loading) return [[], true];
-  return [drivers!, false];
+  return [addresses!, false];
 };
 
-export const isFavoriteDriver = (driverId: string): [boolean, boolean] => {
-  const [driverDoc, loading] = useDocumentOnce(
-    getFavRef(getBaseUser().id).doc(driverId)
+export const isFavoriteAddress = (addressId: string): [boolean, boolean] => {
+  const [addressDoc, loading] = useDocumentOnce(
+    getFavRef(getBaseUser().id).doc(addressId)
   );
   if (loading) return [false, true];
-  return [driverDoc!.exists, false];
+  return [addressDoc!.exists, false];
 };
 
-export const addFavoriteDriver = (driver: BaseUser) => {
-  const favDoc = getFavRef(getBaseUser().id).doc(driver.id);
-  favDoc.set(driver);
+export const addFavoriteAddress = (address: Address) => {
+  const favDoc = getFavRef(getBaseUser().id).doc();
+  address.id = favDoc.id;
+  favDoc.set(address);
 };
 
-export const removeFavoriteDriver = (driverId: string) => {
-  getFavRef(getBaseUser().id).doc(driverId).delete();
+export const removeFavoriteAddress = (addressId: string) => {
+  getFavRef(getBaseUser().id).doc(addressId).delete();
 };

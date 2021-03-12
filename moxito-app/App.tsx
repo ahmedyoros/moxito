@@ -23,6 +23,7 @@ import Drivers from './screens/Drivers';
 import Home from './screens/Home';
 import Login from './screens/Login';
 import Profile from './screens/Profile';
+import PublicProfile from './screens/PublicProfile';
 import CommonStyle from './styles/CommonStyle';
 import { COLORS } from './themes/colors';
 import useTheme, { useNavigationTheme } from './themes/ThemeProvider';
@@ -81,7 +82,8 @@ export default function App() {
   function renderMenu(): React.ReactNode {
     const routeNames = [
       'Ma course',
-      'Mon profile',
+      'Modifier mon profile',
+      'Mon profile public',
       'Mes adresses préférées',
       'Mes chauffeurs préférés',
     ];
@@ -122,13 +124,20 @@ export default function App() {
         />
         <Drawer.Screen
           name={routeNames[2]}
+          component={PublicProfile}
+          options={{
+            drawerIcon: () => <Ionicons name="star" size={20} color={COLORS.orange} />
+          }}
+        />
+        <Drawer.Screen
+          name={routeNames[3]}
           component={Adresses}
           options={{
             drawerIcon: () => <House width={20} height={20} />,
           }}
         />
         <Drawer.Screen
-          name={routeNames[3]}
+          name={routeNames[4]}
           component={Drivers}
           options={{
             drawerIcon: () => <Helmet width={20} height={20} />,

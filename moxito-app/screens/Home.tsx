@@ -12,6 +12,7 @@ import AcceptRace from './driver/AcceptRace';
 import FollowRace from './driver/FollowRace';
 import Idle from './driver/Idle';
 import SearchRace from './driver/SearchRace';
+import PublicProfile from './PublicProfile';
 import RaceOver from './RaceOver';
 import UserReview from './UserReview';
 
@@ -28,9 +29,9 @@ export default function Home({ navigation }: any) {
   });
 
   if (loading) return <Loading />;
-  
+
   //Common screens
-  if(user.status === UserStatus.arrived){
+  if (user.status === UserStatus.arrived) {
     return (
       <Stack.Navigator>
         <Stack.Screen
@@ -40,6 +41,7 @@ export default function Home({ navigation }: any) {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Noter" component={UserReview} />
+        <Stack.Screen name="Profile" component={PublicProfile} />
       </Stack.Navigator>
     );
   }
@@ -48,9 +50,9 @@ export default function Home({ navigation }: any) {
     switch (user.status) {
       default:
         //idle
-        return <Idle user={user}/>;
+        return <Idle user={user} />;
       case UserStatus.searching:
-        return <SearchRace user={user}/>;
+        return <SearchRace user={user} />;
       case UserStatus.accepting:
         return <AcceptRace user={user} />;
       case UserStatus.racing:
@@ -65,6 +67,7 @@ export default function Home({ navigation }: any) {
               initialParams={{ user: user }}
             />
             <Stack.Screen name="Chat" component={Chat} />
+            <Stack.Screen name="Profile" component={PublicProfile} />
           </Stack.Navigator>
         );
     }
@@ -82,9 +85,10 @@ export default function Home({ navigation }: any) {
             name="FollowDriver"
             component={FollowDriver}
             initialParams={{ user: user }}
-            options={{headerShown: false }}
+            options={{ headerShown: false }}
           />
           <Stack.Screen name="Chat" component={Chat} />
+          <Stack.Screen name="Profile" component={PublicProfile} />
         </Stack.Navigator>
       );
   }

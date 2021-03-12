@@ -1,12 +1,12 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useDocumentData, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 import { firebaseConfig } from '../config';
 import { Currency } from '../enums/Currency';
 import { UserRef } from '../types/DocumentReferences';
 import { BaseUser, defaultPictureUrl, User } from '../types/User';
-import { hasNull as hasNullOrUndefined } from '../utils/hasNull';
+import { hasNullOrUndefined } from '../utils/nullOrUndefined';
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
@@ -35,8 +35,17 @@ export default function useCurrentUser(): [User, boolean] {
     id: fireUser.uid,
     ...fireUserInfos,
   };
-  const loading = userLoading || hasNullOrUndefined(fireUserInfos);
+  const loading = userLoading;
+  
+  return [user, loading];
+}
 
+export function getFullUser(baseUser: BaseUser): [User, boolean] {
+  const [userVal, loading] = useDocumentDataOnce<User>(userRef.doc(baseUser.id));
+  const user: User = {
+    ...(userVal as User),
+    ...baseUser,
+  }
   return [user, loading];
 }
 

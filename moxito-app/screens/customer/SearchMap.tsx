@@ -12,12 +12,20 @@ import { Race } from '../../types/Race';
 
 export default function SearchMap({ user }: UserProps) {
   const search = () => {
-    const addresses = getSampleAddresses();
-    
+    // const addresses = getSampleAddresses();
+
     const race: Race = {
       createdAt: Date.now(),
-      from: addresses[0],
-      to: addresses[1],
+      from: {
+        street: 'quelques part dans ',
+        city: 'Cambrai',
+        pos: { lat: 50.18457, lng: 3.24112 },
+      },
+      to: {
+        street: '10 rue john hadley',
+        city: 'Lille',
+        pos: { lat: 50.6098859, lng: 3.1518583 },
+      },
       customer: getBaseUser(),
       raceDistance: 100,
       estimateDuration: 100,

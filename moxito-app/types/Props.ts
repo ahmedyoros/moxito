@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationHelpers } from '@react-navigation/stack/lib/typescript/src/types';
 import { ReactElement, ReactNode } from 'react';
 import { Race } from './Race';
@@ -13,7 +13,7 @@ export type ElementProps = {
 };
 
 export type NavigationProps = {
-  navigation: StackNavigationHelpers;
+  navigation: NavigationProp<any, any>;
   route: RouteProp<any, any>;
 };
 

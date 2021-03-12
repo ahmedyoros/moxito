@@ -40,7 +40,7 @@ export default function FollowRace({ navigation, route }: NavigationProps) {
         { alignItems: 'center', justifyContent: 'center' },
       ]}
     >
-      <Avatar size={50} imageUrl={race.customer.photoURL} />
+      <Avatar size={50} imageUrl={race.customer.photoURL} onPress={() => navigation.navigate('Profile', race.customer)}/>
       <Text style={[commonStyle.text, { alignSelf: 'center' }]}>
         En course avec {race.customer.displayName}. Il faut aller de
         {race.from.street}, {race.from.city} à {race.to.street}, {race.to.city}

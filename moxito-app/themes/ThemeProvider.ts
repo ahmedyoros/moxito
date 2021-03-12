@@ -1,8 +1,7 @@
-import { DefaultTheme as DefaultNavigationTheme, Theme as NavigationTheme, DarkTheme as DarkNavigationTheme } from '@react-navigation/native';
+import { DarkTheme as DarkNavigationTheme, DefaultTheme as DefaultNavigationTheme, Theme as NavigationTheme } from '@react-navigation/native';
 import { useColorScheme } from 'react-native-appearance';
-import { DefaultTheme, DarkTheme } from 'react-native-paper';
+import { DarkTheme, DefaultTheme } from 'react-native-paper';
 import { Theme } from 'react-native-paper/lib/typescript/types';
-import { COLORS } from './colors';
 import { darkColors, lightColors } from './colorThemes';
 
 export default function useTheme(): Theme {

@@ -16,7 +16,7 @@ export type User = BaseUser & {
   lastLoggedIn?: number,
   createdAt: number,
   lastSeenAt: number,
-  role: Role | string
+  role: Role
   presentation?: string,
   motoModel?: string,
   immatriculation?: string,

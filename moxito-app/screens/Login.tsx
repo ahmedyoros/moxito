@@ -7,8 +7,10 @@ import { BarTitle } from '../components/BarTitle';
 import FacebookLogin from '../components/FacebookLogin';
 import GoogleLogin from '../components/GoogleLogin';
 import KeyboardAvoid from '../components/KeyboardAvoid';
+import Loading from '../components/Loading';
 import ManualLogin from '../components/ManualLogin';
 import ManualSignup from '../components/ManualSignup';
+import { useDidMountEffect } from '../components/MyHooks';
 import TwitterLogin from '../components/TwitterLogin';
 import { firebaseConfig } from '../config';
 import { Role } from '../enums/Role';
@@ -32,6 +34,7 @@ export default function Login({ route }: NavigationProps) {
     userCredential,
     setUserCredential,
   ] = useState<firebase.auth.UserCredential>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!credential) return;
@@ -40,6 +43,7 @@ export default function Login({ route }: NavigationProps) {
 
   useEffect(() => {
     if (!userCredential) return;
+    setLoading(true);
     const fireUser = userCredential!.user!;
     if (userCredential!.additionalUserInfo!.isNewUser) {
       const userProfile: any = userCredential!.additionalUserInfo!.profile!;
@@ -54,6 +58,7 @@ export default function Login({ route }: NavigationProps) {
       }
 
       const userInfos: any = {
+        createdAt: new Date(fireUser.metadata.creationTime!).getTime(),
         firstname: userProfile.given_name || firstname || displayName,
         name: userProfile.family_name || lastname || null,
         role: role,
@@ -73,10 +78,15 @@ export default function Login({ route }: NavigationProps) {
     }
   }, [userCredential]);
 
+  useDidMountEffect(() => {
+
+  }, [loading])
+
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
   const loginStyle = LoginStyle(theme);
 
+  if(loading) return <Loading />;
   return (
     <KeyboardAvoid>
       <View style={commonStyle.container}>

@@ -27,7 +27,7 @@ export function createRace(
 
 let interval: number;
 
-function lookForDrivers(center: number[], radiusInM: number, callback: (docs: any[]) => void) {
+function lookForRaces(center: number[], radiusInM: number, callback: (docs: any[]) => void) {
   const bounds = geofire.geohashQueryBounds(center, radiusInM);
   const promises = [];
   for (const b of bounds) {
@@ -71,7 +71,7 @@ export function searchClosestRace(pos: Pos, radius: number, callback: (raceId: s
   const center = [pos.lat, pos.lng];
 
   interval = setInterval(_ => {
-    lookForDrivers(center, radius*1000, (raceDocs) => {
+    lookForRaces(center, radius*1000, (raceDocs) => {
       console.log(center, radius);
       
       if(raceDocs.length >= 1){
