@@ -1,10 +1,10 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import 'firebase/auth';
 import { Address } from '../types/Address';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { AddressesRef } from '../types/DocumentReferences';
 import { firebaseConfig } from '../config';
+import { getBaseUser } from './UserManager';
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
@@ -12,19 +12,17 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 
 export default function useFavoritesAdresses(): [Address[], boolean] {
-  const fireUser: firebase.User = firebase.auth().currentUser!;
   const [addressVal, loading] = useDocumentData<Address[]>(
-    db.doc('/addresses/' + fireUser.uid) as AddressesRef
+    db.doc('/addresses/' + getBaseUser().id) as AddressesRef
   );
   const address: Address[] = (addressVal || []) as Address[];
   return [address, loading];
 }
 
 export function loadFavoritesAddresses(): void {
-  const fireUser: firebase.User = firebase.auth().currentUser!;
   const addresses: Address[] = getSampleAddresses();
 
-  db.doc('/addresses/' + fireUser.uid).set(addresses);
+  db.doc('/addresses/' + getBaseUser().id).set(addresses);
 }
 
 export function getSampleAddresses(): Address[] {

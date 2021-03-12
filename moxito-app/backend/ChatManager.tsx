@@ -1,5 +1,4 @@
 import * as firebase from 'firebase/app';
-import 'firebase/auth';
 import 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { IMessage } from 'react-native-gifted-chat';

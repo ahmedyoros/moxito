@@ -14,6 +14,7 @@ import { Image, SafeAreaView, Text } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import Helmet from './assets/icons/helmet.svg';
 import House from './assets/icons/house.svg';
+import { getFireUser } from './backend/UserManager';
 import Avatar from './components/Avatar';
 import { Role } from './enums/Role';
 import './logs/IgnoreLogs';
@@ -148,7 +149,7 @@ export default function App() {
   }
 
   function renderDrawerItems(props: any) {
-    const fireUser = firebase.auth().currentUser!;
+    const fireUser = getFireUser();
     return (
       <DrawerContentScrollView {...props}>
         <SafeAreaView

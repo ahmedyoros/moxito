@@ -2,10 +2,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { ImagePickerOptions } from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import * as firebase from 'firebase/app';
-import 'firebase/auth';
 import 'firebase/storage';
 import React from 'react';
 import { View } from 'react-native';
+import { getFireUser } from '../backend/UserManager';
 import Avatar from './Avatar';
 import Loading from './Loading';
 import MyButton from './MyButton';
@@ -114,7 +114,7 @@ async function uploadImageAsync(uri: any, avatar: boolean) {
 
   let ref: firebase.storage.Reference;
   if (avatar) {
-    const uid = firebase.auth().currentUser!.uid;
+    const uid = getFireUser().uid;
     ref = firebase.storage().ref('avatar').child(uid);
   } else {
     ref = firebase.storage().ref();

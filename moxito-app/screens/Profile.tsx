@@ -1,9 +1,7 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { HelperText, Snackbar, TextInput } from 'react-native-paper';
-import useCurrentUser, { updateCurrentUser } from '../backend/UserManager';
+import {getCurrentUser, getFireUser, updateCurrentUser } from '../backend/UserManager';
 import { BarTitle } from '../components/BarTitle';
 import KeyboardAvoid from '../components/KeyboardAvoid';
 import Loading from '../components/Loading';
@@ -15,9 +13,9 @@ import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
 
 export default function Profile({ navigation, route }: NavigationProps) {
-  const [user, userLoading] = useCurrentUser();
+  const [user, userLoading] = getCurrentUser();
   const newUser: boolean = route.params!.newUser;
-  const fireUser = firebase.auth().currentUser!;
+  const fireUser = getFireUser();
   const theme = useTheme();
 
   const [presentation, setPresentation] = useState('');
@@ -71,7 +69,7 @@ export default function Profile({ navigation, route }: NavigationProps) {
   if (userLoading) return <Loading />;
   return (
     <KeyboardAvoid>
-      {newUser && <BarTitle title={`Bienvenue ${user.displayName} !`} />}
+      {newUser && <BarTitle title={`Bienvenue ${user.firstname} !`} />}
       <UploadImage
         avatar={true}
         imageUrl={user.photoURL}

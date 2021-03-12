@@ -1,10 +1,8 @@
 import * as firebase from 'firebase/app';
-import 'firebase/auth';
 import 'firebase/firestore';
-import { useCollectionData, useCollectionDataOnce, useDocumentDataOnce, useDocumentOnce } from 'react-firebase-hooks/firestore';
+import { useCollectionData, useDocumentOnce } from 'react-firebase-hooks/firestore';
 import { firebaseConfig } from '../config';
 import { Address } from '../types/Address';
-import { User } from '../types/User';
 import { getBaseUser } from './UserManager';
 
 if (!firebase.apps.length) {

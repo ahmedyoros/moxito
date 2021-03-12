@@ -1,6 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
-import useCurrentUser from '../backend/UserManager';
+import { useCurrentUser } from '../backend/UserManager';
 import Loading from '../components/Loading';
 import { Role } from '../enums/Role';
 import { UserStatus } from '../enums/Status';
