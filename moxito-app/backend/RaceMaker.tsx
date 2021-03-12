@@ -2,9 +2,9 @@ import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import { firebaseConfig } from '../config';
 import { RaceStatus } from '../enums/Status';
+import { Pos } from '../types/Pos';
 import { Race } from '../types/Race';
 import { racesRef } from './RaceManager';
-import * as Location from 'expo-location';
 
 const geofire = require('geofire-common');
 
@@ -65,13 +65,15 @@ export function stopSearching() {
 }
 
 /**
- * @param radius searchRadius in meters
+ * @param radius searchRadius in kilometers
  */
-export function searchClosestRace(location: Location.LocationObject, radius: number, callback: (raceId: string) => void) {
-  const center = [location.coords.latitude, location.coords.longitude];
+export function searchClosestRace(pos: Pos, radius: number, callback: (raceId: string) => void) {
+  const center = [pos.lat, pos.lng];
 
   interval = setInterval(_ => {
-    lookForDrivers(center, radius, (raceDocs) => {
+    lookForDrivers(center, radius*1000, (raceDocs) => {
+      console.log(center, radius);
+      
       if(raceDocs.length >= 1){
         clearInterval(interval);
         callback(raceDocs[0].id);

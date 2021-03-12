@@ -1,6 +1,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Animated, ImageBackground, View } from 'react-native';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { Title } from 'react-native-paper';
@@ -18,6 +18,8 @@ import MoxitoStyle from '../../styles/MoxitoStyle';
 import { COLORS } from '../../themes/colors';
 import useTheme from '../../themes/ThemeProvider';
 import { UserProps } from '../../types/Props';
+
+const geofire = require('geofire-common');
 
 const Countdown = ({ onComplete }: any) => (
   <CountdownCircleTimer
@@ -40,8 +42,16 @@ const Countdown = ({ onComplete }: any) => (
 
 export default function AcceptRace({ user: user }: UserProps) {
   const [race, loading] = getRace(user.currentRaceId!);
+
+  const [joinDistance, setJoinDistance] = useState(0);
+
+  useEffect(() => {
+    if(loading) return;
+    setJoinDistance(Math.round(geofire.distanceBetween([user.pos!.lat, user.pos!.lng], [race.from.pos.lat, race.from.pos.lng])));
+  }, [race])
+
   const accept = () => {
-    acceptRace(user.currentRaceId!, () => {
+    acceptRace(user.currentRaceId!, joinDistance, () => {
       updateCurrentUser({ status: UserStatus.racing });
       updateUser(race.customer.id, { status: UserStatus.racing });
     });
@@ -56,6 +66,7 @@ export default function AcceptRace({ user: user }: UserProps) {
       });
     });
   };
+
 
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
@@ -80,7 +91,7 @@ export default function AcceptRace({ user: user }: UserProps) {
             <CrossTable
               child1={
                 <CrossTableCell
-                  title={race.joinDistance + ' Km'}
+                  title={joinDistance + ' Km'}
                   subtitle={"jusqu'au client"}
                 />
               }

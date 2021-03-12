@@ -1,6 +1,9 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
-import { useDocumentData, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
+import {
+  useDocumentData,
+  useDocumentDataOnce,
+} from 'react-firebase-hooks/firestore';
 import { firebaseConfig } from '../config';
 import { RaceStatus } from '../enums/Status';
 import { Race } from '../types/Race';
@@ -24,17 +27,26 @@ export function declineRace(id: string, callback?: () => void) {
     .then(() => callback && callback());
 }
 
-export function acceptRace(id: string, callback?: () => void) {
+export function acceptRace(
+  id: string,
+  joinDistance: number,
+  callback?: () => void
+) {
   racesRef
     .doc(id)
-    .update({ status: RaceStatus.ongoing, startedAt: Date.now(), driver: getBaseUser() })
+    .update({
+      status: RaceStatus.ongoing,
+      startedAt: Date.now(),
+      driver: getBaseUser(),
+      joinDistance: joinDistance,
+    })
     .then(() => callback && callback());
 }
 
 export function endRace(id: string, callback?: () => void) {
   racesRef
     .doc(id)
-    .update({ status: RaceStatus.over, endedAt: Date.now()})
+    .update({ status: RaceStatus.over, endedAt: Date.now() })
     .then(() => callback && callback());
 }
 
@@ -47,5 +59,3 @@ export function getRace(id: string): [Race, boolean] {
   const [race, loading] = useDocumentDataOnce<Race>(racesRef.doc(id));
   return [race!, loading];
 }
-
-

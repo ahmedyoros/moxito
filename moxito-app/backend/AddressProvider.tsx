@@ -30,9 +30,9 @@ export function loadFavoritesAddresses(): void {
 export function getSampleAddresses(): Address[] {
   return [
     {
-      street: '9 rue de lignières',
-      city: 'Saint-Quentin',
-      pos: { lat: 49.8517, lng: 3.2831 }
+      street: 'quelques part dans ',
+      city: 'Cambrai',
+      pos: { lat: 50.18457, lng: 3.24112 }, 
     },
     {
       street: '10 rue john hadley',

@@ -24,6 +24,7 @@ export type User = BaseUser & {
   currentRaceId?: string,
   currency?: Currency | string,
   searchRadius?: number
+  pos?: Pos
 }
 
 export const defaultPictureUrl = 'https://firebasestorage.googleapis.com/v0/b/moxito-a4531.appspot.com/o/defaultUser.png?alt=media&token=47dca24b-1744-42eb-b4e7-53ef20edcf5f';

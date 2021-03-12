@@ -1,3 +1,4 @@
+import * as Location from 'expo-location';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import {
@@ -10,34 +11,37 @@ import Loading from '../../components/Loading';
 import MyButton from '../../components/MyButton';
 import { UserStatus } from '../../enums/Status';
 import useTheme from '../../themes/ThemeProvider';
-import * as Location from 'expo-location';
 import { UserProps } from '../../types/Props';
 
 export default function SearchRace({user} : UserProps) {
-  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [pos, setPos] = useState(user.pos);
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestPermissionsAsync();
+      const { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      const location = await Location.getCurrentPositionAsync({});
+      setPos({
+        lat:location.coords.latitude,
+        lng:location.coords.longitude
+      });
     })();
   }, []);
 
   useEffect(() => {
-    if(!location) return;
-    findClosestRace(location, user.searchRadius!, (raceId: string) => {
+    if(!pos) return;
+    findClosestRace(pos, user.searchRadius!, (raceId: string) => {
       updateCurrentUser({
         status: UserStatus.accepting,
         currentRaceId: raceId,
+        pos: pos
       });
     });
     return () => stopSearching();
-  }, [location]);
+  }, [pos]);
 
   const theme = useTheme();
   return (
