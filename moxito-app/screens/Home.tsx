@@ -21,6 +21,7 @@ const Stack = createStackNavigator();
 
 export default function Home({ navigation }: any) {
   const [user, loading] = useCurrentUser();
+  
   useEffect(() => {
     if (loading) return;
     const showHeader =

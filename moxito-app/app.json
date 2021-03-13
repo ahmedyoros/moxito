@@ -31,6 +31,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
+      "useNextNotificationsApi": true,
       "config": {
         "googleSignIn": {
           "certificateHash": "EE6915C40DC3479FFFFC1518BEA2CFB67B891FEA"

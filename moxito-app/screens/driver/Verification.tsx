@@ -1,5 +1,6 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import React from 'react';
+import { View } from 'react-native';
+import { Headline } from 'react-native-paper';
 import { createRequest } from '../../backend/RequestManager';
 import Loading from '../../components/Loading';
 import CommonStyle from '../../styles/CommonStyle';
@@ -16,7 +17,7 @@ export default function Verification({user}: UserProps) {
   return (
     <View style={commonStyle.container}>
       <Loading/>
-      <Text style={commonStyle.text}>Avant de proposer une course. Un administrateur doit valider votre compte. Cette opération peut prendre un certains temps</Text>
+      <Headline style={[commonStyle.text, {marginLeft: 10}]}>Avant de proposer une course, un administrateur doit valider votre compte. Cette opération peut prendre un certains temps. </Headline>
     </View>
   )
 }

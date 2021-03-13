@@ -1,13 +1,18 @@
 const functions = require('firebase-functions');
 const nodemailer = require('nodemailer');
 const admin = require('firebase-admin');
-
+const appIconURL =
+  'https://firebasestorage.googleapis.com/v0/b/moxito-a4531.appspot.com/o/icon.png?alt=media&token=4b612318-0222-43b8-926b-5c62eaeb127b';
 const accountVerification = 'accountVerification';
+const { Expo } = require('expo-server-sdk');
 
 admin.initializeApp();
 const db = admin.firestore();
 const userRef = (userId) => db.collection('users').doc(userId);
+const tokenRef = (userId, tokenId) => userRef(userId).collection('tokens').doc(tokenId);
 const requestDoc = () => functions.firestore.document('requests/{requestId}');
+const expo = new Expo();
+
 
 const gmailEmail = functions.config().gmail.email;
 const gmailPassword = functions.config().gmail.password;
@@ -31,7 +36,7 @@ exports.onRequestCreate = requestDoc().onCreate((requestDoc, context) => {
     return sendVerificationEmail(request);
 });
 
-exports.onRequestChange = requestDoc().onUpdate((change, context) => {
+exports.onRequestChange = requestDoc().onUpdate(async (change, context) => {
   const request = {
     ...change.after.data(),
     id: context.params.requestId,
@@ -39,9 +44,24 @@ exports.onRequestChange = requestDoc().onUpdate((change, context) => {
 
   if (request.type === accountVerification && request.accepted) {
     userRef(request.user.id).update({ verified: true });
-    //TODO: send push notification
-    console.log('user verified success :D');
+    const notificationDoc = await tokenRef(
+      request.user.id,
+      'notification'
+    ).get();
+
+    const pushToken = notificationDoc.data().data;
+
+    if (!Expo.isExpoPushToken(pushToken)) {
+      return console.error(`Push token ${pushToken} is not a valid Expo push token`);
+    }
+
+    return expo.sendPushNotificationsAsync([{
+      to: pushToken,
+      sound: 'default',
+      body: '🏍️ Votre compte a été validé ✔️',
+    }])
   }
+  return null;
 });
 
 async function sendVerificationEmail(request) {

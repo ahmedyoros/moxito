@@ -5,7 +5,7 @@ import { getBaseUser } from "./UserManager";
 export const reqRef = db.collection('requests');
 
 export const createRequest = async (requestType: RequestType) => {
-  if(await isRequestSent(requestType)){
+  if(!await isRequestSent(requestType)){
     const request: Request = {
       createdAt: Date.now(),
       type: requestType,
@@ -17,9 +17,9 @@ export const createRequest = async (requestType: RequestType) => {
 }
 
 const setRequestSent = async (requestType: RequestType) => {
-  await AsyncStorage.setItem(requestType, 'true');
+  await AsyncStorage.setItem(getBaseUser().id+requestType, 'true');
 }
 
 const isRequestSent = async (requestType: RequestType) => {
-  return await AsyncStorage.getItem(requestType) === 'true';
+  return await AsyncStorage.getItem(getBaseUser().id+requestType) === 'true';
 }

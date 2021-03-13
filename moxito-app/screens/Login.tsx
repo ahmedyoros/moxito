@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { storeNotificationToken } from '../backend/TokenManager';
 import { createUser, updateCurrentUser } from '../backend/UserManager';
 import { BarTitle } from '../components/BarTitle';
 import FacebookLogin from '../components/FacebookLogin';
@@ -68,7 +69,7 @@ export default function Login({ route }: NavigationProps) {
             ? userProfile.picture
             : userProfile.picture.data.url,
       });
-      createUser(userInfos, fireUser.uid);
+      createUser(userInfos, fireUser.uid, () => storeNotificationToken(fireUser.uid));
     } else {
       updateCurrentUser({ lastLoggedIn: Date.now() });
     }
