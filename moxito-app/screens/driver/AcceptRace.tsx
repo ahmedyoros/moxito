@@ -1,5 +1,3 @@
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Animated, ImageBackground, View } from 'react-native';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
@@ -11,6 +9,7 @@ import CrossTable from '../../components/CrossTable';
 import CrossTableCell from '../../components/CrossTableCell';
 import Loading from '../../components/Loading';
 import MyButton from '../../components/MyButton';
+import { deleteField } from '../../config';
 import fx from '../../currency.config';
 import { UserStatus } from '../../enums/Status';
 import CommonStyle from '../../styles/CommonStyle';
@@ -62,7 +61,7 @@ export default function AcceptRace({ user: user }: UserProps) {
     declineRace(user.currentRaceId!, () => {
       updateCurrentUser({
         status: UserStatus.idle,
-        currentRaceId: firebase.firestore.FieldValue.delete(),
+        currentRaceId: deleteField(),
       });
     });
   };

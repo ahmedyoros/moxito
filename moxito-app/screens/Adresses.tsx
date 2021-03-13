@@ -2,14 +2,14 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { List } from 'react-native-paper';
 import Loading from '../components/Loading';
-import useFavoritesAdresses from '../backend/AddressProvider';
 import CommonStyle from '../styles/CommonStyle';
 import FavoriteStyle from '../styles/FavoriteStyle';
 import useTheme from '../themes/ThemeProvider';
 import House from '../assets/icons/house.svg';
+import { useFavoriteAddresses } from '../backend/FavoriteManager';
 
 export default function Adresses() {
-  const [adresses, loading] = useFavoritesAdresses();
+  const [adresses, loading] = useFavoriteAddresses();
 
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);

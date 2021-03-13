@@ -52,8 +52,8 @@ export function getCurrentUser(): [User, boolean] {
   return [user, loading];
 }
 
-export function getFullUser(baseUser: BaseUser): [User, boolean] {
-  const [userVal, loading] = useDocumentDataOnce<User>(
+export function useFullUser(baseUser: BaseUser): [User, boolean] {
+  const [userVal, loading] = useDocumentData<User>(
     userRef.doc(baseUser.id)
   );
   const user: User = {

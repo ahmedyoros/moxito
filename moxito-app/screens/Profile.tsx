@@ -58,10 +58,11 @@ export default function Profile({ navigation, route }: NavigationProps) {
       checkPresentationError();
       checkImmatriculationError();
       checkMotoModelError();
-      if (presenationError || motoModelError || immatriculationError) return;
+      if (presentation === '' || motoModel === '' || immatriculation === '') return;
 
       userData.motoModel = motoModel;
       userData.immatriculation = immatriculation;
+
     }
     updateCurrentUser(userData, () => setSnackbarVisible(true));
   };

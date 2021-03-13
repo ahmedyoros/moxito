@@ -1,16 +1,9 @@
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
-import { firebaseConfig } from '../config';
 import { RaceStatus } from '../enums/Status';
 import { Pos } from '../types/Pos';
 import { Race } from '../types/Race';
 import { racesRef } from './RaceManager';
 
 const geofire = require('geofire-common');
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
 
 export function createRace(
   race: Race,

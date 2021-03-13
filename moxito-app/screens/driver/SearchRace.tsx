@@ -1,10 +1,7 @@
 import * as Location from 'expo-location';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import {
-  searchClosestRace as findClosestRace,
-  stopSearching
-} from '../../backend/RaceMaker';
+import { searchClosestRace, stopSearching } from '../../backend/RaceMaker';
 import { updateCurrentUser } from '../../backend/UserManager';
 import { BarTitle } from '../../components/BarTitle';
 import Loading from '../../components/Loading';
@@ -13,7 +10,7 @@ import { UserStatus } from '../../enums/Status';
 import useTheme from '../../themes/ThemeProvider';
 import { UserProps } from '../../types/Props';
 
-export default function SearchRace({user} : UserProps) {
+export default function SearchRace({ user }: UserProps) {
   const [pos, setPos] = useState(user.pos);
 
   useEffect(() => {
@@ -25,19 +22,19 @@ export default function SearchRace({user} : UserProps) {
 
       const location = await Location.getCurrentPositionAsync({});
       setPos({
-        lat:location.coords.latitude,
-        lng:location.coords.longitude
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
       });
     })();
   }, []);
 
   useEffect(() => {
-    if(!pos) return;
-    findClosestRace(pos, user.searchRadius!, (raceId: string) => {
+    if (!pos) return;
+    searchClosestRace(pos, user.searchRadius!, (raceId: string) => {
       updateCurrentUser({
         status: UserStatus.accepting,
         currentRaceId: raceId,
-        pos: pos
+        pos: pos,
       });
     });
     return () => stopSearching();

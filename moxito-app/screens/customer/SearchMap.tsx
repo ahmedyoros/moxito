@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { getSampleAddresses } from '../../backend/AddressProvider';
 import { createRace } from '../../backend/RaceMaker';
 import { getBaseUser, updateCurrentUser } from '../../backend/UserManager';
 import { BarTitle } from '../../components/BarTitle';
@@ -12,8 +11,6 @@ import { Race } from '../../types/Race';
 
 export default function SearchMap({ user }: UserProps) {
   const search = () => {
-    // const addresses = getSampleAddresses();
-
     const race: Race = {
       createdAt: Date.now(),
       from: {

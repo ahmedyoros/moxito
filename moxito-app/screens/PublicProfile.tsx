@@ -1,29 +1,29 @@
+import { capitalize } from 'lodash';
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
-import { getAvgRating as getAvgRatings } from '../backend/ReviewManager';
-import { getBaseUser, getFullUser } from '../backend/UserManager';
+import { Text, View } from 'react-native';
+import { Divider, Headline, Paragraph as PaperText } from 'react-native-paper';
+import { AirbnbRating } from 'react-native-ratings';
+import MotoIcon from '../assets/motos/moto-1.svg';
+import { getAvgRatings } from '../backend/ReviewManager';
+import { getBaseUser, useFullUser } from '../backend/UserManager';
 import Avatar from '../components/Avatar';
 import Loading from '../components/Loading';
+import { Role } from '../enums/Role';
 import CommonStyle from '../styles/CommonStyle';
 import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
-import { BaseUser, User } from '../types/User';
-import { AirbnbRating } from 'react-native-ratings';
-import { average } from '../utils/array';
-import { Role } from '../enums/Role';
-import { capitalize } from 'lodash';
 import { reviewList } from '../types/Review';
-import { Divider, Headline, Paragraph as PaperText } from 'react-native-paper';
-import MotoIcon from '../assets/motos/moto-1.svg';
+import { BaseUser } from '../types/User';
+import { average } from '../utils/array';
 
 export default function PublicProfile({ navigation, route }: NavigationProps) {
   const baseUser: BaseUser = route.params?.user || getBaseUser();
 
-  const [user, userLoading] = getFullUser(baseUser);
+  const [user, userLoading] = useFullUser(baseUser);
   const [reviewsCount, ratings, ratingsLoading] = getAvgRatings(baseUser.id);
 
   useEffect(() => {
-    if(!route.params) return;
+    if (!route.params) return;
     navigation.setOptions({
       title: 'Profile de ' + baseUser.displayName,
     });
@@ -32,7 +32,7 @@ export default function PublicProfile({ navigation, route }: NavigationProps) {
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
 
-  if (userLoading || ratingsLoading) return <Loading />;  
+  if (userLoading || ratingsLoading) return <Loading />;
   return (
     <View style={commonStyle.container}>
       <View
@@ -107,19 +107,21 @@ export default function PublicProfile({ navigation, route }: NavigationProps) {
           ))}
         </View>
       </View>
-      {user.presentation && user.presentation != '' && (
-        <View style={{ marginLeft: 10 }}>
-          <Headline style={{ fontStyle: 'italic', marginTop: 20 }}>
-            A propos de {user.displayName}
-          </Headline>
-          <PaperText>{user.presentation}</PaperText>
-        </View>
-      )}
+      <View style={{ marginLeft: 10 }}>
+        <Headline style={{ fontStyle: 'italic', marginTop: 20 }}>
+          A propos de {user.displayName}
+        </Headline>
+        <PaperText>
+          {user.presentation && user.presentation.trim() != ''
+            ? user.presentation
+            : `${user.displayName} préfère rester discret`}
+        </PaperText>
+      </View>
       {user.role == Role.Driver && (
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <Divider
             style={{
-              width:'100%',
+              width: '100%',
               marginVertical: 10,
               borderColor: theme.colors.primary,
               borderWidth: 1,
@@ -128,7 +130,7 @@ export default function PublicProfile({ navigation, route }: NavigationProps) {
           {user.motoModel && user.motoModel != '' && (
             <View style={{ marginLeft: 10 }}>
               <Text style={commonStyle.text}>Modèle {user.motoModel}</Text>
-              <MotoIcon/>
+              <MotoIcon />
             </View>
           )}
           {user.immatriculation && (

@@ -1,5 +1,3 @@
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
 import React from 'react';
 import { View } from 'react-native';
 import { deleteRace } from '../../backend/RaceManager';
@@ -7,6 +5,7 @@ import { updateCurrentUser } from '../../backend/UserManager';
 import { BarTitle } from '../../components/BarTitle';
 import Loading from '../../components/Loading';
 import MyButton from '../../components/MyButton';
+import { deleteField } from '../../config';
 import { UserStatus } from '../../enums/Status';
 import CommonStyle from '../../styles/CommonStyle';
 import useTheme from '../../themes/ThemeProvider';
@@ -17,7 +16,7 @@ export default function SearchDriver({user} : UserProps) {
     deleteRace(user.currentRaceId!);
     updateCurrentUser({
       status: UserStatus.idle,
-      currentRaceId: firebase.firestore.FieldValue.delete(),
+      currentRaceId: deleteField(),
     });
   }
 

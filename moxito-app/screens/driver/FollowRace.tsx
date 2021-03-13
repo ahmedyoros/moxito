@@ -1,6 +1,4 @@
 import { FontAwesome5 } from '@expo/vector-icons';
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { endRace, useRace } from '../../backend/RaceManager';
@@ -11,7 +9,7 @@ import MyButton from '../../components/MyButton';
 import { UserStatus } from '../../enums/Status';
 import CommonStyle from '../../styles/CommonStyle';
 import useTheme from '../../themes/ThemeProvider';
-import { NavigationProps, UserProps } from '../../types/Props';
+import { NavigationProps } from '../../types/Props';
 import { User } from '../../types/User';
 
 export default function FollowRace({ navigation, route }: NavigationProps) {

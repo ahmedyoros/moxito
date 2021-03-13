@@ -1,3 +1,4 @@
+import { FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { useRace } from '../../backend/RaceManager';
@@ -5,9 +6,8 @@ import Avatar from '../../components/Avatar';
 import Loading from '../../components/Loading';
 import CommonStyle from '../../styles/CommonStyle';
 import useTheme from '../../themes/ThemeProvider';
-import { NavigationProps, UserProps } from '../../types/Props';
+import { NavigationProps } from '../../types/Props';
 import { User } from '../../types/User';
-import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function FollowDriver({navigation, route}: NavigationProps) {
   const user: User = route.params!.user;
