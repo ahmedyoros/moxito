@@ -7,8 +7,7 @@ import firebase from 'firebase/app';
 export type BaseUser = {
   id: string;
   photoURL: string,
-  displayName: string,
-  email?: string,
+  displayName: string
 }
 
 export type FireUser = firebase.User;

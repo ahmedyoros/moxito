@@ -63,14 +63,24 @@ export function getFullUser(baseUser: BaseUser): [User, boolean] {
   return [user, loading];
 }
 
-export function getBaseUser(withEmail = false): BaseUser {
+export function getBaseUser(): BaseUser {
+  const user = getFireUser();
+
+  return {
+    photoURL: user.photoURL || defaultPictureUrl,
+    displayName: user.displayName!,
+    id: user.uid
+  };
+}
+
+export function getBaseUserWithEmail(): any {
   const user = getFireUser();
 
   return {
     photoURL: user.photoURL || defaultPictureUrl,
     displayName: user.displayName!,
     id: user.uid,
-    email: withEmail ? user.email! : undefined
+    email: user.email
   };
 }
 

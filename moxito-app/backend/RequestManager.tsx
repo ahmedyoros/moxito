@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-community/async-storage";
 import { db } from "../config";
 import { Request, RequestType } from "../types/Request";
-import { getBaseUser } from "./UserManager";
+import { getBaseUser, getBaseUserWithEmail } from "./UserManager";
 export const reqRef = db.collection('requests');
 
 export const createRequest = async (requestType: RequestType) => {
@@ -10,7 +10,7 @@ export const createRequest = async (requestType: RequestType) => {
       createdAt: Date.now(),
       type: requestType,
       accepted: false,
-      user: getBaseUser(true)
+      user: getBaseUserWithEmail()
     } 
     reqRef.add(request).then(() => setRequestSent(requestType));
   }
