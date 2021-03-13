@@ -1,26 +1,19 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
 import {
   useDocumentData,
   useDocumentDataOnce,
 } from 'react-firebase-hooks/firestore';
-import { firebaseConfig } from '../config';
+import { auth, db } from '../config';
 import { Currency } from '../enums/Currency';
 import { UserRef } from '../types/DocumentReferences';
-import { BaseUser, defaultPictureUrl, User } from '../types/User';
-import { hasNullOrUndefined } from '../utils/nullOrUndefined';
+import { BaseUser, defaultPictureUrl, FireUser, User } from '../types/User';
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-export const userRef = firebase.firestore().collection('users');
+export const userRef = db.collection('users');
 
-export function getFireUser(): firebase.User {
-  return firebase.auth().currentUser!;
+export function getFireUser(): FireUser {
+  return auth.currentUser!;
 }
 
-function buildUser(fireUser: firebase.User, userVal: User | undefined) {
+function buildUser(fireUser: FireUser, userVal: User | undefined) {
   const fireUserInfos = {
     email: fireUser.email!,
     photoURL: fireUser.photoURL!,
@@ -36,7 +29,7 @@ function buildUser(fireUser: firebase.User, userVal: User | undefined) {
 }
 
 export function useCurrentUser(): [User, boolean] {
-  const fireUser: firebase.User = getFireUser();
+  const fireUser = getFireUser();
 
   const [userVal, loading] = useDocumentData<User>(
     userRef.doc(fireUser.uid) as UserRef
@@ -48,7 +41,7 @@ export function useCurrentUser(): [User, boolean] {
 }
 
 export function getCurrentUser(): [User, boolean] {
-  const fireUser: firebase.User = getFireUser();
+  const fireUser = getFireUser();
 
   const [userVal, loading] = useDocumentDataOnce<User>(
     userRef.doc(fireUser.uid) as UserRef
@@ -70,13 +63,14 @@ export function getFullUser(baseUser: BaseUser): [User, boolean] {
   return [user, loading];
 }
 
-export function getBaseUser(): BaseUser {
+export function getBaseUser(withEmail = false): BaseUser {
   const user = getFireUser();
 
   return {
     photoURL: user.photoURL || defaultPictureUrl,
     displayName: user.displayName!,
     id: user.uid,
+    email: withEmail ? user.email! : undefined
   };
 }
 

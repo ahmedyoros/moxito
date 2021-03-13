@@ -7,8 +7,6 @@ import {
 } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import firebase from 'firebase/app';
-import 'firebase/auth';
 import React, { useState } from 'react';
 import { Image, SafeAreaView, Text } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -16,6 +14,7 @@ import Helmet from './assets/icons/helmet.svg';
 import House from './assets/icons/house.svg';
 import { getFireUser } from './backend/UserManager';
 import Avatar from './components/Avatar';
+import { auth } from './config';
 import { Role } from './enums/Role';
 import './logs/IgnoreLogs';
 import Adresses from './screens/Adresses';
@@ -40,8 +39,7 @@ export default function App() {
   const [logged, setLogged] = useState(false);
   const [newUser, setNewUser] = useState(false);
 
-  firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
-    
+  auth.onAuthStateChanged((user) => {
     if (user) {
       setLogged(true);
       setNewUser(user.metadata.creationTime == user.metadata.lastSignInTime);
@@ -88,10 +86,12 @@ export default function App() {
       'Mes adresses préférées',
       'Mes chauffeurs préférés',
     ];
+    const initialRouteName = routeNames[newUser ? 1 : 0];
+    
     return (
       <Drawer.Navigator
         drawerContent={renderDrawerItems}
-        initialRouteName={routeNames[newUser ? 1 : 0]}
+        initialRouteName={initialRouteName}
         screenOptions={{
           headerShown: true,
           headerTintColor: theme.colors.text,
@@ -168,7 +168,7 @@ export default function App() {
         <DrawerItemList {...props} />
         <DrawerItem
           label="Se déconnecter"
-          onPress={() => firebase.auth().signOut()}
+          onPress={() => auth.signOut()}
         />
       </DrawerContentScrollView>
     );

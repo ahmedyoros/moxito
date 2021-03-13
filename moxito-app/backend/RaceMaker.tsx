@@ -72,8 +72,6 @@ export function searchClosestRace(pos: Pos, radius: number, callback: (raceId: s
 
   interval = setInterval(_ => {
     lookForRaces(center, radius*1000, (raceDocs) => {
-      console.log(center, radius);
-      
       if(raceDocs.length >= 1){
         clearInterval(interval);
         callback(raceDocs[0].id);

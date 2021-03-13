@@ -1,12 +1,10 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import GoogleIcon from '../assets/logos/google.svg';
 import CommonStyle from '../styles/CommonStyle';
-import LoginStyle from '../styles/LoginStyle';
 import useTheme from '../themes/ThemeProvider';
 import * as Google from 'expo-auth-session/providers/google';
+import { fireAuth } from '../config';
 
 export default function GoogleLogin({ setCredential }: any) {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
@@ -17,7 +15,7 @@ export default function GoogleLogin({ setCredential }: any) {
   React.useEffect(() => {
     if (response?.type === 'success') {
       setCredential(
-        firebase.auth.GoogleAuthProvider.credential(response.params.id_token)
+        fireAuth.GoogleAuthProvider.credential(response.params.id_token)
       );
     }
   }, [response]);

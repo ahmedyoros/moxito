@@ -12,6 +12,7 @@ import AcceptRace from './driver/AcceptRace';
 import FollowRace from './driver/FollowRace';
 import Idle from './driver/Idle';
 import SearchRace from './driver/SearchRace';
+import Verification from './driver/Verification';
 import PublicProfile from './PublicProfile';
 import RaceOver from './RaceOver';
 import UserReview from './UserReview';
@@ -47,6 +48,8 @@ export default function Home({ navigation }: any) {
   }
 
   if (user.role === Role.Driver) {
+    if(!user.verified)
+      return <Verification user={user}/>
     switch (user.status) {
       default:
         //idle

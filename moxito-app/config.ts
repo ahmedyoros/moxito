@@ -1,3 +1,6 @@
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 import {
   API_KEY,
   AUTH_DOMAIN,
@@ -6,10 +9,10 @@ import {
   STORAGE_BUCKET,
   MESSAGING_SENDER_ID,
   APP_ID,
-  MEASURMENT
+  MEASURMENT,
 } from '@env';
 
-export const firebaseConfig = {
+const firebaseConfig = {
   apiKey: API_KEY,
   authDomain: AUTH_DOMAIN,
   databaseURL: DB_URL,
@@ -17,5 +20,13 @@ export const firebaseConfig = {
   storageBucket: STORAGE_BUCKET,
   messagingSenderId: MESSAGING_SENDER_ID,
   appId: APP_ID,
-  measurementId: MEASURMENT
+  measurementId: MEASURMENT,
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
 }
+
+export const auth = firebase.auth();
+export const fireAuth = firebase.auth;
+export const db = firebase.firestore();

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@expo/metro-config": "^0.1.56",
+    "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/slider": "3.0.3",
     "@react-navigation/drawer": "^5.12.4",

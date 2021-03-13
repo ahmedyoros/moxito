@@ -1,9 +1,8 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Button, HelperText, TextInput } from 'react-native-paper';
 import { getFireUser } from '../backend/UserManager';
+import { auth } from '../config';
 import { defaultPictureUrl } from '../types/User';
 import MyButton from './MyButton';
 
@@ -19,8 +18,7 @@ export default function ManualSignUp({ role, setCredential }: any) {
   const signUp = () => {
     if (confirmPassword !== password) return setPwError(true);
 
-    firebase
-      .auth()
+    auth
       .createUserWithEmailAndPassword(email.trim(), password)
       .then((credential) => {
         credential.additionalUserInfo!.profile = {
@@ -29,7 +27,7 @@ export default function ManualSignUp({ role, setCredential }: any) {
           picture: defaultPictureUrl,
         };
         getFireUser().updateProfile({
-          displayName: firstname.trim(), 
+          displayName: firstname.trim(),
         });
 
         setCredential(credential);

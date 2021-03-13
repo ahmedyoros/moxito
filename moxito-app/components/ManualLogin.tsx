@@ -1,8 +1,7 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { HelperText, TextInput } from 'react-native-paper';
+import { auth } from '../config';
 import MyButton from './MyButton';
 
 export default function ManualLogin({ setCredential }: any) {
@@ -11,8 +10,7 @@ export default function ManualLogin({ setCredential }: any) {
   const [fireError, setFireError] = useState('');
 
   const signIn = () => {
-    firebase
-      .auth()
+    auth
       .signInWithEmailAndPassword(email.trim(), password)
       .then(setCredential)
       .catch(({ message }) => setFireError(message));

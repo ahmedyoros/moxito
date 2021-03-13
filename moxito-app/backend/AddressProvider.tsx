@@ -1,15 +1,8 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
 import { Address } from '../types/Address';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { AddressesRef } from '../types/DocumentReferences';
-import { firebaseConfig } from '../config';
 import { getBaseUser } from './UserManager';
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.firestore();
+import { db } from '../config';
 
 export default function useFavoritesAdresses(): [Address[], boolean] {
   const [addressVal, loading] = useDocumentData<Address[]>(

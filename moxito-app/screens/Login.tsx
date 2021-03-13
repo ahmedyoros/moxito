@@ -1,5 +1,4 @@
 import firebase from 'firebase/app';
-import 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { createUser, updateCurrentUser } from '../backend/UserManager';
@@ -12,17 +11,13 @@ import ManualLogin from '../components/ManualLogin';
 import ManualSignup from '../components/ManualSignup';
 import { useDidMountEffect } from '../components/MyHooks';
 import TwitterLogin from '../components/TwitterLogin';
-import { firebaseConfig } from '../config';
+import { auth } from '../config';
 import { Role } from '../enums/Role';
 import { UserStatus } from '../enums/Status';
 import CommonStyle from '../styles/CommonStyle';
 import LoginStyle from '../styles/LoginStyle';
 import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
 
 export default function Login({ route }: NavigationProps) {
   const register: boolean = route.params!.register;
@@ -38,7 +33,7 @@ export default function Login({ route }: NavigationProps) {
 
   useEffect(() => {
     if (!credential) return;
-    firebase.auth().signInWithCredential(credential!).then(setUserCredential);
+    auth.signInWithCredential(credential!).then(setUserCredential);
   }, [credential]);
 
   useEffect(() => {
@@ -62,7 +57,8 @@ export default function Login({ route }: NavigationProps) {
         firstname: userProfile.given_name || firstname || displayName,
         name: userProfile.family_name || lastname || null,
         role: role,
-        status: UserStatus.idle 
+        status: UserStatus.idle,
+        verified: false,
       };
 
       fireUser.updateProfile({
@@ -78,15 +74,13 @@ export default function Login({ route }: NavigationProps) {
     }
   }, [userCredential]);
 
-  useDidMountEffect(() => {
-
-  }, [loading])
+  useDidMountEffect(() => {}, [loading]);
 
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
   const loginStyle = LoginStyle(theme);
 
-  if(loading) return <Loading />;
+  if (loading) return <Loading />;
   return (
     <KeyboardAvoid>
       <View style={commonStyle.container}>

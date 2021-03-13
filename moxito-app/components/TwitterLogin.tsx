@@ -1,5 +1,3 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import TwitterIcon from '../assets/logos/twitter.svg';
