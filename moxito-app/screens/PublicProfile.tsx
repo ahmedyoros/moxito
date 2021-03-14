@@ -128,7 +128,9 @@ export default function PublicProfile({ navigation, route }: NavigationProps) {
           {user.motoModel && user.motoModel != '' && (
             <View style={{ marginLeft: 10 }}>
               <Text style={commonStyle.text}>Modèle {user.motoModel}</Text>
-              <MotoIcon/>
+              {/* <Image
+                source={require('./assets/motos/moto-1.png')}
+              /> */}
             </View>
           )}
           {user.immatriculation && (
