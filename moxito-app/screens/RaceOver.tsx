@@ -1,11 +1,8 @@
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
 import React from 'react';
 import { ImageBackground, View } from 'react-native';
 import { Title } from 'react-native-paper';
 import Moxito from '../assets/logos/moxito-w.svg';
 import { getRace } from '../backend/RaceManager';
-import { updateCurrentUser } from '../backend/UserManager';
 import CrossTable from '../components/CrossTable';
 import CrossTableCell from '../components/CrossTableCell';
 import Loading from '../components/Loading';

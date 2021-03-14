@@ -1,4 +1,5 @@
 import firebase from 'firebase/app';
+import 'firebase/auth'
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { storeNotificationToken } from '../backend/TokenManager';

@@ -1,11 +1,10 @@
 import * as ImagePicker from 'expo-image-picker';
 import { ImagePickerOptions } from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import * as firebase from 'firebase/app';
-import 'firebase/storage';
 import React from 'react';
 import { View } from 'react-native';
 import { getFireUser } from '../backend/UserManager';
+import { storage } from '../config';
 import Avatar from './Avatar';
 import Loading from './Loading';
 import MyButton from './MyButton';
@@ -112,12 +111,12 @@ async function uploadImageAsync(uri: any, avatar: boolean) {
     xhr.send(null);
   });
 
-  let ref: firebase.storage.Reference;
+  let ref;
   if (avatar) {
     const uid = getFireUser().uid;
-    ref = firebase.storage().ref('avatar').child(uid);
+    ref = storage.ref('avatar').child(uid);
   } else {
-    ref = firebase.storage().ref();
+    ref = storage.ref();
   }
   const snapshot = await ref.put(blob);
 
