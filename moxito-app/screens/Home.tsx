@@ -4,6 +4,7 @@ import { useCurrentUser } from '../backend/UserManager';
 import Loading from '../components/Loading';
 import { Role } from '../enums/Role';
 import { UserStatus } from '../enums/Status';
+import { LocationLatLng } from '../types/LocationLatLng';
 import Chat from './Chat';
 import FollowDriver from './customer/FollowDriver';
 import SearchDriver from './customer/SearchDriver';
@@ -19,15 +20,15 @@ import UserReview from './UserReview';
 
 const Stack = createStackNavigator();
 
-export default function Home({ navigation }: any) {
+export default function Home({ navigation}: any) {
   const [user, loading] = useCurrentUser();
-  
+
   useEffect(() => {
     if (loading) return;
     const showHeader =
       user.status !== UserStatus.accepting &&
       user.status !== UserStatus.arrived;
-    navigation.setOptions({ headerShown: showHeader });
+    navigation.setOptions({ headerShown: false });
   });
 
   if (loading) return <Loading />;
@@ -79,7 +80,7 @@ export default function Home({ navigation }: any) {
   switch (user.status) {
     default:
       //idle
-      return <SearchMap user={user} />;
+      return <SearchMap user={user}/>;
     case UserStatus.searching:
       return <SearchDriver user={user} />;
     case UserStatus.racing:
