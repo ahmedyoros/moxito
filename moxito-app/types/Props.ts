@@ -12,9 +12,12 @@ export type ElementProps = {
   children: ReactElement[] | ReactElement;
 };
 
+export type MyRouteProp = RouteProp<any, any>;
+export type MyNavigationProp = NavigationProp<any, any>;
+
 export type NavigationProps = {
-  navigation: NavigationProp<any, any>;
-  route: RouteProp<any, any>;
+  navigation: MyNavigationProp
+  route: MyRouteProp;
 };
 
 export type UserProps = {

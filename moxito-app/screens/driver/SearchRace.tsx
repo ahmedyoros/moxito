@@ -8,25 +8,17 @@ import Loading from '../../components/Loading';
 import MyButton from '../../components/MyButton';
 import { UserStatus } from '../../enums/Status';
 import useTheme from '../../themes/ThemeProvider';
+import { Pos, toPos } from '../../types/Pos';
 import { UserProps } from '../../types/Props';
+import usePermissions from 'expo-permissions-hooks'
 
 export default function SearchRace({ user }: UserProps) {
-  const [pos, setPos] = useState(user.pos);
-
+  const [pos, setPos] = useState<Pos>()
+  const {isGranted} = usePermissions('LOCATION');
+  
   useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestPermissionsAsync();
-      if (status !== 'granted') {
-        return;
-      }
-
-      const location = await Location.getCurrentPositionAsync({});
-      setPos({
-        lat: location.coords.latitude,
-        lng: location.coords.longitude,
-      });
-    })();
-  }, []);
+    if(isGranted) Location.getCurrentPositionAsync().then((position) => setPos(toPos(position)));
+  }, [isGranted]);
 
   useEffect(() => {
     if (!pos) return;

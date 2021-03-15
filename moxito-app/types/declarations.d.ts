@@ -6,6 +6,8 @@ declare module '*.svg' {
 }
 
 declare module 'money';
+declare module 'expo-permissions-hooks';
+declare module 'parse-google-place';
 declare module '@env' {
   export const API_KEY: string;
   export const AUTH_DOMAIN: string;

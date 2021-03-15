@@ -88,7 +88,7 @@ export default function PublicProfile({ navigation, route }: NavigationProps) {
                   fontWeight: 'bold',
                 },
               ]}
-              key={r}
+              index={r}
             >
               {r}
             </Text>
@@ -97,7 +97,7 @@ export default function PublicProfile({ navigation, route }: NavigationProps) {
         <View style={{ flexDirection: 'column' }}>
           {ratings.map((r, idx) => (
             <AirbnbRating
-              key={idx}
+              index={idx}
               isDisabled
               size={30}
               showRating={false}

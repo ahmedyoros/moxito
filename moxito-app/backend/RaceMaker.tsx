@@ -11,7 +11,7 @@ export function createRace(
 ) {
   const pos = race.from.pos;
   if(!pos.hash){
-    const hash = geofire.geohashForLocation([pos.lat, pos.lng]);
+    const hash = geofire.geohashForLocation([pos.latitude, pos.longitude]);
     race.from.pos.hash = hash;
   }
   const docRef = racesRef.doc();
@@ -37,8 +37,8 @@ function lookForRaces(center: number[], radiusInM: number, callback: (docs: any[
 
     for (const snap of snapshots) {
       for (const doc of snap.docs) {
-        const lat = doc.get('from.pos.lat');
-        const lng = doc.get('from.pos.lng');
+        const lat = doc.get('from.pos.latitude');
+        const lng = doc.get('from.pos.longitude');
         // We have to filter out a few false positives due to GeoHash
         // accuracy, but most will match
         const distanceInKm = geofire.distanceBetween([lat, lng], center);
@@ -61,7 +61,7 @@ export function stopSearching() {
  * @param radius searchRadius in kilometers
  */
 export function searchClosestRace(pos: Pos, radius: number, callback: (raceId: string) => void) {
-  const center = [pos.lat, pos.lng];
+  const center = [pos.latitude, pos.longitude];
 
   interval = setInterval(_ => {
     lookForRaces(center, radius*1000, (raceDocs) => {
