@@ -27,7 +27,7 @@ const Stack = createStackNavigator();
 
 export default function HomeMap({ navigation, route }: NavigationProps) {
   const [pos, setPos] = useState<Pos>();
-  const { isGranted, isDenied } = usePermissions('LOCATION');
+  const { isGranted, isDenied, ask } = usePermissions('LOCATION');
   const [favoriteAddresses] = useFavoriteAddresses();
   const user: User = route.params!.user;
   const [race, loading] = getRace(user.id);
@@ -37,7 +37,8 @@ export default function HomeMap({ navigation, route }: NavigationProps) {
       Location.getCurrentPositionAsync().then((position) =>
         setPos(toPos(position))
       );
-  }, [isGranted]);
+    else ask()
+  }, []);
 
   const [fromAddress, setFromAddress] = useState<Address>();
   const [toAddress, setToAddress] = useState<Address>();
