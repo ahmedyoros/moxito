@@ -51,9 +51,9 @@ export default function Profile({ navigation, route }: NavigationProps) {
     }
   }, [userLoading]);
 
-  const renderItem =(item) => {
+  const renderItem =({item, index}) => {
     return (
-      <View style={{backgroundColor: COLORS.orange}}>
+      <View style={{backgroundColor: COLORS.orange, borderRadius: 10}}>
         <Image
             source={getImage(item)}
         />
