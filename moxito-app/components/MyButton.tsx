@@ -10,6 +10,7 @@ export default function MyButton({onPress, title, icon, style}: any) {
 
     return (
       <Button
+        key={title}
         uppercase={false}
         contentStyle={{ height: 50 }}
         labelStyle={{color:COLORS.black}}

@@ -1,4 +1,5 @@
 import { useCollectionData, useDocument } from 'react-firebase-hooks/firestore';
+import { Place } from 'react-native-google-places-autocomplete';
 import { Address } from '../types/Address';
 import { getBaseUser, userRef } from './UserManager';
 
@@ -36,4 +37,16 @@ export const addFavoriteAddress = (address: Address) => {
 
 export const removeFavoriteAddress = (address: Address) => {
   getFavRef(getBaseUser().id).doc(hash(address)).delete();
+};
+
+export const toPlace = (address: Address): Place => {
+  return {
+    description: hash(address),
+    geometry: {
+      location: {
+        lat: address.pos.latitude,
+        lng: address.pos.longitude,
+      },
+    },
+  };
 };

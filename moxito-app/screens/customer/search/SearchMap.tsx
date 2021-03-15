@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Platform, Text, View } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Headline } from 'react-native-paper';
+import { useFavoriteAddresses } from '../../../backend/FavoriteManager';
 import { createRace } from '../../../backend/RaceMaker';
 import { deleteRace } from '../../../backend/RaceManager';
 import { getBaseUser, updateCurrentUser } from '../../../backend/UserManager';
@@ -25,7 +26,8 @@ const geofire = require('geofire-common');
 
 export default function SearchMap({ navigation, route }: NavigationProps) {
   const [pos, setPos] = useState<Pos>();
-  const { isGranted } = usePermissions('LOCATION');
+  const {isGranted } = usePermissions('LOCATION');
+  const [favoriteAddresses] = useFavoriteAddresses();
 
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
@@ -96,7 +98,6 @@ export default function SearchMap({ navigation, route }: NavigationProps) {
 
   useEffect(() => {
     const user: User = route.params!.user;
-    console.log(user);
     
     setSearching(user.status === UserStatus.searching);
     setRaceId(user.currentRaceId);
@@ -199,6 +200,7 @@ export default function SearchMap({ navigation, route }: NavigationProps) {
             address={fromAddress}
             title="Départ"
             index="from"
+            favoriteAddresses={favoriteAddresses}
             searching={searching}
           />
           <AddressHolder
@@ -206,6 +208,7 @@ export default function SearchMap({ navigation, route }: NavigationProps) {
             address={toAddress}
             title="Déstination"
             index="to"
+            favoriteAddresses={favoriteAddresses}
             searching={searching}
           />
         </View>

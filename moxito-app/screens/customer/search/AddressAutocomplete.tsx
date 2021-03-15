@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import parseGooglePlace from 'parse-google-place';
+import React, { useEffect, useRef, useState } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { TextInput } from 'react-native-paper';
+import { toPlace } from '../../../backend/FavoriteManager';
+import Loading from '../../../components/Loading';
 import CommonStyle from '../../../styles/CommonStyle';
 import useTheme from '../../../themes/ThemeProvider';
 import { Address } from '../../../types/Address';
 import { NavigationProps } from '../../../types/Props';
 import SuggestionItem from './SuggestionItem';
-import parseGooglePlace from 'parse-google-place';
 
 export default function AddressAutocomplete({
   navigation,
@@ -14,6 +16,7 @@ export default function AddressAutocomplete({
 }: NavigationProps) {
   const suggestCurrentLocation: boolean = route.params!.suggestCurrentLocation;
   const address: Address | undefined = route.params!.address;
+  const favoriteAddresses: Address[] = route.params!.favoriteAddresses;
   const title: string = route.params!.title;
   const index: string = route.params!.index;
 
@@ -26,6 +29,8 @@ export default function AddressAutocomplete({
   useEffect(() => {
     ref.current?.focus();
   }, []);
+
+  const [currentInput, setCurrentInput] = useState('');
 
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
@@ -74,12 +79,14 @@ export default function AddressAutocomplete({
           backgroundColor: theme.colors.background,
         },
         listView: {
-          padding: 5,
+          paddingTop: 5,
         },
         row: {
           backgroundColor: theme.colors.surface,
         },
       }}
+      listEmptyComponent={() => <Loading />}
+      predefinedPlaces={favoriteAddresses.map(toPlace)}
       textInputProps={{
         InputComp: TextInput,
       }}
@@ -90,7 +97,14 @@ export default function AddressAutocomplete({
         language: 'en',
       }}
       fetchDetails={true}
-      renderRow={(data) => <SuggestionItem data={data} />}
+      renderRow={(data, idx) => (
+        <SuggestionItem
+          data={data}
+          suggestCurrentLocation={suggestCurrentLocation}
+          index={idx}
+          currentInput={ref.current?.getAddressText()}
+        />
+      )}
       renderDescription={(data: any) => data.description || data.vicinity}
     />
   );

@@ -1,24 +1,22 @@
 import { useNavigation } from '@react-navigation/core';
-import { useRoute } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { List } from 'react-native-paper';
 import {
   addFavoriteAddress,
   isFavoriteAddress,
-  removeFavoriteAddress,
+  removeFavoriteAddress
 } from '../../../backend/FavoriteManager';
 import CommonStyle from '../../../styles/CommonStyle';
-import { COLORS } from '../../../themes/colors';
 import useTheme from '../../../themes/ThemeProvider';
 import { Address } from '../../../types/Address';
-import { MyRouteProp } from '../../../types/Props';
 
 type Props = {
   suggestCurrentLocation: boolean;
   address: Address | undefined;
   title: string;
   index: string;
+  favoriteAddresses: Address[];
   searching: boolean;
 };
 
@@ -27,6 +25,7 @@ export default function AddressHolder({
   address,
   title,
   index,
+  favoriteAddresses,
   searching,
 }: Props) {
   const theme = useTheme();
@@ -72,6 +71,7 @@ export default function AddressHolder({
           address,
           title,
           index,
+          favoriteAddresses
         });
       }}
     />
