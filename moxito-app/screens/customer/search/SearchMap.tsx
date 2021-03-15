@@ -28,6 +28,7 @@ export default function SearchMap({ navigation, route }: NavigationProps) {
   const [pos, setPos] = useState<Pos>();
   const {isGranted } = usePermissions('LOCATION');
   const [favoriteAddresses] = useFavoriteAddresses();
+  const kmPrice = 2500;
 
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
@@ -80,17 +81,20 @@ export default function SearchMap({ navigation, route }: NavigationProps) {
 
   useEffect(() => {
     if (!fromAddress || !toAddress) return;
-    setDistance(
-      geofire.distanceBetween(
-        [fromAddress.pos.latitude, fromAddress.pos.longitude],
-        [toAddress.pos.latitude, toAddress.pos.longitude]
-      )
-    );
+    let distance = geofire.distanceBetween(
+      [fromAddress.pos.latitude, fromAddress.pos.longitude],
+      [toAddress.pos.latitude, toAddress.pos.longitude]
+    )
+    setDistance(distance);
 
-    const estimatedSpeed = 36.2; // km/h
+    const estimatedSpeed = 25; // km/h
     setDuration((distance / estimatedSpeed) * 3600);
 
-    setPrice(1500);
+    //Price
+    if (distance > 2)
+      setPrice(distance*kmPrice);
+    else setPrice(kmPrice)
+
   }, [fromAddress, toAddress]);
 
   const [searching, setSearching] = useState(false);
@@ -224,7 +228,7 @@ export default function SearchMap({ navigation, route }: NavigationProps) {
               <MyButton
                 style={{ width: '30%', marginRight: 0 }}
                 title="Valider"
-                onPress={submit}
+                onPress={(!fromAddress || !toAddress) ? null : submit}
               />
               <View style={{ flexDirection: 'column', marginHorizontal: 10 }}>
                 <Text
