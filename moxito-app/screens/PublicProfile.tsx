@@ -14,6 +14,7 @@ import { NavigationProps } from '../types/Props';
 import { reviewList } from '../types/Review';
 import { BaseUser } from '../types/User';
 import { average } from '../utils/array';
+import { getImage } from '../utils/getImage';
 
 export default function PublicProfile({ navigation, route }: NavigationProps) {
   const baseUser: BaseUser = route.params?.user || getBaseUser();
@@ -130,7 +131,7 @@ export default function PublicProfile({ navigation, route }: NavigationProps) {
             <View style={{ marginLeft: 10 }}>
               <Text style={commonStyle.text}>Modèle {user.motoModel}</Text>
               <Image
-                source={require('../assets/motos/moto-1.png')}
+                source={getImage(user.motoModel)}
               />
             </View>
           )}

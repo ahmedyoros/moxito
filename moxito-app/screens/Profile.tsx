@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { View, Image, Dimensions} from 'react-native';
 import { HelperText, Snackbar, TextInput } from 'react-native-paper';
 import {getCurrentUser, getFireUser, updateCurrentUser } from '../backend/UserManager';
 import { BarTitle } from '../components/BarTitle';
@@ -11,15 +11,29 @@ import UploadImage from '../components/UploadImage';
 import { Role } from '../enums/Role';
 import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
+import Carousel from 'react-native-snap-carousel';
+import { scrollInterpolator, animatedStyles } from '../utils/animations';
+import { getImage } from '../utils/getImage';
+import { COLORS } from '../themes/colors';
+
+
 
 export default function Profile({ navigation, route }: NavigationProps) {
   const [user, userLoading] = getCurrentUser();
   const newUser: boolean = route.params!.newUser;
   const fireUser = getFireUser();
   const theme = useTheme();
+  const carouselItems = ["1", "2", "3", "4"];
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const SLIDER_WIDTH = Dimensions.get('window').width;
+  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
+  const ITEM_HEIGHT = Math.round(ITEM_WIDTH * 3 / 4);
+
 
   const [presentation, setPresentation] = useState('');
   const [presenationError, setPresenationError] = useState(false);
+
 
   const [motoModel, setMotoModel] = useState('');
   const [motoModelError, setMotoModelError] = useState(false);
@@ -36,6 +50,17 @@ export default function Profile({ navigation, route }: NavigationProps) {
       user.motoModel && setMotoModel(user.motoModel);
     }
   }, [userLoading]);
+
+  const renderItem =(item) => {
+    return (
+      <View style={{backgroundColor: COLORS.orange}}>
+        <Image
+            source={getImage(item)}
+        />
+      </View>
+    )
+  };
+
 
   const updatePhotoUrl = (photoURL: string) => {
     fireUser.updateProfile({
@@ -58,6 +83,8 @@ export default function Profile({ navigation, route }: NavigationProps) {
     updateCurrentUser(userData, () => setSnackbarVisible(true));
   };
 
+  
+
   if (userLoading) return <Loading />;
   return (
     <KeyboardAvoid>
@@ -79,14 +106,25 @@ export default function Profile({ navigation, route }: NavigationProps) {
       </HelperText>
       {user.role == Role.Driver && (
         <View>
-          <TextInput
-            label="Modèle de votre moto"
-            value={motoModel}
-            onChangeText={setMotoModel}
+          <Carousel
+            data={carouselItems}
+            renderItem={renderItem}
+            sliderWidth={SLIDER_WIDTH}
+            itemWidth={ITEM_WIDTH}
+            inactiveSlideShift={0}
+            snapToEnd
+          
+            onSnapToItem = { 
+              index => {
+                setActiveIndex(index);
+                setMotoModel((index + 1) + "") 
+              }
+            }
+            scrollInterpolator={scrollInterpolator}
+            slideInterpolatedStyle={animatedStyles}
+            useScrollView={true}          
           />
-          <HelperText type="error" visible={motoModelError}>
-            Ce champ est requis.
-          </HelperText>
+      
         </View>
       )}
       <MyButton title="Valider" onPress={submit} />
