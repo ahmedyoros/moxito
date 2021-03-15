@@ -38,7 +38,7 @@ export default function HomeMap({ navigation, route }: NavigationProps) {
         setPos(toPos(position))
       );
     else ask()
-  }, []);
+  }, [isGranted]);
 
   const [fromAddress, setFromAddress] = useState<Address>();
   const [toAddress, setToAddress] = useState<Address>();
