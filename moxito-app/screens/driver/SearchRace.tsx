@@ -1,4 +1,5 @@
 import * as Location from 'expo-location';
+import usePermissions from 'expo-permissions-hooks';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { searchClosestRace, stopSearching } from '../../backend/RaceMaker';
@@ -9,15 +10,19 @@ import MyButton from '../../components/MyButton';
 import { UserStatus } from '../../enums/Status';
 import useTheme from '../../themes/ThemeProvider';
 import { Pos, toPos } from '../../types/Pos';
-import { UserProps } from '../../types/Props';
-import usePermissions from 'expo-permissions-hooks'
+import { NavigationProps } from '../../types/Props';
+import { User } from '../../types/User';
 
-export default function SearchRace({ user }: UserProps) {
-  const [pos, setPos] = useState<Pos>()
-  const {isGranted} = usePermissions('LOCATION');
-  
+export default function SearchRace({ navigation, route }: NavigationProps) {
+  const user: User = route.params!.user;
+  const [pos, setPos] = useState<Pos>();
+  const { isGranted } = usePermissions('LOCATION');
+
   useEffect(() => {
-    if(isGranted) Location.getCurrentPositionAsync().then((position) => setPos(toPos(position)));
+    if (isGranted)
+      Location.getCurrentPositionAsync().then((position) =>
+        setPos(toPos(position))
+      );
   }, [isGranted]);
 
   useEffect(() => {
@@ -39,7 +44,10 @@ export default function SearchRace({ user }: UserProps) {
       <Loading />
       <MyButton
         title="Ne plus accepter de course"
-        onPress={() => updateCurrentUser({ status: UserStatus.idle })}
+        onPress={() => {
+          navigation.navigate('Idle');
+          updateCurrentUser({ status: UserStatus.idle });
+        }}
       />
     </View>
   );

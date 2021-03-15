@@ -8,7 +8,7 @@ const getFavRef = (userId: string) => {
 };
 
 export function hash(address: Address) {
-  return address.street + ', ' + address.city;
+  return address.street + (address.city != '' ? (', ' + address.city) : '');
 }
 
 export const useFavoriteAddresses = (): [Address[], boolean] => {

@@ -108,6 +108,7 @@ export default function App() {
           name={routeNames[0]}
           component={Home}
           options={{
+            headerShown: false,
             drawerIcon: () => (
               <Ionicons name="map" size={20} color={COLORS.orange} />
             )

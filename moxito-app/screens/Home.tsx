@@ -1,14 +1,17 @@
+import { Ionicons } from '@expo/vector-icons';
+import { DrawerActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
 import { useCurrentUser } from '../backend/UserManager';
 import Loading from '../components/Loading';
 import { Role } from '../enums/Role';
 import { UserStatus } from '../enums/Status';
+import { COLORS } from '../themes/colors';
 import useTheme from '../themes/ThemeProvider';
+import { NavigationProps } from '../types/Props';
 import Chat from './Chat';
-import FollowDriver from './customer/FollowDriver';
-import SearchMap from './customer/search/SearchMap';
-import AddressAutocomplete from './customer/search/AddressAutocomplete';
+import AddressAutocomplete from './customer/map/AddressAutocomplete';
+import HomeMap from './HomeMap';
 import AcceptRace from './driver/AcceptRace';
 import FollowRace from './driver/FollowRace';
 import Idle from './driver/Idle';
@@ -17,31 +20,11 @@ import Verification from './driver/Verification';
 import PublicProfile from './PublicProfile';
 import RaceOver from './RaceOver';
 import UserReview from './UserReview';
-import { Ionicons } from '@expo/vector-icons';
-import { NavigationProps } from '../types/Props';
-import { DrawerActions } from '@react-navigation/native';
-import { COLORS } from '../themes/colors';
 
 const Stack = createStackNavigator();
 
 export default function Home({ navigation }: NavigationProps) {
   const [user, loading] = useCurrentUser();
-
-  const theme = useTheme();
-
-  useEffect(() => {
-    if (loading) return;
-    if (
-      user.status == UserStatus.accepting ||
-      user.status == UserStatus.arrived ||
-      (user.role === Role.Customer &&
-        (user.status === UserStatus.idle ||
-          user.status === UserStatus.searching))
-    ) {
-      navigation.setOptions({ headerShown: false });
-    }
-  });
-
   if (loading) return <Loading />;
 
   //Common screens
@@ -62,76 +45,41 @@ export default function Home({ navigation }: NavigationProps) {
 
   if (user.role === Role.Driver) {
     if (!user.verified) return <Verification user={user} />;
-    switch (user.status) {
-      default:
-        //idle
-        return <Idle user={user} />;
-      case UserStatus.searching:
-        return <SearchRace user={user} />;
-      case UserStatus.accepting:
-        return <AcceptRace user={user} />;
-      case UserStatus.racing:
-        return (
-          <Stack.Navigator
-            screenOptions={{ headerShown: false }}
-            initialRouteName="FollowRace"
-          >
-            <Stack.Screen
-              name="FollowRace"
-              component={FollowRace}
-              initialParams={{ user: user }}
+    if (user.status === UserStatus.accepting) return <AcceptRace user={user} />;
+  }
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="HomeMap"
+        component={HomeMap}
+        initialParams={{ user: user }}
+        options={{
+          headerTransparent: true,
+          headerTitle: () => null,
+          headerLeft: () => (
+            <Ionicons
+              style={{
+                marginLeft: 10,
+              }}
+              name="menu"
+              size={30}
+              color={COLORS.black}
+              onPress={() => {
+                navigation.dispatch(DrawerActions.openDrawer());
+              }}
             />
-            <Stack.Screen name="Chat" component={Chat} />
-            <Stack.Screen name="Profile" component={PublicProfile} />
-          </Stack.Navigator>
-        );
-    }
-  }
-  switch (user.status) {
-    default:
-      //idle or searching
-      return (
-        <Stack.Navigator>
-          <Stack.Screen
-            name="SearchMap"
-            component={SearchMap}
-            initialParams={{ user: user }}
-            options={{
-              headerTransparent: true,
-              headerTitle: () => null,
-              headerLeft: () => (
-                <Ionicons
-                  style={{
-                    marginLeft: 10,
-                  }}
-                  name="menu"
-                  size={30}
-                  color={COLORS.black}
-                  onPress={() => {
-                    navigation.dispatch(DrawerActions.openDrawer());
-                  }}
-                />
-              ),
-            }}
-          />
-          <Stack.Screen
-            name="AddressAutocomplete"
-            component={AddressAutocomplete}
-          />
-        </Stack.Navigator>
-      );
-    case UserStatus.racing:
-      return (
-        <Stack.Navigator>
-          <Stack.Screen
-            name="FollowDriver"
-            component={FollowDriver}
-            initialParams={{ user: user }}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="Chat" component={Chat} />
-          <Stack.Screen name="Profile" component={PublicProfile} />
-        </Stack.Navigator>
-      );
-  }
+          ),
+        }}
+      />
+      {user.role === Role.Customer && (
+        <Stack.Screen
+          name="AddressAutocomplete"
+          component={AddressAutocomplete}
+        />
+      )}
+      <Stack.Screen name="Chat" component={Chat} />
+      <Stack.Screen name="Profile" component={PublicProfile} />
+    </Stack.Navigator>
+  );
 }

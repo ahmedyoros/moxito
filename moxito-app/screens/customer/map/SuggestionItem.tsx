@@ -30,7 +30,7 @@ const SuggestionItem = ({
       >
         <Entypo
           name={
-            currentInput != '' ? 'location-pin' : index == 0 ? 'home' : 'star'
+            currentInput != '' ? 'location-pin' : suggestCurrentLocation && index == 0 ? 'home' : 'star'
           }
           size={18}
           color={COLORS.orange}

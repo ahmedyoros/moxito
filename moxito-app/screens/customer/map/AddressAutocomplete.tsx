@@ -2,7 +2,7 @@ import parseGooglePlace from 'parse-google-place';
 import React, { useEffect, useRef, useState } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { TextInput } from 'react-native-paper';
-import { toPlace } from '../../../backend/FavoriteManager';
+import { hash, toPlace } from '../../../backend/FavoriteManager';
 import Loading from '../../../components/Loading';
 import CommonStyle from '../../../styles/CommonStyle';
 import useTheme from '../../../themes/ThemeProvider';
@@ -39,7 +39,7 @@ export default function AddressAutocomplete({
     <GooglePlacesAutocomplete
       ref={ref}
       keyboardShouldPersistTaps="always"
-      placeholder={address ? address.street + ', ' + address.city : title}
+      placeholder={address ? hash(address) : title}
       onPress={(data, details) => {
         let street = data.description || details?.vicinity;
         let city = '';
@@ -58,7 +58,7 @@ export default function AddressAutocomplete({
           city = data.structured_formatting.secondary_text;
         }
 
-        navigation.navigate('SearchMap', {
+        navigation.navigate('HomeMap', {
           [index + 'Address']: {
             street: street,
             city: city,

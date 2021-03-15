@@ -45,9 +45,16 @@ export default function AcceptRace({ user: user }: UserProps) {
   const [joinDistance, setJoinDistance] = useState(0);
 
   useEffect(() => {
-    if(loading) return;
-    setJoinDistance(Math.round(geofire.distanceBetween([user.pos!.latitude, user.pos!.longitude], [race.from.pos.latitude, race.from.pos.longitude])));
-  }, [race])
+    if (loading) return;
+    setJoinDistance(
+      Math.round(
+        geofire.distanceBetween(
+          [user.pos!.latitude, user.pos!.longitude],
+          [race.from.pos.latitude, race.from.pos.longitude]
+        )
+      )
+    );
+  }, [race]);
 
   const accept = () => {
     acceptRace(user.currentRaceId!, joinDistance, () => {
@@ -65,7 +72,6 @@ export default function AcceptRace({ user: user }: UserProps) {
       });
     });
   };
-
 
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
@@ -108,7 +114,7 @@ export default function AcceptRace({ user: user }: UserProps) {
               }
               child4={
                 <CrossTableCell
-                  title={Math.round(race.estimateDuration/60) + ' min'}
+                  title={Math.round(race.estimateDuration / 60) + ' min'}
                   subtitle={'de trajet'}
                 />
               }
