@@ -4,10 +4,11 @@ import { useCurrentUser } from '../backend/UserManager';
 import Loading from '../components/Loading';
 import { Role } from '../enums/Role';
 import { UserStatus } from '../enums/Status';
+import useTheme from '../themes/ThemeProvider';
 import Chat from './Chat';
 import FollowDriver from './customer/FollowDriver';
-import SearchDriver from './customer/SearchDriver';
-import SearchMap from './customer/SearchMap';
+import SearchMap from './customer/search/SearchMap';
+import AddressAutocomplete from './customer/search/AddressAutocomplete';
 import AcceptRace from './driver/AcceptRace';
 import FollowRace from './driver/FollowRace';
 import Idle from './driver/Idle';
@@ -16,18 +17,29 @@ import Verification from './driver/Verification';
 import PublicProfile from './PublicProfile';
 import RaceOver from './RaceOver';
 import UserReview from './UserReview';
+import { Ionicons } from '@expo/vector-icons';
+import { NavigationProps } from '../types/Props';
+import { DrawerActions } from '@react-navigation/native';
+import { COLORS } from '../themes/colors';
 
 const Stack = createStackNavigator();
 
-export default function Home({ navigation }: any) {
+export default function Home({ navigation }: NavigationProps) {
   const [user, loading] = useCurrentUser();
-  
+
+  const theme = useTheme();
+
   useEffect(() => {
     if (loading) return;
-    const showHeader =
-      user.status !== UserStatus.accepting &&
-      user.status !== UserStatus.arrived;
-    navigation.setOptions({ headerShown: showHeader });
+    if (
+      user.status == UserStatus.accepting ||
+      user.status == UserStatus.arrived ||
+      (user.role === Role.Customer &&
+        (user.status === UserStatus.idle ||
+          user.status === UserStatus.searching))
+    ) {
+      navigation.setOptions({ headerShown: false });
+    }
   });
 
   if (loading) return <Loading />;
@@ -49,8 +61,7 @@ export default function Home({ navigation }: any) {
   }
 
   if (user.role === Role.Driver) {
-    if(!user.verified)
-      return <Verification user={user}/>
+    if (!user.verified) return <Verification user={user} />;
     switch (user.status) {
       default:
         //idle
@@ -78,10 +89,37 @@ export default function Home({ navigation }: any) {
   }
   switch (user.status) {
     default:
-      //idle
-      return <SearchMap user={user} />;
-    case UserStatus.searching:
-      return <SearchDriver user={user} />;
+      //idle or searching
+      return (
+        <Stack.Navigator>
+          <Stack.Screen
+            name="SearchMap"
+            component={SearchMap}
+            initialParams={{ user: user }}
+            options={{
+              headerTransparent: true,
+              headerTitle: () => null,
+              headerLeft: () => (
+                <Ionicons
+                  style={{
+                    marginLeft: 10,
+                  }}
+                  name="menu"
+                  size={30}
+                  color={COLORS.black}
+                  onPress={() => {
+                    navigation.dispatch(DrawerActions.openDrawer());
+                  }}
+                />
+              ),
+            }}
+          />
+          <Stack.Screen
+            name="AddressAutocomplete"
+            component={AddressAutocomplete}
+          />
+        </Stack.Navigator>
+      );
     case UserStatus.racing:
       return (
         <Stack.Navigator>

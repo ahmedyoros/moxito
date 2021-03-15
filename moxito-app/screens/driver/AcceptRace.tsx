@@ -46,7 +46,7 @@ export default function AcceptRace({ user: user }: UserProps) {
 
   useEffect(() => {
     if(loading) return;
-    setJoinDistance(Math.round(geofire.distanceBetween([user.pos!.lat, user.pos!.lng], [race.from.pos.lat, race.from.pos.lng])));
+    setJoinDistance(Math.round(geofire.distanceBetween([user.pos!.latitude, user.pos!.longitude], [race.from.pos.latitude, race.from.pos.longitude])));
   }, [race])
 
   const accept = () => {
@@ -90,13 +90,13 @@ export default function AcceptRace({ user: user }: UserProps) {
             <CrossTable
               child1={
                 <CrossTableCell
-                  title={joinDistance + ' Km'}
+                  title={joinDistance.toFixed(1) + ' Km'}
                   subtitle={"jusqu'au client"}
                 />
               }
               child2={
                 <CrossTableCell
-                  title={race.raceDistance + ' Km'}
+                  title={race.raceDistance.toFixed(1) + ' Km'}
                   subtitle={'de course'}
                 />
               }

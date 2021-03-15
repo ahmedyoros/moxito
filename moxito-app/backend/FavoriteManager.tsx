@@ -1,13 +1,14 @@
-import {
-  useCollectionData,
-  useDocumentOnce,
-} from 'react-firebase-hooks/firestore';
+import { useCollectionData, useDocument } from 'react-firebase-hooks/firestore';
 import { Address } from '../types/Address';
 import { getBaseUser, userRef } from './UserManager';
 
 const getFavRef = (userId: string) => {
   return userRef.doc(userId).collection('favoriteAddresses');
 };
+
+export function hash(address: Address) {
+  return address.street + ', ' + address.city;
+}
 
 export const useFavoriteAddresses = (): [Address[], boolean] => {
   const [addresses, loading] = useCollectionData<Address>(
@@ -17,8 +18,11 @@ export const useFavoriteAddresses = (): [Address[], boolean] => {
   return [addresses!, false];
 };
 
-export const isFavoriteAddress = (addressId: string): [boolean, boolean] => {
-  const [addressDoc, loading] = useDocumentOnce(
+export const isFavoriteAddress = (
+  address: Address | undefined
+): [boolean, boolean] => {
+  const addressId = address ? hash(address) : 'undefined';
+  const [addressDoc, loading] = useDocument(
     getFavRef(getBaseUser().id).doc(addressId)
   );
   if (loading) return [false, true];
@@ -26,11 +30,10 @@ export const isFavoriteAddress = (addressId: string): [boolean, boolean] => {
 };
 
 export const addFavoriteAddress = (address: Address) => {
-  const favDoc = getFavRef(getBaseUser().id).doc();
-  address.id = favDoc.id;
+  const favDoc = getFavRef(getBaseUser().id).doc(hash(address));
   favDoc.set(address);
 };
 
-export const removeFavoriteAddress = (addressId: string) => {
-  getFavRef(getBaseUser().id).doc(addressId).delete();
+export const removeFavoriteAddress = (address: Address) => {
+  getFavRef(getBaseUser().id).doc(hash(address)).delete();
 };

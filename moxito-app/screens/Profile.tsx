@@ -24,23 +24,16 @@ export default function Profile({ navigation, route }: NavigationProps) {
   const [motoModel, setMotoModel] = useState('');
   const [motoModelError, setMotoModelError] = useState(false);
 
-  const [immatriculation, setImmatriculation] = useState('');
-  const [immatriculationError, setImmatriculationError] = useState(false);
-
   const [snackbarVisible, setSnackbarVisible] = useState(false);
 
   const checkPresentationError = () => setPresenationError(presentation.trim() === '' && user.role === Role.Driver);
   useDidMountEffect(checkPresentationError, [presentation]);
   const checkMotoModelError = () => setMotoModelError(motoModel.trim() === '');
   useDidMountEffect(checkMotoModelError, [motoModel]);
-  const checkImmatriculationError = () => setImmatriculationError(immatriculation.trim() === '');
-  useDidMountEffect(checkImmatriculationError, [immatriculation]);
-
   useEffect(() => {
     if (!userLoading) {
       user.presentation && setPresentation(user.presentation);
       user.motoModel && setMotoModel(user.motoModel);
-      user.immatriculation && setImmatriculation(user.immatriculation);
     }
   }, [userLoading]);
 
@@ -56,12 +49,10 @@ export default function Profile({ navigation, route }: NavigationProps) {
     };
     if (user.role == Role.Driver) {
       checkPresentationError();
-      checkImmatriculationError();
       checkMotoModelError();
-      if (presentation === '' || motoModel === '' || immatriculation === '') return;
+      if (presentation === '' || motoModel === '') return;
 
       userData.motoModel = motoModel;
-      userData.immatriculation = immatriculation;
 
     }
     updateCurrentUser(userData, () => setSnackbarVisible(true));
@@ -94,14 +85,6 @@ export default function Profile({ navigation, route }: NavigationProps) {
             onChangeText={setMotoModel}
           />
           <HelperText type="error" visible={motoModelError}>
-            Ce champ est requis.
-          </HelperText>
-          <TextInput
-            label="Plaque d'immatriculation"
-            value={immatriculation}
-            onChangeText={setImmatriculation}
-          />
-          <HelperText type="error" visible={immatriculationError}>
             Ce champ est requis.
           </HelperText>
         </View>

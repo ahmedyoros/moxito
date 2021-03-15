@@ -7,8 +7,8 @@ import {
 } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import React, { useState } from 'react';
-import { Image, SafeAreaView, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Image, SafeAreaView, Text, StatusBar} from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import Helmet from './assets/icons/helmet.svg';
 import House from './assets/icons/house.svg';
@@ -30,6 +30,7 @@ import useTheme, { useNavigationTheme } from './themes/ThemeProvider';
 import { NavigationProps } from './types/Props';
 import { defaultPictureUrl } from './types/User';
 
+
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -38,6 +39,8 @@ export default function App() {
   const commonStyle = CommonStyle(theme);
   const [logged, setLogged] = useState(false);
   const [newUser, setNewUser] = useState(false);
+
+
 
   auth.onAuthStateChanged((user) => {
     if (user) {
@@ -50,6 +53,7 @@ export default function App() {
 
   return (
     <PaperProvider theme={theme}>
+      <StatusBar barStyle="dark-content" translucent={true} backgroundColor={'transparent'}  />
       <NavigationContainer theme={useNavigationTheme()}>
         {logged ? renderMenu() : renderLogin()}
       </NavigationContainer>

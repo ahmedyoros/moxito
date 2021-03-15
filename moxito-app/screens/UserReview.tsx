@@ -71,7 +71,7 @@ export default function UserReview({ navigation, route }: NavigationProps) {
         <Title style={{fontStyle:'italic', marginLeft:30}}>
           Qu'avez vous pensez du {Role.toString(reviewedRole)}?</Title>
         {reviewList[reviewedRole].map((r, idx) => (
-          <View key={r}>
+          <View index={r}>
             <Text style={[commonStyle.text, {fontWeight: 'bold', margin:10, marginLeft:30}]}>{r}</Text>
             <AirbnbRating
               showRating={false}
