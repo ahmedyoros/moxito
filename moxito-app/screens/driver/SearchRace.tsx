@@ -16,13 +16,14 @@ import { User } from '../../types/User';
 export default function SearchRace({ navigation, route }: NavigationProps) {
   const user: User = route.params!.user;
   const [pos, setPos] = useState<Pos>();
-  const { isGranted } = usePermissions('LOCATION');
+  const { isGranted, ask } = usePermissions('LOCATION');
 
   useEffect(() => {
     if (isGranted)
       Location.getCurrentPositionAsync().then((position) =>
         setPos(toPos(position))
-      );
+      )
+    else ask();
   }, [isGranted]);
 
   useEffect(() => {
