@@ -115,6 +115,9 @@ export default function CreateRace({
           flexDirection: 'row',
           borderColor: theme.colors.text,
           borderTopWidth: 1,
+          justifyContent:'space-between',
+          paddingHorizontal: 12,
+          paddingVertical: 15
         }}
       >
         {!(currentRaceId) ? (
@@ -124,11 +127,11 @@ export default function CreateRace({
               title="Valider"
               onPress={submit}
             />
-            <View style={{ flexDirection: 'column', marginHorizontal: 10 }}>
+            <View style={{ flexDirection: 'column'}}>
               <Text
                 style={{
                   fontStyle: 'italic',
-                  fontSize: 40,
+                  fontSize: 36,
                   color: theme.colors.primary,
                 }}
               >
@@ -137,7 +140,7 @@ export default function CreateRace({
               <Text
                 style={[
                   commonStyle.text,
-                  { fontStyle: 'italic', textAlign: 'center' },
+                  { fontStyle: 'italic', textAlign: 'center', fontSize: 16},
                 ]}
               >
                 GNF
