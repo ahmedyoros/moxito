@@ -24,7 +24,7 @@ export default function SearchRace({ navigation, route }: NavigationProps) {
         setPos(toPos(position))
       )
     else ask();
-  }, []);
+  }, [isGranted]);
 
   useEffect(() => {
     if (!pos) return;
