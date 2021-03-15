@@ -24,7 +24,7 @@ export default function FollowDriver({navigation, route}: NavigationProps) {
         { alignItems: 'center', justifyContent: 'center' },
       ]}
     >
-      <Avatar size={50} imageUrl={race.driver!.photoURL} onPress={() => navigation.navigate('Profile', race.driver)} />
+      <Avatar size={50} imageUrl={race.driver!.photoURL} onPress={() => navigation.navigate('Profile', {user:race.driver})} />
       <Text style={[commonStyle.text, {alignSelf: 'center' }]}>{race.driver!.displayName} arrive bientôt !</Text>
       <FontAwesome5
         style={[commonStyle.roundIcon, commonStyle.shadow]}

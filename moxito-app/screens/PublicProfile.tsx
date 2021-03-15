@@ -1,9 +1,8 @@
 import { capitalize } from 'lodash';
 import React, { useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import { Divider, Headline, Paragraph as PaperText } from 'react-native-paper';
 import { AirbnbRating } from 'react-native-ratings';
-import MotoIcon from '../assets/motos/moto-1.svg';
 import { getAvgRatings } from '../backend/ReviewManager';
 import { getBaseUser, useFullUser } from '../backend/UserManager';
 import Avatar from '../components/Avatar';
@@ -130,9 +129,9 @@ export default function PublicProfile({ navigation, route }: NavigationProps) {
           {user.motoModel && user.motoModel != '' && (
             <View style={{ marginLeft: 10 }}>
               <Text style={commonStyle.text}>Modèle {user.motoModel}</Text>
-              {/* <Image
-                source={require('./assets/motos/moto-1.png')}
-              /> */}
+              <Image
+                source={require('../assets/motos/moto-1.png')}
+              />
             </View>
           )}
           {user.immatriculation && (
