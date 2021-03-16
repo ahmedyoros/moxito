@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useFavoriteAddresses } from '../backend/FavoriteManager';
-import { getRace } from '../backend/RaceManager';
+import { getRace, useRace } from '../backend/RaceManager';
 import { Role } from '../enums/Role';
 import { UserStatus } from '../enums/Status';
 import CommonStyle from '../styles/CommonStyle';
@@ -30,9 +30,10 @@ export default function HomeMap({user}: UserProps) {
   const route: MyRouteProp = useRoute();
 
   const [favoriteAddresses] = useFavoriteAddresses();
-  const [race, raceLoading] = getRace(user.currentRaceId! || 'null');
+  const [race, raceLoading] = useRace(user.currentRaceId! || 'null');
   const [fromAddress, setFromAddress] = useState<Address>();
   const [toAddress, setToAddress] = useState<Address>();
+  console.log(race?.status);
   
   useEffect(() => {
     if(!race) return;
@@ -78,9 +79,9 @@ export default function HomeMap({user}: UserProps) {
 
       {user.status === UserStatus.racing ? (
         user.role === Role.Customer ? (
-          <FollowDriver user={user} />
+          <FollowDriver user={user} race={race} />
         ) : (
-          <FollowRace user={user} />
+          <FollowRace user={user} race={race} />
         )
       ) : user.role === Role.Customer ? (
         <CreateRace

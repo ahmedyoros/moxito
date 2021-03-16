@@ -2,7 +2,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, View } from 'react-native';
-import { endRace, useRace } from '../../backend/RaceManager';
+import { endRace } from '../../backend/RaceManager';
 import { updateCurrentUser, updateUser } from '../../backend/UserManager';
 import Avatar from '../../components/Avatar';
 import Loading from '../../components/Loading';
@@ -10,18 +10,24 @@ import MyButton from '../../components/MyButton';
 import { UserStatus } from '../../enums/Status';
 import CommonStyle from '../../styles/CommonStyle';
 import useTheme from '../../themes/ThemeProvider';
-import { MyNavigationProp, UserProps } from '../../types/Props';
+import { MyNavigationProp } from '../../types/Props';
+import { Race } from '../../types/Race';
+import { User } from '../../types/User';
 
-export default function FollowRace({user}: UserProps) {
+type Props = {
+  user: User,
+  race: Race | undefined
+}
+
+export default function FollowRace({user, race}: Props) {
   const navigation: MyNavigationProp = useNavigation();
-  const [race, loading] = useRace(user.currentRaceId!);
 
   const finish = () => {
     endRace(user.currentRaceId!, () => {
       updateCurrentUser({
         status: UserStatus.arrived
       });
-      updateUser(race.customer.id, {
+      updateUser(race!.customer.id, {
         status: UserStatus.arrived
       });
     });
@@ -30,7 +36,7 @@ export default function FollowRace({user}: UserProps) {
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
 
-  if (loading) return <Loading />;
+  if (!race) return <Loading />;
   return (
     <View
       style={[

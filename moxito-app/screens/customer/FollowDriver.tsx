@@ -1,23 +1,27 @@
 import { FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, View } from 'react-native';
-import { useRace } from '../../backend/RaceManager';
 import Avatar from '../../components/Avatar';
 import Loading from '../../components/Loading';
 import CommonStyle from '../../styles/CommonStyle';
 import useTheme from '../../themes/ThemeProvider';
-import { MyNavigationProp, MyRouteProp, UserProps } from '../../types/Props';
+import { MyNavigationProp } from '../../types/Props';
+import { Race } from '../../types/Race';
 import { User } from '../../types/User';
 
-export default function FollowDriver({user}: UserProps) {
+type Props = {
+  user: User,
+  race: Race | undefined
+}
+
+export default function FollowDriver({user, race}: Props){
   const navigation: MyNavigationProp = useNavigation();
-  const [race, loading] = useRace(user.currentRaceId!)
   
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
 
-  if(loading) return <Loading />;
+  if(!race) return <Loading />;
   return (
     <View
       style={[
