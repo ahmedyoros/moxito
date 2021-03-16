@@ -1,5 +1,5 @@
 import { FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { endRace, useRace } from '../../backend/RaceManager';
@@ -10,13 +10,10 @@ import MyButton from '../../components/MyButton';
 import { UserStatus } from '../../enums/Status';
 import CommonStyle from '../../styles/CommonStyle';
 import useTheme from '../../themes/ThemeProvider';
-import { MyNavigationProp, MyRouteProp, NavigationProps } from '../../types/Props';
-import { User } from '../../types/User';
+import { MyNavigationProp, UserProps } from '../../types/Props';
 
-export default function FollowRace() {
+export default function FollowRace({user}: UserProps) {
   const navigation: MyNavigationProp = useNavigation();
-  const route: MyRouteProp = useRoute();
-  const user: User = route.params!.user;
   const [race, loading] = useRace(user.currentRaceId!);
 
   const finish = () => {

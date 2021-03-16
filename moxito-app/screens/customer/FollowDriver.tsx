@@ -7,13 +7,11 @@ import Avatar from '../../components/Avatar';
 import Loading from '../../components/Loading';
 import CommonStyle from '../../styles/CommonStyle';
 import useTheme from '../../themes/ThemeProvider';
-import { MyNavigationProp, MyRouteProp } from '../../types/Props';
+import { MyNavigationProp, MyRouteProp, UserProps } from '../../types/Props';
 import { User } from '../../types/User';
 
-export default function FollowDriver() {
+export default function FollowDriver({user}: UserProps) {
   const navigation: MyNavigationProp = useNavigation();
-  const route: MyRouteProp = useRoute();
-  const user: User = route.params!.user;
   const [race, loading] = useRace(user.currentRaceId!)
   
   const theme = useTheme();

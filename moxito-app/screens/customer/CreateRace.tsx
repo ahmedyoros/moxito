@@ -22,16 +22,15 @@ type Props = {
   toAddress: Address | undefined;
   fromAddress: Address | undefined;
   favoriteAddresses: Address[];
+  user: User;
 };
 
 export default function CreateRace({
   toAddress,
   fromAddress,
   favoriteAddresses,
+  user
 }: Props) {
-  const route: MyRouteProp = useRoute();
-  const user = route.params?.user;
-
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
   const [price, setPrice] = useState(0);
@@ -68,7 +67,7 @@ export default function CreateRace({
       status: RaceStatus.pending,
     };
 
-    setCurrentRaceId(0);
+    setCurrentRaceId('');
     createRace(race, (raceId: string) => {
       setCurrentRaceId(raceId);
       updateCurrentUser({
@@ -79,7 +78,7 @@ export default function CreateRace({
   };
 
   const cancel = () => {
-    deleteRace(currentRaceId);
+    deleteRace(currentRaceId!);
     updateCurrentUser({
       status: UserStatus.idle,
       currentRaceId: deleteField(),
