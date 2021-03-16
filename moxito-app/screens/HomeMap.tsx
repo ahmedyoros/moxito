@@ -1,23 +1,15 @@
-import { Entypo } from '@expo/vector-icons';
 import { useRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import * as Location from 'expo-location';
-import usePermissions from 'expo-permissions-hooks';
-import React, { useEffect, useRef, useState } from 'react';
-import { Platform, View } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { Headline } from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { useFavoriteAddresses } from '../backend/FavoriteManager';
-import { getRace, useRace } from '../backend/RaceManager';
-import { getBaseUser, useCurrentUser } from '../backend/UserManager';
-import Loading from '../components/Loading';
+import { getRace } from '../backend/RaceManager';
 import { Role } from '../enums/Role';
 import { UserStatus } from '../enums/Status';
 import CommonStyle from '../styles/CommonStyle';
 import useTheme from '../themes/ThemeProvider';
 import { Address } from '../types/Address';
-import { Pos, toPos } from '../types/Pos';
-import { MyRouteProp, NavigationProps, UserProps } from '../types/Props';
+import { MyRouteProp, UserProps } from '../types/Props';
 import CreateRace from './customer/CreateRace';
 import FollowDriver from './customer/FollowDriver';
 import AcceptRace from './driver/AcceptRace';
@@ -33,15 +25,18 @@ import UserReview from './UserReview';
 const Stack = createStackNavigator();
 
 export default function HomeMap({user}: UserProps) {
+  console.log('rendering...');
+
   const route: MyRouteProp = useRoute();
 
   const [favoriteAddresses] = useFavoriteAddresses();
   const [race, raceLoading] = getRace(user.currentRaceId! || 'null');
   const [fromAddress, setFromAddress] = useState<Address>();
   const [toAddress, setToAddress] = useState<Address>();
-
+  
   useEffect(() => {
     if(!race) return;
+    
     setToAddress(race.to);
     setFromAddress(race.from);
   }, [raceLoading])
@@ -79,7 +74,7 @@ export default function HomeMap({user}: UserProps) {
 
   return (
     <View style={commonStyle.container}>
-      <MyMapView toAddress={toAddress} fromAddress={fromAddress}/>
+      <MyMapView toAddress={toAddress} fromAddress={fromAddress} user={user} />
 
       {user.status === UserStatus.racing ? (
         user.role === Role.Customer ? (
