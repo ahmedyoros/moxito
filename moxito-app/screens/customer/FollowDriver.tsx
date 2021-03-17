@@ -42,7 +42,7 @@ export default function FollowDriver({ user, race }: UserRaceProps) {
               navigation.navigate('Profile', { user: race.driver })
             }
           />
-          <Subheading style={{ color: COLORS.orange, textAlign: 'center' }}>
+          <Subheading style={{ color: theme.colors.primary, textAlign: 'center' }}>
             profile
           </Subheading>
         </View>
@@ -68,7 +68,7 @@ export default function FollowDriver({ user, race }: UserRaceProps) {
               navigation.navigate('Chat', { race: race, user: user })
             }
           />
-          <Subheading style={{ color: COLORS.orange, textAlign: 'center' }}>
+          <Subheading style={{ color: theme.colors.primary, textAlign: 'center' }}>
             chat
           </Subheading>
         </View>

@@ -9,7 +9,7 @@ export default (theme: Theme) => StyleSheet.create({
   },
   
   button: {
-    backgroundColor: COLORS.white,
+    backgroundColor: theme.colors.text,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,

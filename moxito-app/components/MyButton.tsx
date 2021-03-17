@@ -13,7 +13,7 @@ export default function MyButton({onPress, title, icon, style}: any) {
         key={title}
         uppercase={false}
         contentStyle={{ height: 50 }}
-        labelStyle={{color:COLORS.black}}
+        labelStyle={{color:theme.colors.background}}
         style={[commonStyle.button, style]}
         onPress={onPress}
         icon={icon}

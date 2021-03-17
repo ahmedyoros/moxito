@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { Avatar as PaperAvatar } from 'react-native-paper';
 import { COLORS } from '../themes/colors';
+import useTheme from '../themes/ThemeProvider';
 import { defaultPictureUrl } from '../types/User';
 
 type Props = {
@@ -12,11 +13,13 @@ type Props = {
 };
 
 export default function Avatar({ imageUrl, size, onPress, style }: Props) {
+  const theme = useTheme();
+  
   const styles = StyleSheet.create({
     image: {
       borderWidth: 3,
       borderRadius: size / 2,
-      borderColor: COLORS.orange,
+      borderColor: theme.colors.primary,
       alignSelf: 'center',
     },
   });

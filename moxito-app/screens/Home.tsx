@@ -48,8 +48,12 @@ export default function Home({ navigation }: NavigationProps) {
   );
 }
 
-function LoadHomeMap() {
+function LoadHomeMap({route, navigation}: NavigationProps) {
   const [user, loading] = useCurrentUser();
   if(loading) return <Loading />;
+
+
+
+
   return <HomeMap user={user}/>
 }

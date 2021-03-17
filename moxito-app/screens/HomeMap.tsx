@@ -1,4 +1,4 @@
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
@@ -9,7 +9,7 @@ import { UserStatus } from '../enums/Status';
 import CommonStyle from '../styles/CommonStyle';
 import useTheme from '../themes/ThemeProvider';
 import { Address } from '../types/Address';
-import { MyRouteProp, UserProps } from '../types/Props';
+import { MyNavigationProp, MyRouteProp, UserProps } from '../types/Props';
 import CreateRace from './customer/CreateRace';
 import FollowDriver from './customer/FollowDriver';
 import AcceptRace from './driver/AcceptRace';
@@ -26,7 +26,8 @@ const Stack = createStackNavigator();
 
 export default function HomeMap({user}: UserProps) {
   const route: MyRouteProp = useRoute();
-
+  const navigation: MyNavigationProp = useNavigation();
+  
   const [favoriteAddresses] = useFavoriteAddresses();
   const [race] = useRace(user.currentRaceId! || 'null');
   const [fromAddress, setFromAddress] = useState<Address>();
@@ -69,6 +70,8 @@ export default function HomeMap({user}: UserProps) {
     if (!user.verified) return <Verification user={user} />;
     if (user.status === UserStatus.accepting) return <AcceptRace user={user} race={race} />;
   }
+
+  navigation.setOptions({headerShown: true});
 
   return (
     <View style={commonStyle.container}>

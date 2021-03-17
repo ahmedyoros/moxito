@@ -139,7 +139,7 @@ export default function MyMapView({ toAddress, fromAddress, user, race }: Props)
       {coords.length == 2 &&(
         <Polyline
           coordinates={coords}
-          strokeColor={COLORS.orange}
+          strokeColor={theme.colors.primary}
           strokeWidth={5}
           lineDashPattern={[50, 50]}
         />

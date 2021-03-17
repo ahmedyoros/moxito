@@ -65,7 +65,7 @@ export default function FollowRace({ user, race }: Props) {
               navigation.navigate('Profile', { user: race.customer })
             }
           />
-          <Subheading style={{ color: COLORS.orange, textAlign: 'center' }}>
+          <Subheading style={{ color: theme.colors.primary, textAlign: 'center' }}>
             profile
           </Subheading>
         </View>
@@ -92,7 +92,7 @@ export default function FollowRace({ user, race }: Props) {
               navigation.navigate('Chat', { race: race, user: user })
             }
           />
-          <Subheading style={{ color: COLORS.orange, textAlign: 'center' }}>
+          <Subheading style={{ color: theme.colors.primary, textAlign: 'center' }}>
             chat
           </Subheading>
         </View>
