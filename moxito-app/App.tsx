@@ -10,7 +10,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React, { useState, useEffect } from 'react';
 import { Image, SafeAreaView, Text, StatusBar} from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
-import Helmet from './assets/icons/helmet.svg';
 import House from './assets/icons/house.svg';
 import { getFireUser } from './backend/UserManager';
 import Avatar from './components/Avatar';
@@ -85,10 +84,9 @@ export default function App() {
   function renderMenu(): React.ReactNode {
     const routeNames = [
       'Ma course',
-      'Modifier mon profile',
-      'Mon profile public',
+      'Modifier mon profil',
+      'Mon profil public',
       'Mes adresses préférées',
-      'Mes chauffeurs préférés',
     ];
     const initialRouteName = routeNames[newUser ? 1 : 0];
     
@@ -142,13 +140,6 @@ export default function App() {
             drawerIcon: () => <House width={20} height={20} />,
           }}
         />
-        <Drawer.Screen
-          name={routeNames[4]}
-          component={Drivers}
-          options={{
-            drawerIcon: () => <Helmet width={20} height={20} />,
-          }}
-        />
       </Drawer.Navigator>
     );
   }
@@ -168,7 +159,7 @@ export default function App() {
           ]}
         >
           <Avatar size={50} imageUrl={fireUser.photoURL || defaultPictureUrl} />
-          <Text style={[commonStyle.text]}>{fireUser.displayName}</Text>
+          <Text style={[commonStyle.text]}>{" " + fireUser.displayName}</Text>
         </SafeAreaView>
         <DrawerItemList {...props} />
         <DrawerItem
