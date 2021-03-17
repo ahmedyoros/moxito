@@ -89,11 +89,16 @@ export default function Profile({ navigation, route }: NavigationProps) {
   return (
     <KeyboardAvoid>
       {newUser && <BarTitle title={`Bienvenue ${user.firstname} !`} />}
-      <UploadImage
-        avatar={true}
-        imageUrl={user.photoURL}
-        setImageUrl={updatePhotoUrl}
-      />
+      <View style={{
+        marginTop: 15
+      }} >
+        <UploadImage
+          avatar={true}
+          imageUrl={user.photoURL}
+          setImageUrl={updatePhotoUrl}
+        />
+      </View>
+      
       <TextInput
         multiline={true}
         numberOfLines={5}

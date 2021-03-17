@@ -25,7 +25,7 @@ export default function PublicProfile({ navigation, route }: NavigationProps) {
   useEffect(() => {
     if (!route.params) return;
     navigation.setOptions({
-      title: 'Profile de ' + baseUser.displayName,
+      title: 'Profil de ' + baseUser.displayName,
     });
   });
 

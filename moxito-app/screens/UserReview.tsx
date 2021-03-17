@@ -60,16 +60,16 @@ export default function UserReview({ navigation, route }: NavigationProps) {
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
   return (
-    <View>
+    <View style={{paddingVertical: 15}}>
       <Avatar
         size={100}
         imageUrl={(reviewed && reviewed.photoURL) || defaultPictureUrl}
         onPress={seeProfile}
       />
-      <MyButton icon="account-box" title="Profile" onPress={seeProfile} />
+      <MyButton icon="account-box" title="Profil" onPress={seeProfile} />
       <View>
         <Title style={{fontStyle:'italic', marginLeft:30}}>
-          Qu'avez vous pensez du {Role.toString(reviewedRole)}?</Title>
+          Qu'avez-vous pensé du {Role.toString(reviewedRole)}?</Title>
         {reviewList[reviewedRole].map((r, idx) => (
           <View index={r}>
             <Text style={[commonStyle.text, {fontWeight: 'bold', margin:10, marginLeft:30}]}>{r}</Text>

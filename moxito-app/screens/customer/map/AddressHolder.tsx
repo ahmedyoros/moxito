@@ -8,6 +8,7 @@ import {
   removeFavoriteAddress
 } from '../../../backend/FavoriteManager';
 import CommonStyle from '../../../styles/CommonStyle';
+import { COLORS } from '../../../themes/colors';
 import useTheme from '../../../themes/ThemeProvider';
 import { Address } from '../../../types/Address';
 
@@ -58,7 +59,7 @@ export default function AddressHolder({
             <List.Icon
               {...props}
               icon="star"
-              color={favorite ? theme.colors.primary : theme.colors.text}
+              color={favorite ? theme.colors.primary : COLORS.disabledGrey}
             />
           </TouchableOpacity>
           {!searching && <List.Icon {...props} icon="magnify" />}

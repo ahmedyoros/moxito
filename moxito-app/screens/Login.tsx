@@ -60,7 +60,7 @@ export default function Login({ route }: NavigationProps) {
         name: userProfile.family_name || lastname || null,
         role: role,
         status: UserStatus.idle,
-        verified: false,
+        verified: false
       };
 
       fireUser.updateProfile({
@@ -92,7 +92,7 @@ export default function Login({ route }: NavigationProps) {
           <FacebookLogin setCredential={setCredential} />
           <TwitterLogin setCredential={setCredential} />
         </View>
-        <BarTitle title={title + ' manuellement'} />
+        <BarTitle title='Ou saisir' />
         <View>
           {register ? (
             <ManualSignup role={role} setCredential={setUserCredential} />
