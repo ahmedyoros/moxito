@@ -7,7 +7,7 @@ import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Headline } from 'react-native-paper';
 import Loading from '../components/Loading';
 import { Role } from '../enums/Role';
-import { UserStatus } from '../enums/Status';
+import { RaceStatus, UserStatus } from '../enums/Status';
 import useTheme from '../themes/ThemeProvider';
 import { Address } from '../types/Address';
 import { Pos, toPos } from '../types/Pos';
@@ -31,11 +31,11 @@ export default function MyMapView({ toAddress, fromAddress, user, race }: Props)
   const [coords, setCoords] = useState<Pos[]>([]);
 
   useEffect(() =>{
-    if(!race){
-      if (fromAddress && toAddress) 
-        setCoords([fromAddress.pos, toAddress.pos]);
-    }else{
+    if(!fromAddress || !toAddress) return;
+    if(race && race.status === RaceStatus.pickingUp){
       setCoords([race.driverPos!, race.from.pos]);
+    }else{
+      setCoords([fromAddress.pos, toAddress.pos]);
     }
   }, [toAddress, fromAddress, race?.driverPos])
 
@@ -91,8 +91,8 @@ export default function MyMapView({ toAddress, fromAddress, user, race }: Props)
       followsUserLocation
       provider={PROVIDER_GOOGLE}
       initialRegion={{
-        latitude: pos.latitude,
-        longitude: pos.longitude,
+        latitude: pos.latitude || 0,
+        longitude: pos.longitude || 0,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       }}

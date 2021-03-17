@@ -1,19 +1,38 @@
 import { RaceStatus } from '../enums/Status';
+import { Address } from '../types/Address';
 import { Pos } from '../types/Pos';
 import { Race } from '../types/Race';
+import { User } from '../types/User';
 import { racesRef } from './RaceManager';
+import { getBaseUser } from './UserManager';
 
 const geofire = require('geofire-common');
 
 export function createRace(
-  race: Race,
+  fromAddress: Address,
+  toAddress: Address,
+  distance: number,
+  duration: number,
+  price: number,
   callback?: (path: string) => void
 ) {
-  const pos = race.from.pos;
-  if(!pos.hash){
-    const hash = geofire.geohashForLocation([pos.latitude, pos.longitude]);
-    race.from.pos.hash = hash;
-  }
+  
+  const race: Race = {
+    createdAt: Date.now(),
+    from:{
+      ...fromAddress,
+      pos:{
+        ...fromAddress.pos,
+        hash: geofire.geohashForLocation([fromAddress.pos.latitude, fromAddress.pos.longitude])
+      }
+    },
+    to: toAddress,
+    customer: getBaseUser(),
+    raceDistance: distance,
+    estimateDuration: duration,
+    price: price,
+    status: RaceStatus.pending,
+  };
   const docRef = racesRef.doc();
   docRef.set(race).then(() => callback && callback(docRef.id));
 }
@@ -62,9 +81,12 @@ export function stopSearching() {
  */
 export function searchClosestRace(pos: Pos, radius: number, callback: (raceId: string) => void) {
   const center = [pos.latitude, pos.longitude];
-
+  let i = 0;
   interval = setInterval(_ => {
     lookForRaces(center, radius*1000, (raceDocs) => {
+      i++;
+      console.log(i);
+      
       if(raceDocs.length >= 1){
         clearInterval(interval);
         callback(raceDocs[0].id);

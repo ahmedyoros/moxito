@@ -88,23 +88,7 @@ export default function HomeMap({user}: UserProps) {
           user={user}
         />
       ) : (
-        <Stack.Navigator
-          initialRouteName={
-            user.status === UserStatus.idle ? 'Idle' : 'SearchRace'
-          }
-          screenOptions={{ headerShown: false }}
-        >
-          <Stack.Screen
-            name="Idle"
-            component={Idle}
-            initialParams={{ user: user }}
-          />
-          <Stack.Screen
-            name="SearchRace"
-            component={SearchRace}
-            initialParams={{ user: user }}
-          />
-        </Stack.Navigator>
+        user.status === UserStatus.idle ? <Idle user={user}/> : <SearchRace user={user}/>
       )}
     </View>
   );

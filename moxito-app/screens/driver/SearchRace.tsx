@@ -10,11 +10,9 @@ import MyButton from '../../components/MyButton';
 import { UserStatus } from '../../enums/Status';
 import useTheme from '../../themes/ThemeProvider';
 import { Pos, toPos } from '../../types/Pos';
-import { NavigationProps } from '../../types/Props';
-import { User } from '../../types/User';
+import { UserProps } from '../../types/Props';
 
-export default function SearchRace({ navigation, route }: NavigationProps) {
-  const user: User = route.params!.user;
+export default function SearchRace({user} : UserProps) {
   const [pos, setPos] = useState<Pos>();
   const { isGranted, ask } = usePermissions('LOCATION');
 
@@ -46,7 +44,6 @@ export default function SearchRace({ navigation, route }: NavigationProps) {
       <MyButton
         title="Ne plus accepter de course"
         onPress={() => {
-          navigation.navigate('Idle');
           updateCurrentUser({ status: UserStatus.idle });
         }}
       />

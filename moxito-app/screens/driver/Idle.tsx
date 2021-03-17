@@ -7,11 +7,9 @@ import MyButton from '../../components/MyButton';
 import { UserStatus } from '../../enums/Status';
 import CommonStyle from '../../styles/CommonStyle';
 import useTheme from '../../themes/ThemeProvider';
-import { NavigationProps } from '../../types/Props';
-import { User } from '../../types/User';
+import { UserProps } from '../../types/Props';
 
-export default function Idle({ navigation, route }: NavigationProps) {
-  const user: User = route.params!.user;
+export default function Idle({user} : UserProps) {
   const [radius, setRadius] = useState(user.searchRadius || 100);
 
   const theme = useTheme();
@@ -32,7 +30,6 @@ export default function Idle({ navigation, route }: NavigationProps) {
       <MyButton
         title={`Me rendre disponible`}
         onPress={() => {
-          navigation.navigate('SearchRace', {user: user});
           updateCurrentUser({
             status: UserStatus.searching,
             searchRadius: radius,

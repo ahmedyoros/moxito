@@ -41,7 +41,7 @@ export default function CreateRace({
     setDistance(distance);
     setDuration(estimateDurationInMin(distance));
 
-    //Estimating Price
+    //Estimate Price
     if (distance > 2)
       setPrice(Math.round(distance*kmPrice));
     else setPrice(kmPrice)
@@ -51,19 +51,9 @@ export default function CreateRace({
 
   const submit = () => {
     if (!fromAddress || !toAddress) return;
-    const race: Race = {
-      createdAt: Date.now(),
-      from: fromAddress,
-      to: toAddress,
-      customer: getBaseUser(),
-      raceDistance: distance,
-      estimateDuration: duration,
-      price: price,
-      status: RaceStatus.pending,
-    };
-
     setCurrentRaceId('');
-    createRace(race, (raceId: string) => {
+
+    createRace(fromAddress, toAddress, distance, duration, price, (raceId: string) => {
       setCurrentRaceId(raceId);
       updateCurrentUser({
         currentRaceId: raceId,
