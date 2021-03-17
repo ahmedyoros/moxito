@@ -1,24 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Animated, ImageBackground, View } from 'react-native';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
 import { Title } from 'react-native-paper';
 import Moxito from '../../assets/logos/moxito-w.svg';
-import { acceptRace, declineRace, getRace } from '../../backend/RaceManager';
+import { acceptRace, declineRace } from '../../backend/RaceManager';
 import { updateCurrentUser, updateUser } from '../../backend/UserManager';
 import CrossTable from '../../components/CrossTable';
 import CrossTableCell from '../../components/CrossTableCell';
 import Loading from '../../components/Loading';
 import MyButton from '../../components/MyButton';
 import { deleteField } from '../../config';
-import fx from '../../currency.config';
 import { UserStatus } from '../../enums/Status';
-import CommonStyle from '../../styles/CommonStyle';
 import MoxitoStyle from '../../styles/MoxitoStyle';
 import { COLORS } from '../../themes/colors';
 import useTheme from '../../themes/ThemeProvider';
-import { UserProps } from '../../types/Props';
-
-const geofire = require('geofire-common');
+import { UserRaceProps } from '../../types/Props';
+import { getDistanceInKm } from '../../utils/calculator';
 
 const Countdown = ({ onComplete }: any) => (
   <CountdownCircleTimer
@@ -39,27 +36,11 @@ const Countdown = ({ onComplete }: any) => (
   </CountdownCircleTimer>
 );
 
-export default function AcceptRace({ user: user }: UserProps) {
-  const [race, loading] = getRace(user.currentRaceId!);
-
-  const [joinDistance, setJoinDistance] = useState(0);
-
-  useEffect(() => {
-    if (loading) return;
-    setJoinDistance(
-      Math.round(
-        geofire.distanceBetween(
-          [user.pos!.latitude, user.pos!.longitude],
-          [race.from.pos.latitude, race.from.pos.longitude]
-        )
-      )
-    );
-  }, [race]);
-
+export default function AcceptRace({ user, race }: UserRaceProps) {
   const accept = () => {
-    acceptRace(user.currentRaceId!, joinDistance, () => {
+    acceptRace(user.currentRaceId!, user.pos!, () => {
       updateCurrentUser({ status: UserStatus.racing });
-      updateUser(race.customer.id, { status: UserStatus.racing });
+      updateUser(race!.customer.id, { status: UserStatus.racing });
     });
   };
 
@@ -74,7 +55,6 @@ export default function AcceptRace({ user: user }: UserProps) {
   };
 
   const theme = useTheme();
-  const commonStyle = CommonStyle(theme);
   const moxitoStyle = MoxitoStyle(theme);
   return (
     <ImageBackground
@@ -89,14 +69,16 @@ export default function AcceptRace({ user: user }: UserProps) {
         >
           Nouvelle course
         </Title>
-        {loading ? (
+        {!race ? (
           <Loading />
         ) : (
           <>
             <CrossTable
               child1={
                 <CrossTableCell
-                  title={joinDistance.toFixed(1) + ' Km'}
+                  title={
+                    getDistanceInKm(user.pos!, race.from.pos!).toFixed(1) + ' Km'
+                  }
                   subtitle={"jusqu'au client"}
                 />
               }
@@ -108,13 +90,13 @@ export default function AcceptRace({ user: user }: UserProps) {
               }
               child3={
                 <CrossTableCell
-                  title={fx(race.price).to(user.currency)}
-                  subtitle={user.currency!}
+                  title={race.price.toString()}
+                  subtitle={user.currency || 'GNF'}
                 />
               }
               child4={
                 <CrossTableCell
-                  title={Math.round(race.estimateDuration / 60) + ' min'}
+                  title={race.estimateDuration + ' min'}
                   subtitle={'de trajet'}
                 />
               }

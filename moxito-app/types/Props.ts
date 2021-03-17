@@ -27,3 +27,7 @@ export type UserProps = {
 export type RaceProps = {
   race: Race;
 }
+
+export type UserRaceProps = UserProps & {
+  race: Race | undefined;
+};

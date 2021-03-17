@@ -7,7 +7,6 @@ import CrossTable from '../components/CrossTable';
 import CrossTableCell from '../components/CrossTableCell';
 import Loading from '../components/Loading';
 import MyButton from '../components/MyButton';
-import fx from '../currency.config';
 import { Role } from '../enums/Role';
 import MoxitoStyle from '../styles/MoxitoStyle';
 import { COLORS } from '../themes/colors';
@@ -23,12 +22,12 @@ export default function RaceOver({ navigation, route }: NavigationProps) {
   const moxitoStyle = MoxitoStyle(theme);
 
   if (loading) return <Loading />;
+
   const shift =
-    (race.createdAt + race.estimateDuration * 1000 - race.endedAt!) / 3600;
-  const totalDuration =
-    ((user.role === Role.Driver ? race.createdAt : race.startedAt!) -
-      race.endedAt!) /
-    3600;
+    (race.endedAt! - (race.startedAt! + race.estimateDuration * 60000)) / 60000;
+  const totalDuration = (race.endedAt! - race.acceptedAt!) / 60000;
+  const joinDuration = (race.startedAt! - race.acceptedAt!) / 60000;
+
   return (
     <ImageBackground
       source={require('../assets/logos/bg-logos.png')}
@@ -49,7 +48,7 @@ export default function RaceOver({ navigation, route }: NavigationProps) {
             <CrossTable
               child1={
                 <CrossTableCell
-                  title={race.joinDistance + ' Km'}
+                  title={Math.round(joinDuration) + ' min'}
                   subtitle={
                     "jusqu'" +
                     (user.role === Role.Driver ? 'au client' : 'à vous')
@@ -58,7 +57,7 @@ export default function RaceOver({ navigation, route }: NavigationProps) {
               }
               child2={
                 <CrossTableCell
-                  title={race.raceDistance + ' Km'}
+                  title={race.raceDistance.toFixed(1) + ' Km'}
                   subtitle={'de course'}
                 />
               }
@@ -70,7 +69,7 @@ export default function RaceOver({ navigation, route }: NavigationProps) {
               }
               child4={
                 <CrossTableCell
-                  title={Math.round(Math.abs(totalDuration)) + ' min'}
+                  title={Math.round(totalDuration) + ' min'}
                   subtitle="de trajet total"
                 />
               }
@@ -78,11 +77,13 @@ export default function RaceOver({ navigation, route }: NavigationProps) {
             <Title
               style={{ alignSelf: 'center', fontSize: 25, color: COLORS.grey }}
             >
-              {fx(race.price).to(user.currency)} {user.currency}
+              {race.price} {user.currency || 'GNF'}
             </Title>
             <MyButton
               title="Valider"
-              onPress={() => navigation.navigate('Noter', { race: race, user: user })}
+              onPress={() =>
+                navigation.navigate('Noter', { race: race, user: user })
+              }
             />
           </>
         )}

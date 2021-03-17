@@ -25,22 +25,19 @@ import UserReview from './UserReview';
 const Stack = createStackNavigator();
 
 export default function HomeMap({user}: UserProps) {
-  console.log('rendering...');
-
   const route: MyRouteProp = useRoute();
 
   const [favoriteAddresses] = useFavoriteAddresses();
-  const [race, raceLoading] = useRace(user.currentRaceId! || 'null');
+  const [race] = useRace(user.currentRaceId! || 'null');
   const [fromAddress, setFromAddress] = useState<Address>();
   const [toAddress, setToAddress] = useState<Address>();
-  console.log(race?.status);
   
   useEffect(() => {
     if(!race) return;
     
     setToAddress(race.to);
     setFromAddress(race.from);
-  }, [raceLoading])
+  }, [race])
 
   useEffect(() => setToAddress(route.params?.toAddress), [
     route.params?.toAddress,
@@ -70,12 +67,12 @@ export default function HomeMap({user}: UserProps) {
 
   if (user.role === Role.Driver) {
     if (!user.verified) return <Verification user={user} />;
-    if (user.status === UserStatus.accepting) return <AcceptRace user={user} />;
+    if (user.status === UserStatus.accepting) return <AcceptRace user={user} race={race} />;
   }
 
   return (
     <View style={commonStyle.container}>
-      <MyMapView toAddress={toAddress} fromAddress={fromAddress} user={user} />
+      <MyMapView toAddress={toAddress} fromAddress={fromAddress} user={user} race={race}/>
 
       {user.status === UserStatus.racing ? (
         user.role === Role.Customer ? (

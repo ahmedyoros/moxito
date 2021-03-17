@@ -14,9 +14,8 @@ import { Address } from '../../types/Address';
 import { MyRouteProp } from '../../types/Props';
 import { Race } from '../../types/Race';
 import { User } from '../../types/User';
+import { estimateDurationInMin, getDistanceInKm } from '../../utils/calculator';
 import AddressHolder from './map/AddressHolder';
-
-const geofire = require('geofire-common');
 
 type Props = {
   toAddress: Address | undefined;
@@ -38,17 +37,13 @@ export default function CreateRace({
 
   useEffect(() => {
     if (!fromAddress || !toAddress) return;
-    const distance: number = geofire.distanceBetween(
-      [fromAddress.pos.latitude, fromAddress.pos.longitude],
-      [toAddress.pos.latitude, toAddress.pos.longitude]
-    );
+    const distance: number = getDistanceInKm(fromAddress.pos, toAddress.pos);
     setDistance(distance);
-    const estimatedSpeed = 25; // km/h
-    setDuration((distance / estimatedSpeed) * 3600);
+    setDuration(estimateDurationInMin(distance));
 
-    //Price
+    //Estimating Price
     if (distance > 2)
-      setPrice(distance*kmPrice);
+      setPrice(Math.round(distance*kmPrice));
     else setPrice(kmPrice)
   }, [fromAddress, toAddress]);
 
@@ -142,7 +137,7 @@ export default function CreateRace({
                   { fontStyle: 'italic', textAlign: 'center', fontSize: 16},
                 ]}
               >
-                GNF
+                {user.currency}
               </Text>
             </View>
             <View style={{ flexDirection: 'column', marginTop: 10 }}>
@@ -150,7 +145,7 @@ export default function CreateRace({
                 {distance.toFixed(1)} km
               </Text>
               <Text style={[commonStyle.text, { fontStyle: 'italic' }]}>
-                {Math.round(duration/ 60)} min
+                {duration} min
               </Text>
             </View>
           </>

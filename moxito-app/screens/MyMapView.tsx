@@ -6,32 +6,44 @@ import { Platform, View } from 'react-native';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Headline } from 'react-native-paper';
 import Loading from '../components/Loading';
+import { Role } from '../enums/Role';
 import { UserStatus } from '../enums/Status';
 import useTheme from '../themes/ThemeProvider';
 import { Address } from '../types/Address';
 import { Pos, toPos } from '../types/Pos';
+import { Race } from '../types/Race';
 import { User } from '../types/User';
+// import Helmet from '../assets/icons/helmet.svg';
+import { FontAwesome } from '@expo/vector-icons'; 
+import { COLORS } from '../themes/colors';
+import { UserRaceProps } from '../types/Props';
 
-type Props = {
+type Props = UserRaceProps & {
   toAddress: Address | undefined;
   fromAddress: Address | undefined;
-  user: User;
 };
 
-export default function MyMapView({ toAddress, fromAddress, user }: Props) {
+export default function MyMapView({ toAddress, fromAddress, user, race }: Props) {
   const [pos, setPos] = useState<Pos>();
   const { isGranted, isDenied, ask } = usePermissions('LOCATION');
-  
   const ref = useRef<MapView>(null);
 
+  const [coords, setCoords] = useState<Pos[]>([]);
+
+  useEffect(() =>{
+    if(!race){
+      if (fromAddress && toAddress) 
+        setCoords([fromAddress.pos, toAddress.pos]);
+    }else{
+      setCoords([race.driverPos!, race.from.pos]);
+    }
+  }, [toAddress, fromAddress, race?.driverPos])
+
   useEffect(() => {
-    if(!toAddress || user.status != UserStatus.idle) return;
+    if(coords === []) return;
     if (Platform.OS === 'ios') {
       ref?.current?.fitToElements(false);
     } else {
-      const coords: Pos[] = [];
-      if (toAddress) coords.push(toAddress.pos);
-      if (fromAddress) coords.push(fromAddress.pos);
       ref?.current?.fitToCoordinates(coords, { animated: true, edgePadding:{ 
         bottom:20,
         top:50,
@@ -39,7 +51,7 @@ export default function MyMapView({ toAddress, fromAddress, user }: Props) {
         left:20
       } });
     }
-  }, [toAddress, fromAddress]);
+  }, [coords]);
 
   useEffect(() => {
     if (isGranted)
@@ -95,7 +107,7 @@ export default function MyMapView({ toAddress, fromAddress, user }: Props) {
             longitude: fromAddress.pos.longitude,
           }}
         >
-          <Entypo name="home" size={25} color={theme.colors.primary} />
+          <Entypo name="home" size={25} color={COLORS.blue} />
         </Marker>
       )}
 
@@ -108,14 +120,26 @@ export default function MyMapView({ toAddress, fromAddress, user }: Props) {
             longitude: toAddress.pos.longitude,
           }}
         >
-          <Entypo name="location-pin" size={25} color={theme.colors.primary} />
+          <Entypo name="location-pin" size={25} color={COLORS.blue} />
         </Marker>
       )}
 
-      {toAddress && fromAddress && (
+      {user.role === Role.Customer && race?.driverPos && (
+        <Marker
+          title={race.driver!.displayName}
+          coordinate={{
+            latitude: race.driverPos.latitude,
+            longitude: race.driverPos.longitude,
+          }}
+        >
+          <FontAwesome name="motorcycle" size={24} color={COLORS.blue} />
+        </Marker>
+      )}
+
+      {coords.length == 2 &&(
         <Polyline
-          coordinates={[fromAddress.pos, toAddress.pos]}
-          strokeColor={theme.colors.primary} // fallback for when `strokeColors` is not supported by the map-provider
+          coordinates={coords}
+          strokeColor={COLORS.orange}
           strokeWidth={5}
           lineDashPattern={[50, 50]}
         />

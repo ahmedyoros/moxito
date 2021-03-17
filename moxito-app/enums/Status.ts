@@ -1,6 +1,7 @@
 export enum RaceStatus {
   pending = 'pending',
   accepting = 'accepting',
+  pickingUp = 'pickingUp',
   ongoing = 'ongoing',
   over = 'over',
 }

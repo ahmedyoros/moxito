@@ -3,7 +3,8 @@ import {
   useDocumentDataOnce,
 } from 'react-firebase-hooks/firestore';
 import { db } from '../config';
-import { RaceStatus } from '../enums/Status';
+import { RaceStatus, UserStatus } from '../enums/Status';
+import { Pos } from '../types/Pos';
 import { Race } from '../types/Race';
 import { getBaseUser } from './UserManager';
 
@@ -25,18 +26,22 @@ export function declineRace(id: string, callback?: () => void) {
 
 export function acceptRace(
   id: string,
-  joinDistance: number,
+  driverPos: Pos,
   callback?: () => void
 ) {
   racesRef
     .doc(id)
     .update({
-      status: RaceStatus.ongoing,
-      startedAt: Date.now(),
+      status: RaceStatus.pickingUp,
+      acceptedAt: Date.now(),
       driver: getBaseUser(),
-      joinDistance: joinDistance,
+      driverPos: driverPos,
     })
     .then(() => callback && callback());
+}
+
+export function startRace(id: string){
+  racesRef.doc(id).update({status: UserStatus.racing, startedAt: Date.now()});
 }
 
 export function endRace(id: string, callback?: () => void) {
