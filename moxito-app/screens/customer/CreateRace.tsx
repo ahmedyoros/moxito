@@ -9,6 +9,7 @@ import MyButton from '../../components/MyButton';
 import { deleteField } from '../../config';
 import { RaceStatus, UserStatus } from '../../enums/Status';
 import CommonStyle from '../../styles/CommonStyle';
+import { COLORS } from '../../themes/colors';
 import useTheme from '../../themes/ThemeProvider';
 import { Address } from '../../types/Address';
 import { MyRouteProp } from '../../types/Props';
@@ -34,17 +35,27 @@ export default function CreateRace({
   const [duration, setDuration] = useState(0);
   const [price, setPrice] = useState(0);
   const kmPrice = 2500;
+  const [showPrice, setShowPrice] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+
+
 
   useEffect(() => {
-    if (!fromAddress || !toAddress) return;
+    if (!fromAddress || !toAddress) {
+      setShowPrice(false);
+      setShowDetails(false);
+      return;
+    }
     const distance: number = getDistanceInKm(fromAddress.pos, toAddress.pos);
     setDistance(distance);
     setDuration(estimateDurationInMin(distance));
+    setShowDetails(true);
 
     //Estimate Price
     if (distance > 2)
       setPrice(Math.round(distance*kmPrice));
     else setPrice(kmPrice)
+    setShowPrice(true);
   }, [fromAddress, toAddress]);
 
   const [currentRaceId, setCurrentRaceId] = useState(user.currentRaceId)
@@ -75,8 +86,12 @@ export default function CreateRace({
   const commonStyle = CommonStyle(theme);
 
   return (
-    <View>
-      <View>
+    <View style={{paddingHorizontal: 15}}>
+      <View 
+        style={{
+          paddingBottom: 10,
+          paddingTop: 9
+        }}>
         <AddressHolder
           suggestCurrentLocation={true}
           address={fromAddress}
@@ -100,18 +115,16 @@ export default function CreateRace({
           borderColor: theme.colors.text,
           borderTopWidth: 1,
           justifyContent:'space-between',
-          paddingHorizontal: 12,
-          paddingVertical: 15
+          alignItems: 'center',
         }}
       >
         {!(currentRaceId) ? (
           <>
             <MyButton
-              style={{ width: '30%', marginRight: 0 }}
               title="Valider"
               onPress={submit}
             />
-            <View style={{ flexDirection: 'column'}}>
+            { showPrice ? (<View style={{ flexDirection: 'column' }}>
               <Text
                 style={{
                   fontStyle: 'italic',
@@ -119,7 +132,7 @@ export default function CreateRace({
                   color: theme.colors.primary,
                 }}
               >
-                {Math.round(price)}
+                {Math.round(price) + " "}
               </Text>
               <Text
                 style={[
@@ -129,15 +142,17 @@ export default function CreateRace({
               >
                 {user.currency}
               </Text>
-            </View>
-            <View style={{ flexDirection: 'column', marginTop: 10 }}>
+            </View>) : null}
+
+            {showDetails? (<View style={{ flexDirection: 'column', marginTop: 10 }}>
               <Text style={[commonStyle.text, { fontStyle: 'italic' }]}>
                 {distance.toFixed(1)} km
               </Text>
               <Text style={[commonStyle.text, { fontStyle: 'italic' }]}>
                 {duration} min
               </Text>
-            </View>
+            </View>) : null}
+            
           </>
         ) : (
           <>
@@ -146,9 +161,9 @@ export default function CreateRace({
               title="Annuler"
               onPress={cancel}
             />
-            <View style={{ alignContent: 'center', left: 20 }}>
-              <Loading size={50} />
-              <Text style={[commonStyle.text]}>Recherche en cours...</Text>
+            <View>
+              <Loading size={32} />
+              <Text style={[commonStyle.text, { fontSize: 18, color: COLORS.darkOrange}]}>Recherche en cours...</Text>
             </View>
           </>
         )}
