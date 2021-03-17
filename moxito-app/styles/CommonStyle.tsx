@@ -6,6 +6,7 @@ export default (theme: Theme) => StyleSheet.create({
   container: {
     backgroundColor:theme.colors.background,
     flex: 1,
+    paddingHorizontal: 15,
   },
   
   button: {
