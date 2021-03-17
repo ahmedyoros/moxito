@@ -28,7 +28,7 @@ export default function CreateRace({
   toAddress,
   fromAddress,
   favoriteAddresses,
-  user
+  user,
 }: Props) {
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -42,24 +42,30 @@ export default function CreateRace({
     setDuration(estimateDurationInMin(distance));
 
     //Estimate Price
-    if (distance > 2)
-      setPrice(Math.round(distance*kmPrice));
-    else setPrice(kmPrice)
+    if (distance > 2) setPrice(Math.round(distance * kmPrice));
+    else setPrice(kmPrice);
   }, [fromAddress, toAddress]);
 
-  const [currentRaceId, setCurrentRaceId] = useState(user.currentRaceId)
+  const [currentRaceId, setCurrentRaceId] = useState(user.currentRaceId);
 
   const submit = () => {
     if (!fromAddress || !toAddress) return;
     setCurrentRaceId('');
 
-    createRace(fromAddress, toAddress, distance, duration, price, (raceId: string) => {
-      setCurrentRaceId(raceId);
-      updateCurrentUser({
-        currentRaceId: raceId,
-        status: UserStatus.searching,
-      });
-    });
+    createRace(
+      fromAddress,
+      toAddress,
+      distance,
+      duration,
+      price,
+      (raceId: string) => {
+        setCurrentRaceId(raceId);
+        updateCurrentUser({
+          currentRaceId: raceId,
+          status: UserStatus.searching,
+        });
+      }
+    );
   };
 
   const cancel = () => {
@@ -99,19 +105,29 @@ export default function CreateRace({
           flexDirection: 'row',
           borderColor: theme.colors.text,
           borderTopWidth: 1,
-          justifyContent:'space-between',
+          justifyContent: 'space-between',
           paddingHorizontal: 12,
-          paddingVertical: 15
+          paddingVertical: 15,
         }}
       >
-        {!(currentRaceId) ? (
+        {!currentRaceId ? (
           <>
             <MyButton
               style={{ width: '30%', marginRight: 0 }}
               title="Valider"
               onPress={submit}
             />
-            <View style={{ flexDirection: 'column'}}>
+            <View style={{ flexDirection: 'column' }}>
+              <Text
+                style={{
+                  color: theme.colors.text,
+                  fontStyle: 'italic',
+                  textAlign: 'center',
+                  fontSize: 16,
+                }}
+              >
+                prix estimé
+              </Text>
               <Text
                 style={{
                   fontStyle: 'italic',
@@ -122,12 +138,14 @@ export default function CreateRace({
                 {Math.round(price)}
               </Text>
               <Text
-                style={[
-                  commonStyle.text,
-                  { fontStyle: 'italic', textAlign: 'center', fontSize: 16},
-                ]}
+                style={{
+                  color: theme.colors.text,
+                  fontStyle: 'italic',
+                  textAlign: 'center',
+                  fontSize: 16,
+                }}
               >
-                {user.currency}
+                {user.currency || 'GNF'}
               </Text>
             </View>
             <View style={{ flexDirection: 'column', marginTop: 10 }}>

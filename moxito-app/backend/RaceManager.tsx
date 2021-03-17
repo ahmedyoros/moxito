@@ -60,3 +60,7 @@ export function getRace(id: string): [Race, boolean] {
   const [race, loading] = useDocumentDataOnce<Race>(racesRef.doc(id));
   return [race!, loading];
 }
+
+export function updateRacePrice(id: string, price: number){
+  racesRef.doc(id).update({price: price});
+}

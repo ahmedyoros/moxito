@@ -17,6 +17,8 @@ export const useChat = (raceId: string): [IMessage[], boolean] => {
 };
 
 export const sendMessage = (raceId: string, newMessage: IMessage) => {
-  const chatRef = getChatRef(raceId);
-  chatRef.add(newMessage);
+  const chatDoc = getChatRef(raceId).doc(newMessage._id + "");
+  chatDoc.set(newMessage);
 };
+
+export const generateId = (raceId: string): string => getChatRef(raceId).doc().id

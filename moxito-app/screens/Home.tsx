@@ -21,6 +21,7 @@ export default function Home({ navigation }: NavigationProps) {
         name="HomeMap"
         component={LoadHomeMap}
         options={{
+          headerShown:false,
           headerTransparent: true,
           headerTitle: () => null,
           headerLeft: () => (
@@ -51,9 +52,5 @@ export default function Home({ navigation }: NavigationProps) {
 function LoadHomeMap({route, navigation}: NavigationProps) {
   const [user, loading] = useCurrentUser();
   if(loading) return <Loading />;
-
-
-
-
   return <HomeMap user={user}/>
 }

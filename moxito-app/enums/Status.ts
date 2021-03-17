@@ -13,3 +13,8 @@ export enum UserStatus {
   racing = 'racing',
   arrived = 'arrived',
 }
+
+export enum NegociationStatus {
+  accepted = 'accepted',
+  declined = 'declined'
+}
