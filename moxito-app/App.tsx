@@ -3,12 +3,12 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
-  DrawerItemList,
+  DrawerItemList
 } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import React, { useState, useEffect } from 'react';
-import { Image, SafeAreaView, Text, StatusBar} from 'react-native';
+import React, { useState } from 'react';
+import { Image, SafeAreaView, StatusBar, Text } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import House from './assets/icons/house.svg';
 import { getFireUser } from './backend/UserManager';
@@ -18,7 +18,6 @@ import { Role } from './enums/Role';
 import './logs/IgnoreLogs';
 import Adresses from './screens/Adresses';
 import ChooseRole from './screens/ChooseRole';
-import Drivers from './screens/Drivers';
 import Home from './screens/Home';
 import Login from './screens/Login';
 import Profile from './screens/Profile';

@@ -1,4 +1,4 @@
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, FontAwesome } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import usePermissions from 'expo-permissions-hooks';
 import React, { useEffect, useRef, useState } from 'react';
@@ -7,15 +7,11 @@ import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Headline } from 'react-native-paper';
 import Loading from '../components/Loading';
 import { Role } from '../enums/Role';
-import { RaceStatus, UserStatus } from '../enums/Status';
+import { RaceStatus } from '../enums/Status';
+import { COLORS } from '../themes/colors';
 import useTheme from '../themes/ThemeProvider';
 import { Address } from '../types/Address';
 import { Pos, toPos } from '../types/Pos';
-import { Race } from '../types/Race';
-import { User } from '../types/User';
-// import Helmet from '../assets/icons/helmet.svg';
-import { FontAwesome } from '@expo/vector-icons'; 
-import { COLORS } from '../themes/colors';
 import { UserRaceProps } from '../types/Props';
 
 type Props = UserRaceProps & {
@@ -87,7 +83,7 @@ export default function MyMapView({ toAddress, fromAddress, user, race }: Props)
   ) : (
     <MapView
       ref={ref}
-      style={{ width: '100%', height: '68%' }}
+      style={{ width: '100%', height: '65%' }}
       followsUserLocation
       provider={PROVIDER_GOOGLE}
       initialRegion={{

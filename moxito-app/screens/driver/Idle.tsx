@@ -16,7 +16,7 @@ export default function Idle({user} : UserProps) {
   const commonStyle = CommonStyle(theme);
   return (
     <View style={[commonStyle.container, { alignItems: 'center' }]}>
-      <BarTitle title="Vous êtes actuellement hors-ligne" />
+      <BarTitle title="Vous êtes hors-ligne" />
       <Slider
         style={{ width: '80%', height: 40 }}
         minimumValue={1}

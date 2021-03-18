@@ -81,12 +81,8 @@ export function stopSearching() {
  */
 export function searchClosestRace(pos: Pos, radius: number, callback: (raceId: string) => void) {
   const center = [pos.latitude, pos.longitude];
-  let i = 0;
   interval = setInterval(_ => {
     lookForRaces(center, radius*1000, (raceDocs) => {
-      i++;
-      console.log(i);
-      
       if(raceDocs.length >= 1){
         clearInterval(interval);
         callback(raceDocs[0].id);

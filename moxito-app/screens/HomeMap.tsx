@@ -35,9 +35,15 @@ export default function HomeMap({user}: UserProps) {
   
   useEffect(() => {
     if(!race) return;
+
+    if(user.status === UserStatus.arrived){
+      setToAddress(undefined);
+      setFromAddress(undefined);
+    }else{
+      setToAddress(race.to);
+      setFromAddress(race.from);
+    }
     
-    setToAddress(race.to);
-    setFromAddress(race.from);
   }, [race])
 
   useEffect(() => setToAddress(route.params?.toAddress), [

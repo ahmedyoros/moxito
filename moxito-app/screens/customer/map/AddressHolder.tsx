@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { List } from 'react-native-paper';
+import { color } from 'react-native-reanimated';
 import {
   addFavoriteAddress,
   isFavoriteAddress,
@@ -39,13 +40,17 @@ export default function AddressHolder({
     <List.Item
       style={[
         {
-          marginBottom: 5,
-          backgroundColor: theme.colors.surface,
+          height:60,
+          marginVertical: 2,
+          backgroundColor: theme.colors.surface
         },
         commonStyle.shadow,
       ]}
+      titleStyle={{
+        color: address ? theme.colors.text : COLORS.disabledGrey
+      }}
       key={index}
-      title={address?.street}
+      title={address?.street || title}
       description={address?.city}
       right={(props) => (
         <>
@@ -75,6 +80,7 @@ export default function AddressHolder({
           favoriteAddresses
         });
       }}
+
     />
   );
 }
