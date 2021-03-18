@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import { List } from 'react-native-paper';
 import Loading from '../components/Loading';
 import CommonStyle from '../styles/CommonStyle';
@@ -21,8 +21,9 @@ export default function Adresses() {
 
   if (loading) return <Loading />;
   return (
-    <View style={favoriteStyle.container}>
-      <House style={{ alignSelf: 'center', marginBottom:10 }} />
+    <View style={[favoriteStyle.container, {padding: 25, flex:1}]}>
+      <House style={{ alignSelf: 'center', marginBottom: 20}} />
+      <ScrollView>
       {adresses.map((a) => (
         <List.Item
           style={[
@@ -50,10 +51,11 @@ export default function Adresses() {
       ))}
       {adresses.length === 0 && (
         <Text style={favoriteStyle.text}>
-          Il semblerait que vous n'ayez pas encore ajouter d’adresses a vos
+          Il semblerait que vous n'ayez pas encore ajouté d’adresses a vos
           favoris
         </Text>
       )}
+      </ScrollView>
     </View>
   );
 }

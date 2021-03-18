@@ -53,7 +53,7 @@ export default function FollowRace({ user, race }: Props) {
     : getDistanceInKm(race.from.pos, race.to.pos);
     
   return (
-    <View style={commonStyle.container}>
+    <View style={[commonStyle.container, {paddingHorizontal: 5}]}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View
           style={{ flexDirection: 'column', marginLeft: 15, marginTop: 15 }}
@@ -66,12 +66,12 @@ export default function FollowRace({ user, race }: Props) {
             }
           />
           <Subheading style={{ color: theme.colors.primary, textAlign: 'center' }}>
-            profile
+            Profil
           </Subheading>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 10 }}>
           <Text style={[commonStyle.text, { textAlign: 'center' }]}>
-            {picking ? 'rejoindre' : 'en course avec'} {race.customer.displayName}
+            {picking ? 'Rejoindre\n' : 'En course avec \n'}  {race.customer.displayName + " "}
           </Text>
           <Text style={[commonStyle.text, { textAlign: 'center' }]}>
             {estimateDurationInMin(distance)} min
@@ -108,17 +108,18 @@ export default function FollowRace({ user, race }: Props) {
       </Text>
       {picking ? (
         <MyButton
-          title={`client récupéré`}
+          title={`Client récupéré`}
           icon={'account-check'}
           onPress={pickedUp}
         />
       ) : (
         <MyButton
-          title={`terminer la course`}
+          title={`Terminer la course`}
           icon={'check-outline'}
           onPress={finish}
         />
       )}
+          
     </View>
   );
 }

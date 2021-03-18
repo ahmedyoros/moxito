@@ -74,7 +74,11 @@ export default function HomeMap({user}: UserProps) {
   navigation.setOptions({headerShown: true});
 
   return (
-    <View style={commonStyle.container}>
+    <View 
+      style={
+        [ commonStyle.container, 
+          {paddingHorizontal: 0,
+        }]}>
       <MyMapView toAddress={toAddress} fromAddress={fromAddress} user={user} race={race}/>
 
       {user.status === UserStatus.racing ? (

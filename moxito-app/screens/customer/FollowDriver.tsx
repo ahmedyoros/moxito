@@ -43,7 +43,7 @@ export default function FollowDriver({ user, race }: UserRaceProps) {
             }
           />
           <Subheading style={{ color: theme.colors.primary, textAlign: 'center' }}>
-            profile
+            Profil
           </Subheading>
         </View>
         <View style={{ marginTop: 20 }}>
@@ -81,7 +81,7 @@ export default function FollowDriver({ user, race }: UserRaceProps) {
       >
         {picking
           ? `Votre chaffeur ${race.driver!.displayName} arrive`
-          : `Arrivée prévu à ${hash(race.to)}`}{' '}
+          : `Arrivée prévue à ${hash(race.to)}`}{' '}
         dans environ {estimateDurationInMin(distance)} min, soit{' '}
         {distance.toFixed(1)} Km.
       </Text>
