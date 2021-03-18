@@ -57,6 +57,8 @@ export default function HomeMap({user}: UserProps) {
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
 
+  navigation.setOptions({headerShown: false});
+
   if (user.status === UserStatus.arrived) {
     return (
       <Stack.Navigator>
