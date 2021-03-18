@@ -64,7 +64,7 @@ export default function RaceOver({ navigation, route }: NavigationProps) {
               child3={
                 <CrossTableCell
                   title={Math.round(Math.abs(shift)) + ' min'}
-                  subtitle={shift < 0 ? 'de retard' : "d'avance"}
+                  subtitle={shift > 0 ? 'de retard' : "d'avance"}
                 />
               }
               child4={
