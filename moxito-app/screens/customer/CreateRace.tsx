@@ -16,6 +16,8 @@ import { estimateDurationInMin, getDistanceInKm } from '../../utils/calculator';
 import MoxitoW from '../../assets/logos/moxito-w.svg';
 import Moxito from '../../assets/logos/moxito.svg';
 import AddressHolder from './map/AddressHolder';
+import { Headline } from 'react-native-paper';
+import _ from 'lodash';
 
 type Props = {
   toAddress: Address | undefined;
@@ -50,6 +52,8 @@ export default function CreateRace({
 
   const submit = () => {
     if (!fromAddress || !toAddress) return;
+    if (fromAddress.pos === toAddress.pos) return;
+
     setCurrentRaceId('');
 
     createRace(
@@ -106,7 +110,8 @@ export default function CreateRace({
       </View>
       <View
         style={
-          fromAddress && toAddress && {
+          fromAddress &&
+          toAddress && {
             flexDirection: 'row',
             borderColor: theme.colors.text,
             borderTopWidth: 1,
@@ -130,8 +135,12 @@ export default function CreateRace({
                 height={120}
               />
             )
+          ) : _.isEqual(fromAddress.pos,toAddress.pos) ? (
+            <Headline style={{ textAlign: 'center' }}>
+              le départ et la destination sont identiques !
+            </Headline>
           ) : (
-            <>
+            <View>
               <MyButton title="Valider" onPress={submit} />
               <View style={{ flexDirection: 'column' }}>
                 <Text
@@ -172,7 +181,7 @@ export default function CreateRace({
                   {duration} min
                 </Text>
               </View>
-            </>
+            </View>
           )
         ) : (
           <>
