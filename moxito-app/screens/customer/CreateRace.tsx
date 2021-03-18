@@ -142,7 +142,7 @@ export default function CreateRace({
                     fontSize: 16,
                   }}
                 >
-                  prix estimé
+                  Prix estimé
                 </Text>
                 <Text
                   style={{
