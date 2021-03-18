@@ -20,7 +20,7 @@ import { getDistanceInKm } from '../../utils/calculator';
 const Countdown = ({ onComplete }: any) => (
   <CountdownCircleTimer
     isPlaying
-    duration={10}
+    duration={20}
     colors={[
       ['#004777', 0.4],
       ['#F7B801', 0.4],
