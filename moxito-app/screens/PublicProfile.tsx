@@ -135,11 +135,6 @@ export default function PublicProfile({ navigation, route }: NavigationProps) {
               />
             </View>
           )}
-          {user.immatriculation && (
-            <Text style={commonStyle.text}>
-              Immatriculation : {user.immatriculation}
-            </Text>
-          )}
         </View>
       )}
     </View>

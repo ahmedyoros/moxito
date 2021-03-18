@@ -34,13 +34,9 @@ export default function CreateRace({
   const [duration, setDuration] = useState(0);
   const [price, setPrice] = useState(0);
   const kmPrice = 2500;
-  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
-    if (!fromAddress || !toAddress) {
-      setShowDetails(false);
-      return;
-    }
+    if (!fromAddress || !toAddress) return;
     const distance: number = getDistanceInKm(fromAddress.pos, toAddress.pos);
     setDistance(distance);
     setDuration(estimateDurationInMin(distance));
@@ -48,7 +44,6 @@ export default function CreateRace({
     //Estimate Price
     if (distance > 2) setPrice(Math.round(distance * kmPrice));
     else setPrice(kmPrice);
-    setShowDetails(true);
   }, [fromAddress, toAddress]);
 
   const [currentRaceId, setCurrentRaceId] = useState(user.currentRaceId);
@@ -111,7 +106,7 @@ export default function CreateRace({
       </View>
       <View
         style={
-          showDetails && {
+          fromAddress && toAddress && {
             flexDirection: 'row',
             borderColor: theme.colors.text,
             borderTopWidth: 1,
@@ -121,7 +116,7 @@ export default function CreateRace({
         }
       >
         {!currentRaceId ? (
-          !showDetails ? (
+          !(fromAddress && toAddress) ? (
             theme.dark ? (
               <MoxitoW
                 style={{ alignSelf: 'center' }}
