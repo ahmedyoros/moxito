@@ -1,6 +1,6 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, Image } from 'react-native';
 import { Subheading } from 'react-native-paper';
 import { hash } from '../../backend/FavoriteManager';
@@ -44,16 +44,20 @@ export default function FollowRace({ user, race }: Props) {
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
 
+  const [distance, setDistance] = useState(0);
+
   if (!race) return <Loading />;
 
   const picking = race.status === RaceStatus.pickingUp;
 
-  const distance = picking
-    ? getDistanceInKm(race.driverPos!, race.from.pos)
-    : getDistanceInKm(race.from.pos, race.to.pos);
-    
+  useEffect(() => {
+    setDistance(picking 
+    ? getDistanceInKm(race.driver!.pos!, race.from.pos)
+    : getDistanceInKm(race.driver!.pos!, race.to.pos));
+  }, [race])
+
   return (
-    <View style={[commonStyle.container, {paddingHorizontal: 5}]}>
+    <View style={[commonStyle.container, { paddingHorizontal: 5 }]}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View
           style={{ flexDirection: 'column', marginLeft: 15, marginTop: 15 }}
@@ -65,13 +69,16 @@ export default function FollowRace({ user, race }: Props) {
               navigation.navigate('Profile', { user: race.customer })
             }
           />
-          <Subheading style={{ color: theme.colors.primary, textAlign: 'center' }}>
+          <Subheading
+            style={{ color: theme.colors.primary, textAlign: 'center' }}
+          >
             Profil
           </Subheading>
         </View>
         <View style={{ flexDirection: 'column', marginTop: 10 }}>
           <Text style={[commonStyle.text, { textAlign: 'center' }]}>
-            {picking ? 'Rejoindre\n' : 'En course avec \n'}  {race.customer.displayName + " "}
+            {picking ? 'Rejoindre\n' : 'En course avec \n'}{' '}
+            {race.customer.displayName + ' '}
           </Text>
           <Text style={[commonStyle.text, { textAlign: 'center' }]}>
             {estimateDurationInMin(distance)} min
@@ -92,7 +99,9 @@ export default function FollowRace({ user, race }: Props) {
               navigation.navigate('Chat', { race: race, user: user })
             }
           />
-          <Subheading style={{ color: theme.colors.primary, textAlign: 'center' }}>
+          <Subheading
+            style={{ color: theme.colors.primary, textAlign: 'center' }}
+          >
             chat
           </Subheading>
         </View>
@@ -119,7 +128,6 @@ export default function FollowRace({ user, race }: Props) {
           onPress={finish}
         />
       )}
-          
     </View>
   );
 }

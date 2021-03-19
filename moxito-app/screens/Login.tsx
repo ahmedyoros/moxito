@@ -54,7 +54,7 @@ export default function Login({ route }: NavigationProps) {
         lastname = names.join(' ');
       }
 
-      const userInfos: any = {
+      let userInfos: any = {
         createdAt: new Date(fireUser.metadata.creationTime!).getTime(),
         firstname: userProfile.given_name || firstname || displayName,
         name: userProfile.family_name || lastname || null,
@@ -62,6 +62,10 @@ export default function Login({ route }: NavigationProps) {
         status: UserStatus.idle,
         verified: false
       };
+
+      if(role === Role.Driver){
+        userInfos.motoModel = 1;
+      }
 
       fireUser.updateProfile({
         displayName: displayName || userInfos.firstname || userInfos.name,

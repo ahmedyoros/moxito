@@ -1,7 +1,7 @@
 import { RaceStatus } from '../enums/Status';
 import { Address } from './Address';
 import { Pos } from './Pos';
-import { BaseUser } from './User';
+import { BaseUser, DriverUser } from './User';
 
 export type Race = {
   createdAt: number; //milliseconds
@@ -17,7 +17,6 @@ export type Race = {
   price: number; //usd
 
   customer: BaseUser;
-  driver?: BaseUser;
-  driverPos?: Pos;
+  driver?: DriverUser;
   status: RaceStatus;
 };

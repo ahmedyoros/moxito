@@ -6,6 +6,7 @@ import { db } from '../config';
 import { RaceStatus, UserStatus } from '../enums/Status';
 import { Pos } from '../types/Pos';
 import { Race } from '../types/Race';
+import { User } from '../types/User';
 import { getBaseUser } from './UserManager';
 
 
@@ -25,17 +26,19 @@ export function declineRace(id: string, callback?: () => void) {
 }
 
 export function acceptRace(
-  id: string,
-  driverPos: Pos,
+  user: User,
   callback?: () => void
 ) {
   racesRef
-    .doc(id)
+    .doc(user.currentRaceId!)
     .update({
       status: RaceStatus.pickingUp,
       acceptedAt: Date.now(),
-      driver: getBaseUser(),
-      driverPos: driverPos,
+      driver: {
+        ...(getBaseUser()),
+        motoModel:user.motoModel,
+        pos: user.pos
+      },
     })
     .then(() => callback && callback());
 }

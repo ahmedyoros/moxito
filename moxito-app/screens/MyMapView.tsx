@@ -13,6 +13,7 @@ import useTheme from '../themes/ThemeProvider';
 import { Address } from '../types/Address';
 import { Pos, toPos } from '../types/Pos';
 import { UserRaceProps } from '../types/Props';
+import { getModelColor } from '../utils/motoModel';
 
 type Props = UserRaceProps & {
   toAddress: Address | undefined;
@@ -29,11 +30,11 @@ export default function MyMapView({ toAddress, fromAddress, user, race }: Props)
   useEffect(() =>{
     if(!fromAddress || !toAddress) return;
     if(race && race.status === RaceStatus.pickingUp){
-      setCoords([race.driverPos!, race.from.pos]);
+      setCoords([race.driver!.pos!, race.from.pos]);
     }else{
       setCoords([fromAddress.pos, toAddress.pos]);
     }
-  }, [toAddress, fromAddress, race?.driverPos])
+  }, [toAddress, fromAddress, race?.driver?.pos])
 
   useEffect(() => {
     if(coords === []) return;
@@ -120,15 +121,15 @@ export default function MyMapView({ toAddress, fromAddress, user, race }: Props)
         </Marker>
       )}
 
-      {user.role === Role.Customer && race?.driverPos && (
+      {user.role === Role.Customer && race?.driver?.pos && (
         <Marker
           title={race.driver!.displayName}
           coordinate={{
-            latitude: race.driverPos.latitude,
-            longitude: race.driverPos.longitude,
+            latitude: race.driver!.pos.latitude,
+            longitude: race.driver!.pos.longitude,
           }}
         >
-          <FontAwesome name="motorcycle" size={24} color={COLORS.blue} />
+          <FontAwesome name="motorcycle" size={24} color={getModelColor(race.driver.motoModel)} />
         </Marker>
       )}
 

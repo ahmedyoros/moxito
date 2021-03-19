@@ -1,6 +1,6 @@
 import { capitalize } from 'lodash';
 import React, { useEffect } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { Divider, Headline, Paragraph as PaperText } from 'react-native-paper';
 import { AirbnbRating } from 'react-native-ratings';
 import { getAvgRatings } from '../backend/ReviewManager';
@@ -14,7 +14,7 @@ import { NavigationProps } from '../types/Props';
 import { reviewList } from '../types/Review';
 import { BaseUser } from '../types/User';
 import { average } from '../utils/array';
-import { getImage } from '../utils/getImage';
+import { getModelImage } from '../utils/motoModel';
 
 export default function PublicProfile({ navigation, route }: NavigationProps) {
   const baseUser: BaseUser = route.params?.user || getBaseUser();
@@ -127,14 +127,12 @@ export default function PublicProfile({ navigation, route }: NavigationProps) {
               borderWidth: 1,
             }}
           />
-          {user.motoModel && user.motoModel != '' && (
-            <View style={{ alignContent: 'center' }}>
-              <Text style={[commonStyle.text, {alignSelf: 'center'}]}>Modèle {user.motoModel}</Text>
-              <Image
-                source={getImage(user.motoModel)}
-              />
-            </View>
-          )}
+          <View style={{ alignContent: 'center' }}>
+            <Text style={[commonStyle.text, { alignSelf: 'center' }]}>
+              Modèle {user.motoModel! + 1}
+            </Text>
+            <Image source={getModelImage(user.motoModel!)} />
+          </View>
         </View>
       )}
     </View>

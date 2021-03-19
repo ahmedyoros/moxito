@@ -1,19 +1,18 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { Text, View, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, Text, View } from 'react-native';
 import { Subheading } from 'react-native-paper';
+import SandTimer from '../../assets/icons/sand-timer.svg';
+import { hash } from '../../backend/FavoriteManager';
 import Avatar from '../../components/Avatar';
 import Loading from '../../components/Loading';
+import { RaceStatus } from '../../enums/Status';
 import CommonStyle from '../../styles/CommonStyle';
-import { COLORS } from '../../themes/colors';
 import useTheme from '../../themes/ThemeProvider';
 import { MyNavigationProp, UserRaceProps } from '../../types/Props';
 import { estimateDurationInMin, getDistanceInKm } from '../../utils/calculator';
-import SandTimer from '../../assets/icons/sand-timer.svg';
-import { RaceStatus } from '../../enums/Status';
-import { hash } from '../../backend/FavoriteManager';
-import { getImage } from '../../utils/getImage';
+import { getModelImage } from '../../utils/motoModel';
 
 export default function FollowDriver({ user, race }: UserRaceProps) {
   const navigation: MyNavigationProp = useNavigation();
@@ -21,14 +20,18 @@ export default function FollowDriver({ user, race }: UserRaceProps) {
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
 
+  const [distance, setDistance] = useState(0);
+
   if (!race) return <Loading />;
-
+  
   const picking = race.status === RaceStatus.pickingUp;
-
-  const distance = picking
-    ? getDistanceInKm(race.driverPos!, race.from.pos)
-    : getDistanceInKm(race.from.pos, race.to.pos);
-
+  
+  useEffect(() => {
+    setDistance(picking 
+    ? getDistanceInKm(race.driver!.pos!, race.from.pos)
+    : getDistanceInKm(race.driver!.pos!, race.to.pos));
+  }, [race])
+  
   return (
     <View style={commonStyle.container}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -51,7 +54,7 @@ export default function FollowDriver({ user, race }: UserRaceProps) {
             <SandTimer />
           ) : (
             <Image
-              source={getImage('1')}
+              source={getModelImage(race.driver!.motoModel!)}
               style={{ flex: 1, aspectRatio: 2, resizeMode: 'contain' }}
             />
           )}

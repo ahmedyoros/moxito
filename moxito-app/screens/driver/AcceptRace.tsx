@@ -38,7 +38,7 @@ const Countdown = ({ onComplete }: any) => (
 
 export default function AcceptRace({ user, race }: UserRaceProps) {
   const accept = () => {
-    acceptRace(user.currentRaceId!, user.pos!, () => {
+    acceptRace(user, () => {
       updateCurrentUser({ status: UserStatus.racing });
       updateUser(race!.customer.id, { status: UserStatus.racing });
     });

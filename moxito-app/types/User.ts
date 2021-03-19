@@ -4,15 +4,20 @@ import { UserStatus } from "../enums/Status";
 import { Pos } from "./Pos";
 import firebase from 'firebase/app';
 
+export type FireUser = firebase.User;
+
 export type BaseUser = {
   id: string;
   photoURL: string,
   displayName: string
 }
 
-export type FireUser = firebase.User;
+export type DriverUser = BaseUser & {
+  motoModel?: number,
+  pos?: Pos,
+}
 
-export type User = BaseUser & {
+export type User = DriverUser & {
   firstname: string,
   name?: string,
   email: string,
@@ -21,13 +26,11 @@ export type User = BaseUser & {
   lastSeenAt: number,
   role: Role
   presentation?: string,
-  motoModel?: string,
   immatriculation?: string,
   currency?: Currency | string,
   
   status: UserStatus
   searchRadius?: number
-  pos?: Pos
   currentRaceId?: string,
 
   verified: boolean;

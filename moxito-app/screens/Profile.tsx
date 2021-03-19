@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, Dimensions} from 'react-native';
+import { View, Image, Dimensions } from 'react-native';
 import { HelperText, Snackbar, TextInput } from 'react-native-paper';
-import {getCurrentUser, getFireUser, updateCurrentUser } from '../backend/UserManager';
+import {
+  getCurrentUser,
+  getFireUser,
+  updateCurrentUser,
+} from '../backend/UserManager';
 import { BarTitle } from '../components/BarTitle';
 import KeyboardAvoid from '../components/KeyboardAvoid';
 import Loading from '../components/Loading';
@@ -13,36 +17,33 @@ import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
 import Carousel from 'react-native-snap-carousel';
 import { scrollInterpolator, animatedStyles } from '../utils/animations';
-import { getImage } from '../utils/getImage';
+import { getModelImage } from '../utils/motoModel';
 import { COLORS } from '../themes/colors';
-
-
+import { number } from 'prop-types';
 
 export default function Profile({ navigation, route }: NavigationProps) {
   const [user, userLoading] = getCurrentUser();
   const newUser: boolean = route.params!.newUser;
   const fireUser = getFireUser();
   const theme = useTheme();
-  const carouselItems = ["1", "2", "3", "4"];
-  const [activeIndex, setActiveIndex] = useState(0);
+  const carouselItems = new Array<number>(4);
 
-  const SLIDER_WIDTH = Dimensions.get('window').width ;
+  const SLIDER_WIDTH = Dimensions.get('window').width;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.55);
-
 
   const [presentation, setPresentation] = useState('');
   const [presenationError, setPresenationError] = useState(false);
 
-
-  const [motoModel, setMotoModel] = useState('');
-  const [motoModelError, setMotoModelError] = useState(false);
+  const [motoModel, setMotoModel] = useState(0);
 
   const [snackbarVisible, setSnackbarVisible] = useState(false);
 
-  const checkPresentationError = () => setPresenationError(presentation.trim() === '' && user.role === Role.Driver);
+  const checkPresentationError = () =>
+    setPresenationError(
+      presentation.trim() === '' && user.role === Role.Driver
+    );
   useDidMountEffect(checkPresentationError, [presentation]);
-  const checkMotoModelError = () => setMotoModelError(motoModel.trim() === '');
-  useDidMountEffect(checkMotoModelError, [motoModel]);
+
   useEffect(() => {
     if (!userLoading) {
       user.presentation && setPresentation(user.presentation);
@@ -50,22 +51,8 @@ export default function Profile({ navigation, route }: NavigationProps) {
     }
   }, [userLoading]);
 
-  const renderItem =({item, index}) => {
-    return (
-      <View >
-        <Image
-            source={getImage(item)}
-        />
-      </View>
-    )
-  };
-
-
-  const updatePhotoUrl = (photoURL: string) => {
-    fireUser.updateProfile({
-      photoURL: photoURL,
-    });
-  };
+  const updatePhotoUrl = (photoURL: string) =>
+    fireUser.updateProfile({ photoURL: photoURL });
 
   const submit = () => {
     const userData: any = {
@@ -73,62 +60,59 @@ export default function Profile({ navigation, route }: NavigationProps) {
     };
     if (user.role == Role.Driver) {
       checkPresentationError();
-      checkMotoModelError();
-      if (presentation === '' || motoModel === '') return;
+      if (presentation.trim() === '') return;
 
       userData.motoModel = motoModel;
-
     }
     updateCurrentUser(userData, () => setSnackbarVisible(true));
   };
-
-  
 
   if (userLoading) return <Loading />;
   return (
     <KeyboardAvoid>
       {newUser && <BarTitle title={`Bienvenue ${user.firstname} !`} />}
-      <View style={{
-        marginTop: 15
-      }} >
+      <View style={{ marginTop: 15 }}>
         <UploadImage
           avatar={true}
           imageUrl={user.photoURL}
           setImageUrl={updatePhotoUrl}
         />
       </View>
-      
+
       <TextInput
+        key="presentation"
         multiline={true}
         numberOfLines={5}
         label="Présentation"
         value={presentation}
         onChangeText={setPresentation}
       />
-      <HelperText type="error" visible={presenationError}>
+      <HelperText
+        key="presentationError"
+        type="error"
+        visible={presenationError}
+      >
         Ce champ est requis
       </HelperText>
       {user.role == Role.Driver && (
-        <View> 
+        <View>
           <Carousel
-          style={{alignItems: 'center'}}
+            style={{ alignItems: 'center' }}
             data={carouselItems}
-            renderItem={renderItem}
+            renderItem={({ item }: any) => (
+              <Image source={getModelImage(item)} />
+            )}
             sliderWidth={SLIDER_WIDTH}
             itemWidth={ITEM_WIDTH}
-            inactiveSlideShift={0}          
-            onSnapToItem = { 
-              index => {
-                setActiveIndex(index);
-                setMotoModel((index + 1) + "") 
-              }
-            }
+            inactiveSlideShift={0}
+            onSnapToItem={(index) => setMotoModel(index)}
+            initialScrollIndex={motoModel}
           />
-      
         </View>
       )}
       <MyButton title="Valider" onPress={submit} />
       <Snackbar
+        key="snackbarSubmit"
         theme={{ colors: { surface: theme.colors.text } }}
         visible={snackbarVisible}
         onDismiss={() => setSnackbarVisible(false)}
