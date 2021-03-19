@@ -26,9 +26,8 @@ export default function Profile({ navigation, route }: NavigationProps) {
   const carouselItems = ["1", "2", "3", "4"];
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const SLIDER_WIDTH = Dimensions.get('window').width;
-  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
-  const ITEM_HEIGHT = Math.round(ITEM_WIDTH * 3 / 4);
+  const SLIDER_WIDTH = Dimensions.get('window').width ;
+  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.65);
 
 
   const [presentation, setPresentation] = useState('');
@@ -53,7 +52,7 @@ export default function Profile({ navigation, route }: NavigationProps) {
 
   const renderItem =({item, index}) => {
     return (
-      <View style={{backgroundColor: COLORS.orange, borderRadius: 10}}>
+      <View >
         <Image
             source={getImage(item)}
         />
@@ -110,24 +109,20 @@ export default function Profile({ navigation, route }: NavigationProps) {
         Ce champ est requis
       </HelperText>
       {user.role == Role.Driver && (
-        <View>
+        <View> 
           <Carousel
+          style={{alignItems: 'center'}}
             data={carouselItems}
             renderItem={renderItem}
             sliderWidth={SLIDER_WIDTH}
             itemWidth={ITEM_WIDTH}
-            inactiveSlideShift={0}
-            snapToEnd
-          
+            inactiveSlideShift={0}          
             onSnapToItem = { 
               index => {
                 setActiveIndex(index);
                 setMotoModel((index + 1) + "") 
               }
             }
-            scrollInterpolator={scrollInterpolator}
-            slideInterpolatedStyle={animatedStyles}
-            useScrollView={true}          
           />
       
         </View>

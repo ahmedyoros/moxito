@@ -7,5 +7,5 @@ export type Review = {
 
 export const reviewList = {
   [Role.Customer] : ["Ponctualité", "Confiance", "Paiement"],
-  [Role.Driver] : ["Ponctualité", "Fléxibilité", "Paiement"],
+  [Role.Driver] : ["Ponctualité", "Flexibilité", "Paiement"],
 }

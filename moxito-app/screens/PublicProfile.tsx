@@ -128,8 +128,8 @@ export default function PublicProfile({ navigation, route }: NavigationProps) {
             }}
           />
           {user.motoModel && user.motoModel != '' && (
-            <View style={{ marginLeft: 10 }}>
-              <Text style={commonStyle.text}>Modèle {user.motoModel}</Text>
+            <View style={{ alignContent: 'center' }}>
+              <Text style={[commonStyle.text, {alignSelf: 'center'}]}>Modèle {user.motoModel}</Text>
               <Image
                 source={getImage(user.motoModel)}
               />
