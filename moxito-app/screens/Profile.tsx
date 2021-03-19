@@ -27,7 +27,7 @@ export default function Profile({ navigation, route }: NavigationProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const SLIDER_WIDTH = Dimensions.get('window').width ;
-  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.65);
+  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.55);
 
 
   const [presentation, setPresentation] = useState('');
