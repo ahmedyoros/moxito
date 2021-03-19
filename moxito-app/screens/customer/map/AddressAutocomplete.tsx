@@ -23,14 +23,12 @@ export default function AddressAutocomplete({
   useEffect(() => {
     navigation.setOptions({ title: title });
   }, []);
-
+  
   const ref = useRef<any>();
-
+  
   useEffect(() => {
     ref.current?.focus();
   }, []);
-
-  const [currentInput, setCurrentInput] = useState('');
 
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);

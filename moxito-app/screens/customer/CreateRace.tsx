@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { createRace } from '../../backend/RaceMaker';
 import { deleteRace } from '../../backend/RaceManager';
 import { updateCurrentUser } from '../../backend/UserManager';
@@ -18,6 +18,8 @@ import Moxito from '../../assets/logos/moxito.svg';
 import AddressHolder from './map/AddressHolder';
 import { Headline } from 'react-native-paper';
 import _ from 'lodash';
+import NegociateModal from '../../components/NegociateModal';
+import { AntDesign } from '@expo/vector-icons'; 
 
 type Props = {
   toAddress: Address | undefined;
@@ -35,6 +37,8 @@ export default function CreateRace({
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
   const [price, setPrice] = useState(0);
+  const [negociateModalVisible, setNegociateModalVisible] = useState(false);
+
   const kmPrice = 2500;
 
   useEffect(() => {
@@ -52,7 +56,6 @@ export default function CreateRace({
 
   const submit = () => {
     if (!fromAddress || !toAddress) return;
-    if (fromAddress.pos === toAddress.pos) return;
 
     setCurrentRaceId('');
 
@@ -109,40 +112,37 @@ export default function CreateRace({
         />
       </View>
       <View
-        style={
-          fromAddress &&
-          toAddress && {
-            flexDirection: 'row',
-            borderColor: theme.colors.text,
-            borderTopWidth: 1,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }
-        }
+        style={{
+          borderColor: theme.colors.text,
+          borderTopWidth: 1,
+        }}
       >
-        {!currentRaceId ? (
-          !(fromAddress && toAddress) ? (
-            theme.dark ? (
-              <MoxitoW
-                style={{ alignSelf: 'center' }}
-                width={350}
-                height={120}
-              />
-            ) : (
-              <Moxito
-                style={{ alignSelf: 'center' }}
-                width={350}
-                height={120}
-              />
-            )
-          ) : _.isEqual(fromAddress.pos,toAddress.pos) ? (
-            <Headline style={{ textAlign: 'center' }}>
-              le départ et la destination sont identiques !
-            </Headline>
+        {!(fromAddress && toAddress) ? (
+          theme.dark ? (
+            <MoxitoW style={{ alignSelf: 'center' }} width={350} height={120} />
           ) : (
-            <View>
-              <MyButton title="Valider" onPress={submit} />
-              <View style={{ flexDirection: 'column' }}>
+            <Moxito style={{ alignSelf: 'center' }} width={350} height={120} />
+          )
+        ) : _.isEqual(fromAddress.pos, toAddress.pos) ? (
+          <Headline style={{ textAlign: 'center' }}>
+            le départ et la destination sont identiques !
+          </Headline>
+        ) : (
+          <View
+            style={{
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+              marginTop: 10,
+            }}
+          >
+            {!currentRaceId ? (
+              <>
+                <MyButton
+                  title="Valider"
+                  onPress={submit}
+                  style={{ margin: 0 }}
+                />
+                <View style={{ flexDirection: 'column' }}>
                 <Text
                   style={{
                     color: theme.colors.text,
@@ -153,57 +153,79 @@ export default function CreateRace({
                 >
                   Prix estimé
                 </Text>
-                <Text
-                  style={{
-                    fontStyle: 'italic',
-                    fontSize: 36,
-                    color: theme.colors.primary,
-                  }}
-                >
-                  {Math.round(price) + ' '}
-                </Text>
-                <Text
-                  style={{
-                    color: theme.colors.text,
-                    fontStyle: 'italic',
-                    textAlign: 'center',
-                    fontSize: 16,
-                  }}
-                >
-                  {user.currency || 'GNF'}
-                </Text>
-              </View>
-              <View style={{ flexDirection: 'column', marginTop: 10 }}>
-                <Text style={[commonStyle.text, { fontStyle: 'italic' }]}>
-                  {distance.toFixed(1)} km
-                </Text>
-                <Text style={[commonStyle.text, { fontStyle: 'italic' }]}>
-                  {duration} min
-                </Text>
-              </View>
-            </View>
-          )
-        ) : (
-          <>
-            <MyButton
-              style={{ width: '30%', marginRight: 0 }}
-              title="Annuler"
-              onPress={cancel}
-            />
-            <View>
-              <Loading size={32} />
-              <Text
-                style={[
-                  commonStyle.text,
-                  { fontSize: 18, color: COLORS.darkOrange },
-                ]}
-              >
-                Recherche en cours...
-              </Text>
-            </View>
-          </>
+                  <TouchableOpacity
+                    style={[
+                      commonStyle.shadow,
+                      {
+                        backgroundColor: theme.colors.surface,
+                        alignSelf: 'center',
+                        paddingHorizontal:5
+                      },
+                    ]}
+                    onPress={() => setNegociateModalVisible(true)}
+                  >
+                    <Text
+                      style={{
+                        fontStyle: 'italic',
+                        fontSize: 36,
+                        color: theme.colors.primary,
+                      }}
+                    >
+                      {Math.round(price)}
+                      <AntDesign name="edit" size={30} color={theme.colors.primary} />
+                    </Text>
+                    
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      color: theme.colors.text,
+                      fontStyle: 'italic',
+                      textAlign: 'center',
+                      fontSize: 16,
+                    }}
+                  >
+                    {user.currency || 'GNF'}
+                  </Text>
+                </View>
+                <View style={{ flexDirection: 'column', justifyContent: 'center'}}>
+                  <Text style={[commonStyle.text, { fontStyle: 'italic' }]}>
+                    {distance.toFixed(1)} km
+                  </Text>
+                  <Text style={[commonStyle.text, { fontStyle: 'italic' }]}>
+                    {duration} min
+                  </Text>
+                </View>
+              </>
+            ) : (
+              <>
+                <MyButton
+                  style={{ width: '30%', marginRight: 0 }}
+                  title="Annuler"
+                  onPress={cancel}
+                />
+                <View>
+                  <Loading size={32} />
+                  <Text
+                    style={[
+                      commonStyle.text,
+                      { fontSize: 18, color: COLORS.darkOrange },
+                    ]}
+                  >
+                    Recherche en cours...
+                  </Text>
+                </View>
+              </>
+            )}
+          </View>
         )}
       </View>
+      <NegociateModal
+        intialPrice={price}
+        setNewPrice={setPrice}
+        currency={user.currency || 'GNF'}
+        visible={negociateModalVisible}
+        setVisible={setNegociateModalVisible}
+      />
     </View>
   );
 }
