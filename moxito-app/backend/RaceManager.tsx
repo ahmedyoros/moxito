@@ -67,3 +67,7 @@ export function getRace(id: string): [Race, boolean] {
 export function updateRacePrice(id: string, price: number){
   racesRef.doc(id).update({price: price});
 }
+
+export function updateDriverPos(id: string, pos: Pos){
+  racesRef.doc(id).update({'driver.pos': pos});
+}

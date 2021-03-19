@@ -11,7 +11,7 @@ import KeyboardAvoid from '../components/KeyboardAvoid';
 import Loading from '../components/Loading';
 import ManualLogin from '../components/ManualLogin';
 import ManualSignup from '../components/ManualSignup';
-import { useDidMountEffect } from '../components/MyHooks';
+import { useDidMountEffect } from '../utils/hooks';
 import TwitterLogin from '../components/TwitterLogin';
 import { auth } from '../config';
 import { Role } from '../enums/Role';

@@ -22,15 +22,17 @@ export default function FollowDriver({ user, race }: UserRaceProps) {
 
   const [distance, setDistance] = useState(0);
 
-  if (!race) return <Loading />;
-  
-  const picking = race.status === RaceStatus.pickingUp;
-  
   useEffect(() => {
+    if(!race) return;
     setDistance(picking 
     ? getDistanceInKm(race.driver!.pos!, race.from.pos)
     : getDistanceInKm(race.driver!.pos!, race.to.pos));
   }, [race])
+
+  if (!race) return <Loading />;
+  
+  const picking = race.status === RaceStatus.pickingUp;
+  
   
   return (
     <View style={commonStyle.container}>

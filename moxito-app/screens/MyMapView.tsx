@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Platform, View } from 'react-native';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Headline } from 'react-native-paper';
+import { updateDriverPos } from '../backend/RaceManager';
 import Loading from '../components/Loading';
 import { Role } from '../enums/Role';
 import { RaceStatus } from '../enums/Status';
@@ -20,33 +21,43 @@ type Props = UserRaceProps & {
   fromAddress: Address | undefined;
 };
 
-export default function MyMapView({ toAddress, fromAddress, user, race }: Props) {
+export default function MyMapView({
+  toAddress,
+  fromAddress,
+  user,
+  race,
+}: Props) {
   const [pos, setPos] = useState<Pos>();
   const { isGranted, isDenied, ask } = usePermissions('LOCATION');
   const ref = useRef<MapView>(null);
 
   const [coords, setCoords] = useState<Pos[]>([]);
 
-  useEffect(() =>{
-    if(!fromAddress || !toAddress) return;
-    if(race && race.status === RaceStatus.pickingUp){
+  useEffect(() => {
+    if (!fromAddress || !toAddress) setCoords([]);
+    else if (race?.status === RaceStatus.pickingUp) {
       setCoords([race.driver!.pos!, race.from.pos]);
-    }else{
+    } else if (race?.status === RaceStatus.ongoing)
+      setCoords([race.driver!.pos!, toAddress.pos]);
+    else {
       setCoords([fromAddress.pos, toAddress.pos]);
     }
-  }, [toAddress, fromAddress, race?.driver?.pos])
+  }, [toAddress, fromAddress, race?.driver?.pos]);
 
   useEffect(() => {
-    if(coords === []) return;
+    if (coords === []) return;
     if (Platform.OS === 'ios') {
       ref?.current?.fitToElements(false);
     } else {
-      ref?.current?.fitToCoordinates(coords, { animated: true, edgePadding:{ 
-        bottom:20,
-        top:50,
-        right:20,
-        left:20
-      } });
+      ref?.current?.fitToCoordinates(coords, {
+        animated: true,
+        edgePadding: {
+          bottom: 20,
+          top: 50,
+          right: 20,
+          left: 20,
+        },
+      });
     }
   }, [coords]);
 
@@ -58,7 +69,14 @@ export default function MyMapView({ toAddress, fromAddress, user, race }: Props)
           timeInterval: 10000,
           distanceInterval: 1,
         },
-        (location) => setPos(toPos(location))
+        (location) => {
+          setPos(toPos(location));
+          if (
+            user.role === Role.Driver &&
+            race?.status === RaceStatus.pickingUp
+          )
+            updateDriverPos(user.currentRaceId!, toPos(location));
+        }
       );
     else ask();
   }, [isGranted]);
@@ -121,19 +139,23 @@ export default function MyMapView({ toAddress, fromAddress, user, race }: Props)
         </Marker>
       )}
 
-      {user.role === Role.Customer && race?.driver?.pos && (
+      {user.role === Role.Customer && race?.status === RaceStatus.pickingUp && (
         <Marker
           title={race.driver!.displayName}
           coordinate={{
-            latitude: race.driver!.pos.latitude,
-            longitude: race.driver!.pos.longitude,
+            latitude: race.driver!.pos!.latitude,
+            longitude: race.driver!.pos!.longitude,
           }}
         >
-          <FontAwesome name="motorcycle" size={24} color={getModelColor(race.driver.motoModel)} />
+          <FontAwesome
+            name="motorcycle"
+            size={24}
+            color={getModelColor(race.driver!.motoModel!)}
+          />
         </Marker>
       )}
 
-      {coords.length == 2 &&(
+      {coords.length == 2 && (
         <Polyline
           coordinates={coords}
           strokeColor={theme.colors.primary}

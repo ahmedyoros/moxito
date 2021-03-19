@@ -5,11 +5,13 @@ import { View } from 'react-native';
 import { useFavoriteAddresses } from '../backend/FavoriteManager';
 import { getRace, useRace } from '../backend/RaceManager';
 import { Role } from '../enums/Role';
-import { UserStatus } from '../enums/Status';
+import { RaceStatus, UserStatus } from '../enums/Status';
 import CommonStyle from '../styles/CommonStyle';
 import useTheme from '../themes/ThemeProvider';
 import { Address } from '../types/Address';
 import { MyNavigationProp, MyRouteProp, UserProps } from '../types/Props';
+import { Race } from '../types/Race';
+import { usePrevious } from '../utils/hooks';
 import CreateRace from './customer/CreateRace';
 import FollowDriver from './customer/FollowDriver';
 import AcceptRace from './driver/AcceptRace';
@@ -30,11 +32,21 @@ export default function HomeMap({user}: UserProps) {
   
   const [favoriteAddresses] = useFavoriteAddresses();
   const [race] = useRace(user.currentRaceId! || 'null');
+  const previousRace = usePrevious<Race>(race);
   const [fromAddress, setFromAddress] = useState<Address>();
   const [toAddress, setToAddress] = useState<Address>();
   
   useEffect(() => {
-    if(!race) return;
+    console.log(race?.status + " previous : " + previousRace?.status);
+    
+    if(!race){
+      if(previousRace?.status === RaceStatus.over){
+        setToAddress(undefined);
+        setFromAddress(undefined);
+      }
+      return;
+    } 
+    
     setToAddress(race.to);
     setFromAddress(race.from);
   }, [race])

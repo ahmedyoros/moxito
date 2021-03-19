@@ -10,7 +10,7 @@ import { BarTitle } from '../components/BarTitle';
 import KeyboardAvoid from '../components/KeyboardAvoid';
 import Loading from '../components/Loading';
 import MyButton from '../components/MyButton';
-import { useDidMountEffect } from '../components/MyHooks';
+import { useDidMountEffect } from '../utils/hooks';
 import UploadImage from '../components/UploadImage';
 import { Role } from '../enums/Role';
 import useTheme from '../themes/ThemeProvider';
