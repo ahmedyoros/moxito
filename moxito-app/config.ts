@@ -2,6 +2,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
+import 'firebase/functions';
 import {
   API_KEY,
   AUTH_DOMAIN,
@@ -27,9 +28,9 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-
 export const auth = firebase.auth();
 export const fireAuth = firebase.auth;
 export const db = firebase.firestore();
 export const storage = firebase.storage();
+export const functions = firebase.functions();
 export const deleteField = () => firebase.firestore.FieldValue.delete();

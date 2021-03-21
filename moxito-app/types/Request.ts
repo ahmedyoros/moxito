@@ -9,4 +9,5 @@ export type Request = {
   type: RequestType;
   createdAt: number;
   accepted: boolean;
+  additionalData?: any;
 }

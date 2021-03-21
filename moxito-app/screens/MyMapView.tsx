@@ -67,7 +67,7 @@ export default function MyMapView({
         {
           accuracy: Location.Accuracy.Balanced,
           timeInterval: 10000,
-          distanceInterval: 1,
+          distanceInterval: 50,
         },
         (location) => {
           setPos(toPos(location));
@@ -82,12 +82,13 @@ export default function MyMapView({
   }, [isGranted]);
 
   const theme = useTheme();
+  const mapHeight = '65%';
   return !pos ? (
     <View
       style={{
         alignItems: 'center',
         justifyContent: 'center',
-        height: '68%',
+        height: mapHeight,
       }}
     >
       {isDenied ? (
@@ -102,7 +103,7 @@ export default function MyMapView({
   ) : (
     <MapView
       ref={ref}
-      style={{ width: '100%', height: '65%' }}
+      style={{ width: '100%', height: mapHeight }}
       followsUserLocation
       provider={PROVIDER_GOOGLE}
       initialRegion={{

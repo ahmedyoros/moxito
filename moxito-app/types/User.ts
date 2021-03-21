@@ -7,31 +7,31 @@ import firebase from 'firebase/app';
 export type FireUser = firebase.User;
 
 export type BaseUser = {
-  id: string;
-  photoURL: string,
+  id: string
+  photoURL: string
   displayName: string
 }
 
 export type DriverUser = BaseUser & {
-  motoModel?: number,
-  pos?: Pos,
+  motoModel?: number
+  pos?: Pos
 }
 
 export type User = DriverUser & {
-  firstname: string,
-  name?: string,
-  email: string,
-  lastLoggedIn?: number,
-  createdAt: number,
-  lastSeenAt: number,
+  firstname: string
+  name?: string
+  email: string
+  lastLoggedIn?: number
+  createdAt: number
+  lastSeenAt: number
   role: Role
-  presentation?: string,
-  immatriculation?: string,
-  currency?: Currency | string,
+  presentation?: string
+  immatriculation?: string
+  currency?: Currency | string
   
   status: UserStatus
   searchRadius?: number
-  currentRaceId?: string,
+  currentRaceId?: string
 
   verified: boolean;
 }

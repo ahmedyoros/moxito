@@ -73,17 +73,6 @@ export function getBaseUser(): BaseUser {
   };
 }
 
-export function getBaseUserWithEmail(): any {
-  const user = getFireUser();
-
-  return {
-    photoURL: user.photoURL || defaultPictureUrl,
-    displayName: user.displayName!,
-    id: user.uid,
-    email: user.email
-  };
-}
-
 export function createUser(infos: any, id: string, callback?: () => void) {
   userRef
     .doc(id)

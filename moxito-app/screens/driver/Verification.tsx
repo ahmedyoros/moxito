@@ -9,7 +9,7 @@ import { UserProps } from '../../types/Props';
 import { RequestType } from '../../types/Request';
 
 export default function Verification({user}: UserProps) {
-  createRequest(RequestType.accountVerification);
+  createRequest(RequestType.accountVerification, {email : user.email});
 
   const theme = useTheme();
   const commonStyle = CommonStyle(theme);
