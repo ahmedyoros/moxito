@@ -5,16 +5,17 @@ import { getBaseUser } from "./UserManager";
 export const reqRef = db.collection('requests');
 
 export const createRequest = async (requestType: RequestType, additionalData?: any) => {
-  if(!await isRequestSent(requestType)){
-    const request: Request = {
-      createdAt: Date.now(),
-      type: requestType,
-      accepted: false,
-      user: getBaseUser(),
-      additionalData: additionalData
-    } 
-    reqRef.add(request).then(() => setRequestSent(requestType));
-  }
+  const sent = await isRequestSent(requestType);
+  if(sent) return;
+
+  const request: Request = {
+    createdAt: Date.now(),
+    type: requestType,
+    accepted: false,
+    user: getBaseUser(),
+    additionalData: additionalData
+  } 
+  reqRef.add(request).then(() => setRequestSent(requestType));
 }
 
 const setRequestSent = async (requestType: RequestType) => {
