@@ -33,6 +33,14 @@
         "backgroundColor": "#FFFFFF"
       },
       "useNextNotificationsApi": true,
+      "config": {
+        "googleSignIn": {
+          "apiKey": "AIzaSyAbLNTd6rceTrxD0MA72opTzmJalyy26Z8"
+        },
+        "googleMaps": {
+          "apiKey": "AIzaSyAbLNTd6rceTrxD0MA72opTzmJalyy26Z8"
+        }
+      },
       "googleServicesFile": "./google-services.json"
     },
     "web": {
