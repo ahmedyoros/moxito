@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const { Expo } = require('expo-server-sdk');
 const config = require('./config');
+const functions = require('firebase-functions');
 
 const expo = new Expo();
 const tokenRef = (userId, tokenId) =>
