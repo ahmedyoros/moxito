@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, Dimensions } from 'react-native';
+import { Dimensions, Image, View } from 'react-native';
 import { HelperText, Snackbar, TextInput } from 'react-native-paper';
+import Carousel from 'react-native-snap-carousel';
 import {
   getCurrentUser,
   getFireUser,
@@ -10,23 +11,18 @@ import { BarTitle } from '../components/BarTitle';
 import KeyboardAvoid from '../components/KeyboardAvoid';
 import Loading from '../components/Loading';
 import MyButton from '../components/MyButton';
-import { useDidMountEffect } from '../utils/hooks';
 import UploadImage from '../components/UploadImage';
 import { Role } from '../enums/Role';
 import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
-import Carousel from 'react-native-snap-carousel';
-import { scrollInterpolator, animatedStyles } from '../utils/animations';
+import { useDidMountEffect } from '../utils/hooks';
 import { getModelImage } from '../utils/motoModel';
-import { COLORS } from '../themes/colors';
-import { number } from 'prop-types';
 
 export default function Profile({ navigation, route }: NavigationProps) {
   const [user, userLoading] = getCurrentUser();
   const newUser: boolean = route.params!.newUser;
   const fireUser = getFireUser();
   const theme = useTheme();
-  const carouselItems = new Array<number>(4);
 
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.55);
@@ -45,10 +41,9 @@ export default function Profile({ navigation, route }: NavigationProps) {
   useDidMountEffect(checkPresentationError, [presentation]);
 
   useEffect(() => {
-    if (!userLoading) {
-      user.presentation && setPresentation(user.presentation);
-      user.motoModel && setMotoModel(user.motoModel);
-    }
+    if (!user) return;
+    setPresentation(user.presentation || '');
+    setMotoModel(user.motoModel || 0);
   }, [userLoading]);
 
   const updatePhotoUrl = (photoURL: string) =>
@@ -98,7 +93,7 @@ export default function Profile({ navigation, route }: NavigationProps) {
         <View>
           <Carousel
             style={{ alignItems: 'center' }}
-            data={carouselItems}
+            data={Array.from(Array(4).keys())}
             renderItem={({ item }: any) => (
               <Image source={getModelImage(item)} />
             )}
