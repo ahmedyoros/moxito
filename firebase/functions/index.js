@@ -59,7 +59,7 @@ exports.onRaceCreate = raceDoc().onCreate(async (snap, context) => {
 async function sendVerificationEmail(request) {
   const mailOptions = {
     from: `${APP_NAME} <noreply@firebase.com>`,
-    to: gmailEmail,
+    to: request.additionalData.email,
   };
 
   mailOptions.subject = `${APP_NAME} - new request : ${request.type}`;
