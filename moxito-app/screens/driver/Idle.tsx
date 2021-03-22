@@ -11,36 +11,16 @@ import { Pos, toPos } from '../../types/Pos';
 import { UserProps } from '../../types/Props';
 import * as Location from 'expo-location';
 import usePermissions from 'expo-permissions-hooks';
-const geofire = require('geofire-common');
 
 export default function Idle({ user }: UserProps) {
   const [radius, setRadius] = useState(user.searchRadius || 100);
   const { isGranted, ask } = usePermissions('LOCATION');
-  const [pos, setPos] = useState<Pos>();
-  useEffect(() => {
-    let watchPosition: Promise<{ remove(): void }> | null = null;
-    if (isGranted) {
-      watchPosition = Location.watchPositionAsync(
-        {
-          accuracy: Location.Accuracy.Balanced,
-          timeInterval: 10000,
-          distanceInterval: 100,
-        },
-        (location) => {
-          const pos = toPos(location);
-          setPos(pos);
-          updateCurrentUser({ pos: {
-            ...pos,
-            hash: geofire.geohashForLocation([pos.latitude, pos.longitude])
-          }});
-        }
-      );
-    } else ask();
+  const [pos, setPos] = useState<Pos | undefined>(user.pos);
 
-    return () => {
-      if (!watchPosition) return;
-      watchPosition.then(({ remove }) => remove());
-    };
+  useEffect(() => {
+    if (isGranted) {
+      Location.getCurrentPositionAsync().then((location) => setPos(toPos(location)))
+    } else ask();
   }, [isGranted]);
 
   const theme = useTheme();
@@ -66,6 +46,7 @@ export default function Idle({ user }: UserProps) {
               updateCurrentUser({
                 status: UserStatus.searching,
                 searchRadius: radius,
+                pos: pos,
               });
             }}
           />
