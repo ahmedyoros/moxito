@@ -42,6 +42,13 @@ exports.searchRace = functions.https.onCall(async (data, context) => {
   await raceMaking.matchUpUser(data.user.id, 'driver', data.driverPos, data.searchRadius * 1000);
 });
 
+exports.notifyUser = functions.https.onCall(async (data, context) => {
+  return await utils.sendPushNotifications(data.id, {
+    sound: data.sound || 'default',
+    body: data.message,
+  });
+});
+
 exports.onRaceCreate = raceDoc().onCreate(async (snap, context) => {
   const race = snap.data();
   

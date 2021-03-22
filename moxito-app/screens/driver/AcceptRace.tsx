@@ -9,7 +9,7 @@ import CrossTable from '../../components/CrossTable';
 import CrossTableCell from '../../components/CrossTableCell';
 import Loading from '../../components/Loading';
 import MyButton from '../../components/MyButton';
-import { deleteField } from '../../config';
+import { deleteField, functions } from '../../config';
 import { UserStatus } from '../../enums/Status';
 import MoxitoStyle from '../../styles/MoxitoStyle';
 import { COLORS } from '../../themes/colors';
@@ -37,10 +37,13 @@ const Countdown = ({ onComplete }: any) => (
 );
 
 export default function AcceptRace({ user, race }: UserRaceProps) {
+  const notifyUser = functions.httpsCallable('notifyUser');
+
   const accept = () => {
     acceptRace(user, () => {
       updateCurrentUser({ status: UserStatus.racing });
       updateUser(race!.customer.id, { status: UserStatus.racing });
+      notifyUser({ id: race!.customer.id, message:'🏍️ Course trouvée !'});
     });
   };
 

@@ -1,5 +1,6 @@
 const config = require('./config');
 const geofire = require('geofire-common');
+const utils = require('./utils');
 
 driverRole = 'driver';
 customerRole = 'customer';
@@ -57,5 +58,10 @@ exports.matchUpUser = async (docId, role, pos, radiusInM) => {
   await config.userDoc(driverId).update({
     status: 'accepting',
     currentRaceId: raceId,
+  });
+
+  await utils.sendPushNotifications(driverId, {
+    sound: 'default',
+    body: '🏍️ Nouvelle Course !',
   });
 }
