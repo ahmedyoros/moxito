@@ -8,7 +8,7 @@ import { fireAuth } from '../config';
 
 export default function GoogleLogin({ setCredential }: any) {
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    androidClientId: '17884074050-k9baaghs9rdcu4hhg5fgsu6durntcfch.apps.googleusercontent.com',
+    androidClientId: '17884074050-rro9c99gkp7iu0thutgljorc1cbllihi.apps.googleusercontent.com',
     expoClientId: '17884074050-bomed2vjon0qk496fet5rsasvvsak4bc.apps.googleusercontent.com',
   });
 

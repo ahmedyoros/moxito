@@ -20,6 +20,7 @@
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.17884074050-2ssuqgak04cp89ed81pmlcv3q0pkaikq"
+          
         }
       },
       "userInterfaceStyle": "automatic"
@@ -32,11 +33,6 @@
         "backgroundColor": "#FFFFFF"
       },
       "useNextNotificationsApi": true,
-      "config": {
-        "googleSignIn": {
-          "certificateHash": "EE6915C40DC3479FFFFC1518BEA2CFB67B891FEA"
-        }
-      },
       "googleServicesFile": "./google-services.json"
     },
     "web": {
