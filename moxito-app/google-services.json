@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "17884074050",
+    "firebase_url": "https://moxito-a4531-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "moxito-a4531",
+    "storage_bucket": "moxito-a4531.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17884074050:android:621b30ad14a7726b81dddb",
+        "android_client_info": {
+          "package_name": "univ.lille.moxito"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "17884074050-k9baaghs9rdcu4hhg5fgsu6durntcfch.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "univ.lille.moxito",
+            "certificate_hash": "aa29c16d4987eb752cda7ecc88820dcd00e68b8c"
+          }
+        },
+        {
+          "client_id": "17884074050-7gv934n6a2emnlkc935boofppbe5u0gu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe0pnvfdEB0EL3FMrgPacJxtP1yO1U6WM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "17884074050-7gv934n6a2emnlkc935boofppbe5u0gu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "17884074050-2ssuqgak04cp89ed81pmlcv3q0pkaikq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "univ.lille.moxito"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

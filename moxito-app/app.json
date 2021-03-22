@@ -36,7 +36,8 @@
         "googleSignIn": {
           "certificateHash": "EE6915C40DC3479FFFFC1518BEA2CFB67B891FEA"
         }
-      }
+      },
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
