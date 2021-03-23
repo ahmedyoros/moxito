@@ -29,7 +29,7 @@ exports.onRequestChange = requestDoc().onUpdate(async (change, context) => {
 
   if (request.type === accountVerification && request.accepted) {
     config.userDoc(request.user.id).update({ verified: true });
-    return await utils.sendPushNotifications(user.request.id, {
+    return await utils.sendPushNotifications(request.user.id, {
       sound: 'default',
       body: '🏍️ Votre compte a été validé ✔️',
     });
