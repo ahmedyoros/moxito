@@ -47,5 +47,11 @@ export default (theme: Theme) => StyleSheet.create({
       borderRadius: 100,
     },
 
-    modal: { backgroundColor: theme.colors.surface, paddingVertical: 10 },
+    modal: { 
+      backgroundColor: theme.colors.surface, paddingVertical: 10 
+    },
+
+    notifyBadge: {
+      position: 'absolute', elevation: 10, left: 30
+    }
   });

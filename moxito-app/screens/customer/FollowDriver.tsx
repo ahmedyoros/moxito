@@ -6,6 +6,7 @@ import { Subheading } from 'react-native-paper';
 import SandTimer from '../../assets/icons/sand-timer.svg';
 import { hash } from '../../backend/FavoriteManager';
 import Avatar from '../../components/Avatar';
+import ChatButton from '../../components/ChatButton';
 import Loading from '../../components/Loading';
 import { RaceStatus } from '../../enums/Status';
 import CommonStyle from '../../styles/CommonStyle';
@@ -61,22 +62,7 @@ export default function FollowDriver({ user, race }: UserRaceProps) {
             />
           )}
         </View>
-        <View
-          style={{ flexDirection: 'column', marginRight: 15, marginTop: 15 }}
-        >
-          <FontAwesome5
-            style={[commonStyle.roundIcon, commonStyle.shadow]}
-            name="rocketchat"
-            size={24}
-            color={theme.colors.primary}
-            onPress={() =>
-              navigation.navigate('Chat', { race: race, user: user })
-            }
-          />
-          <Subheading style={{ color: theme.colors.primary, textAlign: 'center' }}>
-            chat
-          </Subheading>
-        </View>
+        <ChatButton race={race} user={user}/>
       </View>
       <Text
         style={[

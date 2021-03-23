@@ -1,7 +1,8 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { Bubble, GiftedChat, IMessage, Reply } from 'react-native-gifted-chat';
+import 'dayjs/locale/fr';
+import { Bubble, GiftedChat, IMessage, Reply, Send } from 'react-native-gifted-chat';
 import { generateId, sendMessage, useChat } from '../backend/ChatManager';
 import { updateRacePrice } from '../backend/RaceManager';
 import Loading from '../components/Loading';
@@ -13,6 +14,7 @@ import useTheme from '../themes/ThemeProvider';
 import { NavigationProps } from '../types/Props';
 import { Race } from '../types/Race';
 import { User } from '../types/User';
+import SendIcon from '../assets/icons/send.svg';
 
 export default function Chat({ navigation, route }: NavigationProps) {
   const race: Race = route.params!.race;
@@ -22,6 +24,8 @@ export default function Chat({ navigation, route }: NavigationProps) {
     name: user.displayName,
     avatar: user.photoURL,
   };
+
+  navigation.setOptions({title:'Chat avec '+race[Role.opposite(user.role)]?.displayName})
 
   const [messages, loading] = useChat(user.currentRaceId!);
 
@@ -91,6 +95,8 @@ export default function Chat({ navigation, route }: NavigationProps) {
         onSend={onSend}
         onQuickReply={(replies) => onNegociationReply(replies[0])}
         user={chatUser}
+        locale='fr'
+        placeholder='Taper un message...'
         renderBubble={(props) => (
           <Bubble
             {...props}
@@ -145,6 +151,17 @@ export default function Chat({ navigation, route }: NavigationProps) {
             </Text>
           </View>
         )}
+        renderSend={(props) => {
+          return (
+              <Send
+                  {...props}
+              >
+                  <View style={{marginRight: 10, marginBottom: 10}}>
+                      <SendIcon height={25} width={25}/>
+                  </View>
+              </Send>
+          );
+      }}
       />
     </View>
   );

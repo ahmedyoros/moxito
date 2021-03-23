@@ -1,29 +1,21 @@
-import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View } from 'react-native';
 import { Subheading } from 'react-native-paper';
 import { hash } from '../../backend/FavoriteManager';
 import { endRace, startRace } from '../../backend/RaceManager';
 import { updateCurrentUser, updateUser } from '../../backend/UserManager';
 import Avatar from '../../components/Avatar';
+import ChatButton from '../../components/ChatButton';
 import Loading from '../../components/Loading';
 import MyButton from '../../components/MyButton';
 import { RaceStatus, UserStatus } from '../../enums/Status';
 import CommonStyle from '../../styles/CommonStyle';
-import { COLORS } from '../../themes/colors';
 import useTheme from '../../themes/ThemeProvider';
-import { MyNavigationProp } from '../../types/Props';
-import { Race } from '../../types/Race';
-import { User } from '../../types/User';
-import { getDistanceInKm, estimateDurationInMin } from '../../utils/calculator';
+import { MyNavigationProp, UserRaceProps } from '../../types/Props';
+import { estimateDurationInMin, getDistanceInKm } from '../../utils/calculator';
 
-type Props = {
-  user: User;
-  race: Race | undefined;
-};
-
-export default function FollowRace({ user, race }: Props) {
+export default function FollowRace({ user, race }: UserRaceProps) {
   const navigation: MyNavigationProp = useNavigation();
 
   const pickedUp = () => {
@@ -89,24 +81,7 @@ export default function FollowRace({ user, race }: Props) {
             {distance.toFixed(1)} Km
           </Text>
         </View>
-        <View
-          style={{ flexDirection: 'column', marginRight: 15, marginTop: 15 }}
-        >
-          <FontAwesome5
-            style={[commonStyle.roundIcon, commonStyle.shadow]}
-            name="rocketchat"
-            size={24}
-            color={theme.colors.primary}
-            onPress={() =>
-              navigation.navigate('Chat', { race: race, user: user })
-            }
-          />
-          <Subheading
-            style={{ color: theme.colors.primary, textAlign: 'center' }}
-          >
-            chat
-          </Subheading>
-        </View>
+        <ChatButton race={race} user={user}/>
       </View>
       <Text
         style={[
