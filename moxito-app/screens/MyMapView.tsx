@@ -1,8 +1,8 @@
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import * as Location from 'expo-location';
-import usePermissions from 'expo-permissions-hooks';
+import { usePermissions, PermissionStatus } from 'expo-permissions';
 import React, { useEffect, useRef, useState } from 'react';
-import { Platform, View } from 'react-native';
+import { Linking, Platform, View } from 'react-native';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Headline } from 'react-native-paper';
 import { updateDriverPos } from '../backend/RaceManager';
@@ -15,6 +15,9 @@ import { Address } from '../types/Address';
 import { Pos, toPos } from '../types/Pos';
 import { UserRaceProps } from '../types/Props';
 import { getModelColor } from '../utils/motoModel';
+import * as Permissions from 'expo-permissions';
+import MyButton from '../components/MyButton';
+import { updateCurrentUser } from '../backend/UserManager';
 
 type Props = UserRaceProps & {
   toAddress: Address | undefined;
@@ -27,11 +30,35 @@ export default function MyMapView({
   user,
   race,
 }: Props) {
-  const [pos, setPos] = useState<Pos>();
-  const { isGranted, isDenied, ask } = usePermissions('LOCATION');
+  const [pos, setPos] = useState<Pos | undefined>(user.pos);
+  const [permission, askPermission] = usePermissions(Permissions.LOCATION, {
+    ask: true,
+  });
   const ref = useRef<MapView>(null);
 
-  const [coords, setCoords] = useState<Pos[]>([]);
+  const [coords, setCoords] = useState<Pos[]>([]);  
+
+  useEffect(() => {
+    if (!(permission?.status === PermissionStatus.GRANTED)) return;
+    const watchPosition = Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.Balanced,
+        timeInterval: 10000,
+        distanceInterval: 1,
+      },
+      (location) => {
+        const pos = toPos(location);
+        setPos(pos);
+        updateCurrentUser({pos: pos});
+        if (user.role === Role.Driver && race?.status === RaceStatus.pickingUp)
+          updateDriverPos(user.currentRaceId!, pos);
+      }
+    );
+
+    return () => {
+      watchPosition.then(({ remove }) => remove());
+    };
+  }, [permission]);
 
   useEffect(() => {
     if (!fromAddress || !toAddress) setCoords([]);
@@ -61,26 +88,6 @@ export default function MyMapView({
     }
   }, [coords]);
 
-  useEffect(() => {
-    if (isGranted)
-      Location.watchPositionAsync(
-        {
-          accuracy: Location.Accuracy.Balanced,
-          timeInterval: 10000,
-          distanceInterval: 50,
-        },
-        (location) => {
-          setPos(toPos(location));
-          if (
-            user.role === Role.Driver &&
-            race?.status === RaceStatus.pickingUp
-          )
-            updateDriverPos(user.currentRaceId!, toPos(location));
-        }
-      );
-    else ask();
-  }, [isGranted]);
-
   const theme = useTheme();
   const mapHeight = '65%';
   return !pos ? (
@@ -91,13 +98,11 @@ export default function MyMapView({
         height: mapHeight,
       }}
     >
-      {isDenied ? (
-        <Headline>Vous n'avez pas autorisé la géolocalisation</Headline>
+      <Headline>Vous avons besoin de connaître votre position</Headline>
+      {permission?.canAskAgain ? (
+        <MyButton onPress={askPermission} title="Autoriser" />
       ) : (
-        <>
-          <Loading />
-          <Headline>Géolocalisation en cours...</Headline>
-        </>
+        <MyButton onPress={Linking.openSettings} title="Paramètres de Moxito" />
       )}
     </View>
   ) : (

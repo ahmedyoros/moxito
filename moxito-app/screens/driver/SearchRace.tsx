@@ -10,49 +10,43 @@ import useTheme from '../../themes/ThemeProvider';
 import { Pos, toPos } from '../../types/Pos';
 import { UserProps } from '../../types/Props';
 import * as Location from 'expo-location';
-import usePermissions from 'expo-permissions-hooks';
 const geofire = require('geofire-common');
 
 export default function SearchRace({ user }: UserProps) {
   const searchRace = functions.httpsCallable('searchRace');
-  const { isGranted, ask } = usePermissions('LOCATION');
 
   useEffect(() => {
-    let watchPosition: Promise<{ remove(): void }> | null = null;
-    if (isGranted) {
-      watchPosition = Location.watchPositionAsync(
-        {
-          accuracy: Location.Accuracy.Balanced,
-          timeInterval: 10000,
-          distanceInterval: 100,
-        },
-        (location) => {
-          const pos = toPos(location);
-          const fullPos: Pos = {
-            ...pos,
-            hash: geofire.geohashForLocation([pos.latitude, pos.longitude]),
-          };
+    const watchPosition = Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.Balanced,
+        timeInterval: 10000,
+        distanceInterval: 100,
+      },
+      (location) => {
+        const pos = toPos(location);
+        const fullPos: Pos = {
+          ...pos,
+          hash: geofire.geohashForLocation([pos.latitude, pos.longitude]),
+        };
 
-          console.log('searching for a race... :)');
-          
-          updateCurrentUser({ pos: fullPos });
-          
-          searchRace({
-            user: getBaseUser(),
-            driverPos: fullPos,
-            searchRadius: user.searchRadius,
-          });
-        }
-      );
-    } else ask();
-
+        console.log('searching for a race... :)');
+        
+        updateCurrentUser({ pos: fullPos });
+        
+        searchRace({
+          user: getBaseUser(),
+          driverPos: fullPos,
+          searchRadius: user.searchRadius,
+        });
+      }
+    )
     return () => {
       if (!watchPosition) return;
       console.log('stop watchPosition');
       
       watchPosition.then(({ remove }) => remove());
     };
-  }, [isGranted]);
+  }, []);
 
   const theme = useTheme();
   return (
