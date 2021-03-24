@@ -44,7 +44,7 @@ export default function MyMapView({
       {
         accuracy: Location.Accuracy.Balanced,
         timeInterval: 10000,
-        distanceInterval: 1,
+        distanceInterval: 10,
       },
       (location) => {
         const pos = toPos(location);
