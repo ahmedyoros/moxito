@@ -1,7 +1,7 @@
-import { useCollection, useCollectionData, useCollectionOnce } from 'react-firebase-hooks/firestore';
+import { useCollection, useCollectionData } from 'react-firebase-hooks/firestore';
 import { IMessage } from 'react-native-gifted-chat';
 import { racesRef } from './RaceManager';
-import { getBaseUser, getCurrentUser } from './UserManager';
+import { getBaseUser } from './UserManager';
 
 const getChatRef = (raceId: string) => {
   return racesRef.doc(raceId).collection('messages');
@@ -22,14 +22,15 @@ export const useChat = (raceId: string): [IMessage[], boolean] => {
   return [messages, false];
 };
 
-export const sendMessage = (raceId: string, newMessage: IMessage) => {
+export const sendMessage = (raceId: string, newMessage: IMessage, callback?: () => void) => {
   const message: IMessage = {
     ...newMessage,
     sent: true,
     received: false,
   };
   const chatDoc = getChatRef(raceId).doc(newMessage._id + '');
-  chatDoc.set(message);
+
+  chatDoc.set(message).then(() => callback && callback());
 };
 
 export const useUnreadMessagesCount = (raceId: string, senderId: string): [number, boolean] => {
