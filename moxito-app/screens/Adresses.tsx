@@ -51,7 +51,7 @@ export default function Adresses() {
       ))}
       {adresses.length === 0 && (
         <Text style={favoriteStyle.text}>
-          Il semblerait que vous n'ayez pas encore ajouté d’adresses a vos
+          Il semblerait que vous n'ayez pas encore ajouté d’adresses à vos
           favoris
         </Text>
       )}
