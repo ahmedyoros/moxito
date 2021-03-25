@@ -3,7 +3,7 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
-  DrawerItemList
+  DrawerItemList,
 } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -28,7 +28,6 @@ import useTheme, { useNavigationTheme } from './themes/ThemeProvider';
 import { NavigationProps } from './types/Props';
 import { defaultPictureUrl } from './types/User';
 
-
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -37,8 +36,6 @@ export default function App() {
   const commonStyle = CommonStyle(theme);
   const [logged, setLogged] = useState(false);
   const [newUser, setNewUser] = useState(false);
-
-
 
   auth.onAuthStateChanged((user) => {
     if (user) {
@@ -51,7 +48,11 @@ export default function App() {
 
   return (
     <PaperProvider theme={theme}>
-      <StatusBar barStyle="dark-content" translucent={true} backgroundColor={'transparent'}  />
+      <StatusBar
+        barStyle="dark-content"
+        translucent={true}
+        backgroundColor={'transparent'}
+      />
       <NavigationContainer theme={useNavigationTheme()}>
         {logged ? renderMenu() : renderLogin()}
       </NavigationContainer>
@@ -59,9 +60,8 @@ export default function App() {
   );
 
   function renderLogin(): React.ReactNode {
-    
     return (
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{ headerBackTitleVisible: false }}>
         <Stack.Screen
           name="ChooseRole"
           component={ChooseRole}
@@ -88,7 +88,7 @@ export default function App() {
       'Mes adresses préférées',
     ];
     const initialRouteName = routeNames[newUser ? 1 : 0];
-    
+
     return (
       <Drawer.Navigator
         drawerContent={renderDrawerItems}
@@ -108,7 +108,7 @@ export default function App() {
             headerShown: false,
             drawerIcon: () => (
               <Ionicons name="map" size={20} color={COLORS.orange} />
-            )
+            ),
           }}
         />
         <Drawer.Screen
@@ -123,13 +123,14 @@ export default function App() {
               />
             ),
           }}
-          
         />
         <Drawer.Screen
           name={routeNames[2]}
           component={PublicProfile}
           options={{
-            drawerIcon: () => <Ionicons name="star" size={20} color={COLORS.orange} />
+            drawerIcon: () => (
+              <Ionicons name="star" size={20} color={COLORS.orange} />
+            ),
           }}
         />
         <Drawer.Screen
@@ -158,13 +159,10 @@ export default function App() {
           ]}
         >
           <Avatar size={50} imageUrl={fireUser.photoURL || defaultPictureUrl} />
-          <Text style={[commonStyle.text]}>{" " + fireUser.displayName}</Text>
+          <Text style={[commonStyle.text]}>{' ' + fireUser.displayName}</Text>
         </SafeAreaView>
         <DrawerItemList {...props} />
-        <DrawerItem
-          label="Se déconnecter"
-          onPress={() => auth.signOut()}
-        />
+        <DrawerItem label="Se déconnecter" onPress={() => auth.signOut()} />
       </DrawerContentScrollView>
     );
   }
