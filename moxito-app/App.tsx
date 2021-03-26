@@ -48,11 +48,7 @@ export default function App() {
 
   return (
     <PaperProvider theme={theme}>
-      <StatusBar
-        barStyle="dark-content"
-        translucent={true}
-        backgroundColor={'transparent'}
-      />
+      <StatusBar/>
       <NavigationContainer theme={useNavigationTheme()}>
         {logged ? renderMenu() : renderLogin()}
       </NavigationContainer>

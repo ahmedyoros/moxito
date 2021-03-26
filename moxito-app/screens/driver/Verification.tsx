@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { Headline } from 'react-native-paper';
 import { createRequest } from '../../backend/RequestManager';
 import Loading from '../../components/Loading';
+import MyButton from '../../components/MyButton';
 import CommonStyle from '../../styles/CommonStyle';
 import useTheme from '../../themes/ThemeProvider';
 import { MyNavigationProp, UserProps } from '../../types/Props';
@@ -26,8 +27,9 @@ export default function Verification({user}: UserProps) {
       <Headline style={[commonStyle.text, {marginLeft: 10}]}>
         Avant de proposer une course, un administrateur doit valider votre compte. 
         Cette opération peut prendre un certain temps. En attendant, 
-        vous pouvez modifier votre profil.
+        vous pouvez
       </Headline>
+      <MyButton title='Modifier votre profil' onPress={() => navigation.navigate('Modifier mon profil')}/>
     </View>
   )
 }

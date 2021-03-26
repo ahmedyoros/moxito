@@ -63,29 +63,30 @@ export default function HomeMap({user}: UserProps) {
   const commonStyle = CommonStyle(theme);
 
   navigation.setOptions({headerShown: false});
-
-  if (user.status === UserStatus.arrived) {
-    return (
-      <Stack.Navigator>
-        <Stack.Screen
-          name="RaceOver"
-          component={RaceOver}
-          initialParams={{ user: user }}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="Noter" component={UserReview} />
-        <Stack.Screen name="Profile" component={PublicProfile} />
-      </Stack.Navigator>
-    );
-  }
-
+  
   if (user.role === Role.Driver) {
-    if (!user.verified) return <Verification user={user} />;
+    if (user.status === UserStatus.arrived) {
+      return (
+        <Stack.Navigator>
+          <Stack.Screen
+            name="RaceOver"
+            component={RaceOver}
+            initialParams={{ user: user }}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="Noter" component={UserReview} />
+          <Stack.Screen name="Profile" component={PublicProfile} />
+        </Stack.Navigator>
+      );
+    }
+
     if (user.status === UserStatus.accepting) return <AcceptRace user={user} race={race} />;
   }
-
+  
   navigation.setOptions({headerShown: true});
-
+  
+  if (user.role === Role.Driver && !user.verified) return <Verification user={user} />;
+  
   return (
     <View 
       style={
