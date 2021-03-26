@@ -2,7 +2,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { getRace } from '../backend/RaceManager';
 import { useCurrentUser } from '../backend/UserManager';
 import Loading from '../components/Loading';
 import { COLORS } from '../themes/colors';

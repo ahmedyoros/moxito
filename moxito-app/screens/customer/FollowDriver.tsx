@@ -27,7 +27,7 @@ export default function FollowDriver({ user, race }: UserRaceProps) {
     if(!race) return;
     setDistance(picking 
     ? getDistanceInKm(race.driver!.pos!, race.from.pos)
-    : getDistanceInKm(race.driver!.pos!, race.to.pos));
+    : getDistanceInKm(race.from.pos, race.to.pos));
   }, [race])
 
   if (!race) return <Loading />;

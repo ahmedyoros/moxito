@@ -64,22 +64,22 @@ export default function HomeMap({user}: UserProps) {
 
   navigation.setOptions({headerShown: false});
   
-  if (user.role === Role.Driver) {
-    if (user.status === UserStatus.arrived) {
-      return (
-        <Stack.Navigator>
-          <Stack.Screen
-            name="RaceOver"
-            component={RaceOver}
-            initialParams={{ user: user }}
-            options={{ headerShown: false }}
+if (user.status === UserStatus.arrived) {
+  return (
+    <Stack.Navigator>
+        <Stack.Screen
+          name="RaceOver"
+          component={RaceOver}
+          initialParams={{ user: user }}
+          options={{ headerShown: false }}
           />
-          <Stack.Screen name="Noter" component={UserReview} />
-          <Stack.Screen name="Profile" component={PublicProfile} />
-        </Stack.Navigator>
-      );
-    }
-
+        <Stack.Screen name="Noter" component={UserReview} />
+        <Stack.Screen name="Profile" component={PublicProfile} />
+      </Stack.Navigator>
+    );
+  }
+    
+  if (user.role === Role.Driver) {
     if (user.status === UserStatus.accepting) return <AcceptRace user={user} race={race} />;
   }
   
