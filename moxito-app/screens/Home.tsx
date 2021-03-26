@@ -15,7 +15,7 @@ const Stack = createStackNavigator();
 
 export default function Home({ navigation }: NavigationProps) {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerBackTitleVisible: false }}>
       <Stack.Screen
         name="HomeMap"
         component={LoadHomeMap}
